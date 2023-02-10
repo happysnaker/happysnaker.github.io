@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <!-- cungudafa百度收录验证编号 -->
+  <!-- <meta name="baidu-site-verification" content="LukfTcyXmC" /> -->
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">Redis 设计与实现重点回顾 | Hexo</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/style.css" type="text/css" media="all" id="saukra_css-css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/jquery.fancybox.min.css" media="all">  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/tags.css" media="all">
+  
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/logo.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/fonts/LOGO/logo.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+  <!-- 分析 -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+  <!-- Baidu Analytics -->
+
+  
+  <!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+  " type="text/css" media="all"> -->
+  <script>
+    /*Initial Variables*/
+    var mashiro_option = new Object();
+    var mashiro_global = new Object();
+    mashiro_option.NProgressON = true;
+    /* 
+    * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+    * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+    */
+    mashiro_option.email_domain = "";
+    mashiro_option.email_name = "";
+    mashiro_option.cookie_version_control = "";
+    mashiro_option.qzone_autocomplete = false;
+    mashiro_option.site_name = "happysnaker开心";
+    mashiro_option.author_name = "开心";
+    mashiro_option.site_url = "http://happysnaker.gitee.io/blog";
+    mashiro_option.v_appId = "";//
+    mashiro_option.v_appKey = "";//
+    mashiro_option.mathjax = "1";
+    mashiro_option.copyright_enable = "false" ;
+    mashiro_option.copyright_minCharNumber = parseInt("120") ;
+    mashiro_option.copyright_description = "本文章著作权归作者所有，任何形式的转载都请注明出处。" ;
+    mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+    mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+    // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+    // mashiro_option.float_player_on = true;
+
+    /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+    var bg = "https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(0).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(1).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(2).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(3).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(4).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(5).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(6).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(7).jpg.webp".split(",");
+    var bgindex = Math.floor(Math.random()*bg.length);
+    if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+      alert('朋友，IE浏览器未适配哦~');
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"><link rel="stylesheet" href="/blog/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/blog/css/prism-line-numbers.css" type="text/css"></head> 
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <!-- Dynamic sliders -->
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <!-- Main content -->
+  <section id="main-container">
+    <!-- Top menu -->
+    <div class="headertop filter-dot">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="http://happysnaker.gitee.io/blog">
+          <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>且停且忘且随风，且行且看且从容</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="http://github.com/happysnaker" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://gitee.com/happysnaker" target="_blank" class="social-github" title="gitee">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/gitee.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  
+  <div id="video-container">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <!-- banner -->
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+        <span class="site-title">
+            <span class="logolink logo">
+                <a href="/">
+                    <ruby>
+                    <span class="sakuraso">Happysnaker</span>
+                    <span class="no">の</span>
+                    <span class="shironeko">小屋</span>
+                    <rp></rp>
+                    <rt class="logo">happysnaker</rt>
+                    <rp></rp>
+                    </ruby>
+                  </a>
+            </span>
+          </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/archives/">
+                          <i class="fa fa-line-chart" aria-hidden="true"></i>
+                          统计
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/blog/tags">
+                          <i class="fa fa-tags" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      
+      <!-- body -->
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1"
+        class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content">  -->
+        <!--套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Redis-设计与实现重点回顾"><a href="#Redis-设计与实现重点回顾" class="headerlink" title="Redis 设计与实现重点回顾"></a>Redis 设计与实现重点回顾</h1><blockquote>
+<p>注：本文是《Redis 设计与实现》章节后的重点回顾，夹杂着一些个人理解</p>
+</blockquote>
+<h2 id="第一部分：数据结构与对象"><a href="#第一部分：数据结构与对象" class="headerlink" title="第一部分：数据结构与对象"></a>第一部分：数据结构与对象</h2><h3 id="简单动态字符串"><a href="#简单动态字符串" class="headerlink" title="简单动态字符串"></a>简单动态字符串</h3><p><img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220212132001799.png" alt="image-20220212132001799"></p>
+<ul>
+<li><strong>Redis 只会使用 C 字符串作为字面量</strong>， 在大多数情况下， Redis 使用 SDS （Simple Dynamic String，简单动态字符串）作为字符串表示。</li>
+<li>比起 C 字符串， SDS 具有以下优点：<ol>
+<li>常数复杂度获取字符串长度。</li>
+<li>杜绝缓冲区溢出。</li>
+<li>减少修改字符串长度时所需的内存重分配次数。</li>
+<li>二进制安全。</li>
+<li>兼容部分 C 字符串函数。</li>
+</ol>
+</li>
+<li><strong>Redis 会共享值为 <code>0</code> 到 <code>9999</code> 的字符串对象。</strong></li>
+</ul>
+<h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><ul>
+<li>链表被广泛用于实现 Redis 的各种功能， 比如列表键， 发布与订阅， 慢查询， 监视器， 等等。</li>
+<li>每个链表节点由一个 <code>listNode</code> 结构来表示， 每个节点都有一个指向前置节点和后置节点的指针， 所以 <strong>Redis 的链表实现是双端链表</strong>。</li>
+<li>每个链表使用一个 <code>list</code> 结构来表示， 这个结构带有表头节点指针、表尾节点指针、以及链表长度等信息。</li>
+<li>因为链表表头节点的前置节点和表尾节点的后置节点都指向 <code>NULL</code> ， 所以 Redis 的链表实现是无环链表。</li>
+<li>通过为链表设置不同的类型特定函数， Redis 的链表可以用于保存各种不同类型的值。</li>
+</ul>
+<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><ul>
+<li>字典被广泛用于实现 Redis 的各种功能， 其中包括<strong>数据库和哈希键</strong>，例如<code>set name abc</code>就是通过哈希字典实现的，键是字符串对象 “name”，值是字符串对象 “abc”，redis 底层所有的存储几乎都依赖于字典实现。</li>
+<li>Redis 中的字典使用哈希表作为底层实现， <strong>每个字典带有两个哈希表</strong>， 一个用于平时使用， 另一个仅在进行 <strong>rehash</strong> 时使用，即 redis 保存了哈希数组 <code>ht[2</code>]，ht[0] 用以平时使用，ht[1] 用以 rehash。</li>
+<li>当字典被用作数据库的底层实现， 或者哈希键的底层实现时， Redis 使用 MurmurHash2 算法来计算键的哈希值。</li>
+<li><strong>哈希表使用链地址法来解决键冲突， 被分配到同一个索引上的多个键值对会连接成一个单向链表</strong>。</li>
+<li>在对哈希表进行扩展或者收缩操作时， 程序需要将现有哈希表包含的所有键值对 rehash 到新哈希表里面， 并且这个 <strong>rehash 过程并不是一次性地完成的， 而是渐进式地完成的，即可能每一次命令完成部分键值的重新散列。</strong></li>
+</ul>
+<p>扩展和收缩哈希表的工作可以通过执行 rehash （重新散列）操作来完成， Redis 对字典的哈希表执行 rehash 的步骤如下：</p>
+<ol>
+<li>为字典的 ht[1] 哈希表分配空间， 这个哈希表的空间大小取决于要执行的操作， 以及 ht[0] 当前包含的键值对数量 （也即是 ht[0].used 属性的值）：<ul>
+<li>如果执行的是扩展操作， 那么 <code>ht[1]</code> 的大小为第一个大于等于 <code>ht[0].used * 2</code> 的 <img src="https://atts.w3cschool.cn/attachments/image/cimg/2015-09-13_55f512f991fc2.png" alt="2^n"> （<code>2</code> 的 <code>n</code> 次方幂)；</li>
+<li>如果执行的是收缩操作， 那么 <code>ht[1]</code> 的大小为第一个大于等于 <code>ht[0].used</code> 的 <img src="https://atts.w3cschool.cn/attachments/image/cimg/2015-09-13_55f512f991fc2.png" alt="2^n"> 。</li>
+</ul>
+</li>
+<li>将保存在 <code>ht[0]</code> 中的所有键值对 rehash 到 <code>ht[1]</code> 上面： rehash 指的是重新计算键的哈希值和索引值， 然后将键值对放置到 <code>ht[1]</code> 哈希表的指定位置上。</li>
+<li>当 <code>ht[0]</code> 包含的所有键值对都迁移到了 <code>ht[1]</code> 之后 （<code>ht[0]</code> 变为空表）， 释放 <code>ht[0]</code> ， 将 <code>ht[1]</code> 设置为 <code>ht[0]</code> ， 并在 <code>ht[1]</code> 新创建一个空白哈希表， 为下一次 rehash 做准备。</li>
+</ol>
+<h3 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h3><p><img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220212132926383.png" alt="image-20220212132926383"></p>
+<ul>
+<li><strong>跳跃表是有序集合的底层实现之一</strong>， 除此之外它在 Redis 中没有其他应用。</li>
+<li>Redis 的跳跃表实现由 <code>zskiplist</code> 和 <code>zskiplistNode</code> 两个结构组成， 其中 <code>zskiplist</code> 用于保存跳跃表信息（比如表头节点、表尾节点、长度）， 而 <code>zskiplistNode</code> 则用于表示跳跃表节点。</li>
+<li>每个跳跃表节点的层高都是 <code>1</code> 至 <code>32</code> 之间的随机数。</li>
+<li>在同一个跳跃表中， 多个节点可以包含相同的分值， 但每个节点的成员对象必须是唯一的。</li>
+<li>跳跃表中的节点按照分值大小进行排序， 当分值相同时， 节点按照成员对象的大小进行排序。</li>
+</ul>
+<h3 id="整数集合"><a href="#整数集合" class="headerlink" title="整数集合"></a>整数集合</h3><pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> intset <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 编码方式</span>
+    uint32_t encoding<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 集合包含的元素数量</span>
+    uint32_t length<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 保存元素的数组</span>
+    int8_t contents<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+ 
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span> intset<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><strong>整数集合是集合键的底层实现之一</strong>。</li>
+<li><strong>整数集合的底层实现为数组， 这个数组以有序、无重复的方式保存集合元素， 在有需要时， 程序会根据新添加元素的类型， 改变这个数组的类型</strong>。在具体实现中，整数集合由一个结构体表示，结构体内存在一个字段 encoding，程序会根据这个字段的值来判断具体数组的编码，例如如果 encoding 为 int16_t，那么 contents 数组每两个元素表示一个值。</li>
+<li>升级操作为整数集合带来了操作上的灵活性， 并且尽可能地节约了内存。</li>
+<li>整数集合<strong>只支持升级操作， 不支持降级操作</strong>。</li>
+</ul>
+<h3 id="压缩列表"><a href="#压缩列表" class="headerlink" title="压缩列表"></a>压缩列表</h3><p>压缩列表是 Redis 为了节约内存而开发的， 由一系列特殊编码的连续内存块组成的顺序型（sequential）数据结构。</p>
+<p><strong>一个压缩列表可以包含任意多个节点（entry）， 每个节点可以保存一个字节数组或者一个整数值。</strong></p>
+<p>图 7-1 展示了压缩列表的各个组成部分， 表 7-1 则记录了各个组成部分的类型、长度、以及用途。</p>
+<p><img src="https://atts.w3cschool.cn/attachments/image/cimg/2015-09-13_55f51bfccbd83.png" alt="img"></p>
+<p><strong>每个 entry 又是由<code>evious_entry_length</code> 、 <code>encoding</code> 、 <code>content</code> 三个部分组成</strong>，这指示着 节点的前一个节点的长度、节点的编码、节点的内容。</p>
+<hr>
+<p>表 7-1 压缩列表各个组成部分的详细说明</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>长度</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>zlbytes</code></td>
+<td><code>uint32_t</code></td>
+<td><code>4</code> 字节</td>
+<td>记录整个压缩列表占用的内存字节数：在对压缩列表进行内存重分配， 或者计算 <code>zlend</code> 的位置时使用。</td>
+</tr>
+<tr>
+<td><code>zltail</code></td>
+<td><code>uint32_t</code></td>
+<td><code>4</code> 字节</td>
+<td>记录压缩列表表尾节点距离压缩列表的起始地址有多少字节： 通过这个偏移量，程序无须遍历整个压缩列表就可以确定表尾节点的地址。</td>
+</tr>
+<tr>
+<td><code>zllen</code></td>
+<td><code>uint16_t</code></td>
+<td><code>2</code> 字节</td>
+<td>记录了压缩列表包含的节点数量： 当这个属性的值小于 <code>UINT16_MAX</code> （<code>65535</code>）时， 这个属性的值就是压缩列表包含节点的数量； 当这个值等于 <code>UINT16_MAX</code> 时， 节点的真实数量需要遍历整个压缩列表才能计算得出。</td>
+</tr>
+<tr>
+<td><code>entryX</code></td>
+<td>列表节点</td>
+<td>不定</td>
+<td>压缩列表包含的各个节点，节点的长度由节点保存的内容决定。</td>
+</tr>
+<tr>
+<td><code>zlend</code></td>
+<td><code>uint8_t</code></td>
+<td><code>1</code> 字节</td>
+<td>特殊值 <code>0xFF</code> （十进制 <code>255</code> ），用于标记压缩列表的末端。</td>
+</tr>
+</tbody></table>
+<hr>
+<p>图 7-2 展示了一个压缩列表示例：</p>
+<ul>
+<li>列表 <code>zlbytes</code> 属性的值为 <code>0x50</code> （十进制 <code>80</code>）， 表示压缩列表的总长为 <code>80</code> 字节。</li>
+<li>列表 <code>zltail</code> 属性的值为 <code>0x3c</code> （十进制 <code>60</code>）， 这表示如果我们有一个指向压缩列表起始地址的指针 <code>p</code> ， 那么只要用指针 <code>p</code> 加上偏移量 <code>60</code> ， 就可以计算出表尾节点 <code>entry3</code> 的地址。</li>
+<li>列表 <code>zllen</code> 属性的值为 <code>0x3</code> （十进制 <code>3</code>）， 表示压缩列表包含三个节点。</li>
+</ul>
+<p><img src="https://atts.w3cschool.cn/attachments/image/cimg/2015-09-13_55f51bfe2547f.png" alt="img"></p>
+<p>图 7-3 展示了另一个压缩列表示例：</p>
+<ul>
+<li>列表 <code>zlbytes</code> 属性的值为 <code>0xd2</code> （十进制 <code>210</code>）， 表示压缩列表的总长为 <code>210</code> 字节。</li>
+<li>列表 <code>zltail</code> 属性的值为 <code>0xb3</code> （十进制 <code>179</code>）， 这表示如果我们有一个指向压缩列表起始地址的指针 <code>p</code> ， 那么只要用指针 <code>p</code> 加上偏移量 <code>179</code> ， 就可以计算出表尾节点 <code>entry5</code> 的地址。</li>
+<li>列表 <code>zllen</code> 属性的值为 <code>0x5</code> （十进制 <code>5</code>）， 表示压缩列表包含五个节点。</li>
+</ul>
+<p><img src="https://atts.w3cschool.cn/attachments/image/cimg/2015-09-13_55f51bffa92c9.png" alt="img"></p>
+<p>我们都知道在计算机底层内存都是 8 字节对齐的，这意味着如果使用不满 8 字节仍然会被填充以 8 字节对齐，这就产生了内存碎片，<strong>压缩列表就是为了解决这些内部碎片而生的</strong>，压缩列表使每一个元素紧密的连接在一起以避免内部碎片，在 C 语言中只需使用 void* 就可以做到这一点，但代价是必须要有额外的信息表示每个元素的大小或链表的总长度。</p>
+<ul>
+<li><p>压缩列表是一种为节约内存而开发的顺序型数据结构。</p>
+</li>
+<li><p><strong>压缩列表被用作列表键和哈希键的底层实现之一</strong>，在表示哈希时，键值是严格靠在一起的。</p>
+</li>
+<li><p>压缩列表可以包含多个节点，每个节点可以保存一个字节数组或者整数值。</p>
+</li>
+<li><p>添加新节点到压缩列表， 或者从压缩列表中删除节点， 可能会引发连锁更新操作， 但这种操作出现的几率并不高。</p>
+<blockquote>
+<p>这是因为节点的 previous_entry_length 要么为 1字节（能够指示 255 字节大小的程度），要么为 5 字节，这取决与前一个节点的大小，如果前一个节点小于 255 字节，那么 previous_entry_length 为 1字节，否则为 5 字节。</p>
+<p>现在如果某节点的 previous_entry_length 占用 1字节，而现在向其前面插入大小更大的节点，那么该节点的 previous_entry_length  的大小应该就会被重新分配，从而导致节点的大小被重新分配，从而又导致其他节点的更新。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h3><pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> redisObject <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 类型</span>
+    <span class="token keyword">unsigned</span> type<span class="token punctuation">:</span><span class="token number">4</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 编码</span>
+    <span class="token keyword">unsigned</span> encoding<span class="token punctuation">:</span><span class="token number">4</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 指向底层实现数据结构的指针</span>
+    <span class="token keyword">void</span> <span class="token operator">*</span>ptr<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 最后一次被访问的时间</span>
+    <span class="token keyword">unsigned</span> lru<span class="token punctuation">:</span><span class="token number">22</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 引用计数</span>
+    <span class="token keyword">unsigned</span> count<span class="token punctuation">:</span><span class="token number">32</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 更多字段......</span>
+
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span> robj<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><p>Redis 数据库中的每个键值对的键和值都是一个对象。</p>
+</li>
+<li><p>Redis 共有 <strong>字符串、列表、哈希、集合、有序集合</strong> 五种类型的对象， 每种类型的<strong>对象至少都有两种或以上的编码方式</strong>， 不同的编码可以在不同的使用场景上优化对象的使用效率。</p>
+<ul>
+<li>列表对象的编码可以是 <code>ziplist</code> 或者 <code>linkedlist</code> ，这取决于列表对象的大小，较小的对象采用 <code>ziplist</code>；</li>
+<li>集合对象的编码可以是 <code>intset</code> 或者 <code>linkedlist</code>，这取决于具体的数据类型。</li>
+<li>有序集合的编码可以是 <code>zipkist</code> 或者 <code>skiplist 和 hashtable</code> ，跳跃表和哈希表的共同使用的效果类似与 Java 中的 TreeMap；</li>
+<li>字符串对象的编码可以是 <code>int</code> 、 <code>raw</code> 或者 <code>embstr</code> ，例如 <code>set age 123</code> 则会使用 int 类型来保存 age 对应的字符串，raw 是简单动态字符串，embstr 是针对短字符串的，其分配内存的次数减少了一次，例如 <code>set name abcd</code>，row 编码会为 name 和 abcd 各分配一次，而 embstr 会一次性分配足够的空间。</li>
+</ul>
+<blockquote>
+<p>TYPE key 可以查看 key 对应的 val 的对象类型，OBJECT ENCODING key 命令可以查看 key 对应的 val 的编码方式。</p>
+</blockquote>
+</li>
+<li><p>服务器在执行某些命令之前， 会先检查给定键的类型能否执行指定的命令， 而检查一个键的类型就是检查键的值对象的类型。</p>
+</li>
+<li><p>Redis 的对象系统带有引用计数实现的内存回收机制， 当一个对象不再被使用时， 该对象所占用的内存就会被自动释放。</p>
+</li>
+<li><p><strong>Redis 会共享值为 <code>0</code> 到 <code>9999</code> 的字符串对象。</strong></p>
+</li>
+<li><p>对象会记录自己的最后一次被访问的时间， 这个时间可以用于计算对象的空转时间。</p>
+</li>
+</ul>
+<h2 id="第二部分：单机数据库的实现"><a href="#第二部分：单机数据库的实现" class="headerlink" title="第二部分：单机数据库的实现"></a>第二部分：单机数据库的实现</h2><h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><ul>
+<li><p>Redis 服务器的所有数据库都保存在 <code>redisServer.db</code> 数组中， 而数据库的数量则由 <code>redisServer.dbnum</code> 属性保存。</p>
+</li>
+<li><p>客户端通过修改目标数据库指针， 让它指向 <code>redisServer.db</code> 数组中的不同元素来切换不同的数据库。</p>
+</li>
+<li><p><strong>数据库主要由 <code>dict</code> 和 <code>expires</code> 两个字典构成， 其中 <code>dict</code> 字典负责保存键值对， 而 <code>expires</code> 字典则负责保存键的过期时间</strong>。</p>
+</li>
+<li><p>因为数据库由字典构成， 所以对<strong>数据库的操作都是建立在字典操作之上的</strong>。</p>
+</li>
+<li><p>数据库的键总是一个字符串对象， 而值则可以是任意一种 Redis 对象类型， 包括字符串对象、哈希表对象、集合对象、列表对象和有序集合对象， 分别对应字符串键、哈希表键、集合键、列表键和有序集合键。</p>
+</li>
+<li><p><code>expires</code> 字典的键指向数据库中的某个键， 而值则记录了数据库键的过期时间， 过期时间是一个以毫秒为单位的 UNIX 时间戳。</p>
+</li>
+<li><p><strong>Redis 使用惰性删除和定期删除两种策略来删除过期的键： 惰性删除策略只在碰到过期键时才进行删除操作， 定期删除策略则每隔一段时间， 主动查找并删除部分过期键，这通常是由 redis 的后台线程<code>serverCron</code> 函数完成，默认的间隔是 100ms。</strong></p>
+<blockquote>
+<p><img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220212141453110.png" alt="image-20220212141453110"></p>
+</blockquote>
+</li>
+<li><p>执行 SAVE 命令或者 BGSAVE 命令所产生的新 RDB 文件不会包含已经过期的键。</p>
+<blockquote>
+<p>重载时会根据主服务器过期字典忽略过期键。</p>
+</blockquote>
+</li>
+<li><p>执行 BGREWRITEAOF 命令所产生的重写 AOF 文件不会包含已经过期的键。</p>
+</li>
+<li><p>当一个过期键被删除之后， 服务器会追加一条 DEL 命令到现有 AOF 文件的末尾， 显式地删除过期键。</p>
+</li>
+<li><p>当主服务器删除一个过期键之后， 它会向所有从服务器发送一条 DEL 命令， 显式地删除过期键。</p>
+</li>
+<li><p><strong>从服务器即使发现过期键， 也不会自作主张地删除它， 而是等待主节点发来 DEL 命令， 这种统一、中心化的过期键删除策略可以保证主从服务器数据的一致性。</strong></p>
+</li>
+<li><p>当 Redis 命令对数据库进行修改之后， 服务器会根据配置， 向客户端发送数据库通知。</p>
+</li>
+<li><p>当内存达到限制时，Redis 具体的回收策略是通过 maxmemory-policy 配置项配置的。</p>
+<ul>
+<li>no-eviction：不清除数据，只是返回错误，这样会导致浪费掉更多的内存，对大多数写命令（DEL 命令和其他的少数命令例外）</li>
+<li>allkeys-lru：从所有的数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰，以供新数据使用 </li>
+<li>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰，以供新数据使用 </li>
+<li>allkeys-random：从所有数据集（server.db[i].dict）中任意选择数据淘汰，以供新数据使用 </li>
+<li>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰，以供新数据使用 </li>
+<li>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰，以供新数据使用</li>
+</ul>
+</li>
+</ul>
+<h3 id="RDB-持久化"><a href="#RDB-持久化" class="headerlink" title="RDB 持久化"></a>RDB 持久化</h3><ul>
+<li><p>RDB 文件用于保存和还原 Redis 服务器所有数据库中的所有键值对数据。</p>
+</li>
+<li><p>SAVE 命令由服务器进程直接执行保存操作，所以该命令会阻塞服务器。</p>
+</li>
+<li><p>BGSAVE 命令由子进程执行保存操作，所以该命令不会阻塞服务器，而是在后台工作。</p>
+</li>
+<li><p>服务器状态中会保存所有用 <code>save</code> 选项设置的保存条件，当任意一个保存条件被满足时，服务器会自动执行 BGSAVE 命令，这就需要 redis 在执行完命名后记录一些数据，例如是否变脏。</p>
+<blockquote>
+<p># 配置</p>
+<p>save 900 1 		  #  900s 内对数据库有 1 次修改<br>save 300 10		 #  300s 内对数据库有 10 次修改<br>save 60 10000 	#  60s 内对数据库有 10000 次修改</p>
+</blockquote>
+<p>检测配置文件仍然是由后台线程<code>serverCron</code> 函数完成，而该函数默认的间隔是 100ms，该函数会先检查时间间隔最短的配置，例如上面默认配置中，先检查 60s 内是否有 10000 次修改，如果没有则检查 300s 内是否有 10 次修改……</p>
+</li>
+<li><p>RDB 文件是一个经过压缩的二进制文件，由多个部分组成。</p>
+</li>
+<li><p>对于不同类型的键值对， RDB 文件会使用不同的方式来保存它们。</p>
+</li>
+</ul>
+<p><strong>RDB 的保存方式是直接存储数据</strong>，对于不同类型的键值对， RDB 文件会使用不同的方式来保存它们。</p>
+<h3 id="AOF-持久化"><a href="#AOF-持久化" class="headerlink" title="AOF 持久化"></a>AOF 持久化</h3><ul>
+<li><p><strong>AOF 文件通过保存所有修改数据库的写命令请求来记录服务器的数据库状态。</strong></p>
+</li>
+<li><p>AOF 文件中的所有命令都以 Redis 命令请求协议的格式保存。</p>
+</li>
+<li><p>命令请求会先保存到 AOF 缓冲区里面， 之后再定期写入并同步到 AOF 文件。</p>
+</li>
+<li><p><code>appendfsync</code> 选项的不同值对 AOF 持久化功能的安全性、以及 Redis 服务器的性能有很大的影响。</p>
+<blockquote>
+<ol>
+<li>always 每次都将缓冲区的内容立即写入aof文件种</li>
+<li>everysec(默认的) 距离上次同步超过一秒就进行同步，有专门的线程负责执行</li>
+<li>no 就是由磁盘决定什么时候将缓冲区存入磁盘</li>
+</ol>
+</blockquote>
+</li>
+<li><p>服务器只要载入并重新执行保存在 AOF 文件中的命令， 就可以还原数据库本来的状态。</p>
+</li>
+<li><p>AOF 重写可以产生一个新的 AOF 文件， 这个新的 AOF 文件和原有的 AOF 文件所保存的数据库状态一样， 但体积更小。</p>
+</li>
+<li><p>AOF 重写是一个有歧义的名字， <strong>该功能是通过读取数据库中的键值对来实现的， 程序无须对现有 AOF 文件进行任何读入、分析或者写入操作。</strong></p>
+</li>
+<li><p><strong>在执行 BGREWRITEAOF 命令时， Redis 服务器会维护一个 AOF 重写缓冲区， 该缓冲区会在子进程创建新 AOF 文件的期间， 记录服务器执行的所有写命令。 当子进程完成创建新 AOF 文件的工作之后， 服务器会将重写缓冲区中的所有内容追加到新 AOF 文件的末尾， 使得新旧两个 AOF 文件所保存的数据库状态一致。 最后， 服务器用新的 AOF 文件替换旧的 AOF 文件， 以此来完成 AOF 文件重写操作。</strong></p>
+</li>
+</ul>
+<p>AOF 通过记录客户写操作命令来完成备份，好处是你可以很清晰的知道在数据丢失这段时间内客户执行了什么操作，坏处是这可能会造成一定的冗余，例如对同一个键执行多次 set 命令，那么只有最后一次 set 是有效的，前几次都是冗余的，因此长时间后，AOF 文件会变得臃肿，所以才有 BGREWRITEAOF（AOF 重写）这种操作出现。</p>
+<h3 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h3><p>Redis 基于 <strong>Reactor 模式</strong> 开发了自己的网络事件处理器： 这个处理器被称为文件事件处理器（file event handler）：</p>
+<ul>
+<li>文件事件处理器使用 <strong>I&#x2F;O 多路复用</strong> 程序来同时监听多个套接字， 并根据套接字目前执行的任务来为套接字关联不同的事件处理器。</li>
+<li>当被监听的套接字准备好执行连接应答（accept）、读取（read）、写入（write）、关闭（close）等操作时， 与操作相对应的文件事件就会产生， 这时文件事件处理器就会调用套接字之前关联好的事件处理器来处理这些事件。</li>
+</ul>
+<p>虽然文件事件处理器以单线程方式运行， 但通过使用 I&#x2F;O 多路复用程序来监听多个套接字， 文件事件处理器既实现了高性能的网络通信模型， 又可以很好地与 Redis 服务器中其他同样以单线程方式运行的模块进行对接， 这保持了 Redis 内部单线程设计的简单性。</p>
+<p><img src="https://atts.w3cschool.cn/attachments/image/cimg/2015-09-13_55f524b50e6e6.png" alt="img"></p>
+<p><strong>文件事件是对套接字操作的抽象， 每当一个套接字准备好执行连接应答（accept）、写入、读取、关闭等操作时， 就会产生一个文件事件。</strong> 因为一个服务器通常会连接多个套接字， 所以多个文件事件有可能会并发地出现。</p>
+<p>I&#x2F;O 多路复用程序负责监听多个套接字， 并向文件事件分派器传送那些产生了事件的套接字。</p>
+<p><strong>尽管多个文件事件可能会并发地出现， 但 I&#x2F;O 多路复用程序总是会将所有产生事件的套接字都入队到一个队列里面， 然后通过这个队列， 以有序）、同步、每次一个套接字的方式向文件事件分派器传送套接字</strong>： 当上一个套接字产生的事件被处理完毕之后（该套接字为事件所关联的事件处理器执行完毕）， I&#x2F;O 多路复用程序才会继续向文件事件分派器传送下一个套接字， 如图 。</p>
+<p><img src="https://atts.w3cschool.cn/attachments/image/cimg/2015-09-13_55f524bd8058c.png" alt="img"></p>
+<p>文件事件分派器接收 I&#x2F;O 多路复用程序传来的套接字， 并根据套接字产生的事件的类型， 调用相应的事件处理器。</p>
+<p>服务器会为执行不同任务的套接字关联不同的事件处理器， 这些处理器是一个个函数， 它们定义了某个事件发生时， 服务器应该执行的动作。</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220212150422966.png" alt="image-20220212150422966" style="zoom:50%;" />
+
+<p>事件调度程序伪代码：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">aeProcessEvents</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>true<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 获取距离当前时间最近的事件事件</span>
+        timeEvent <span class="token operator">=</span> <span class="token function">aeSerachNearestEvent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 计算距离现在还剩多久</span>
+        deltaTime <span class="token operator">=</span> timeEvent<span class="token punctuation">.</span>when <span class="token operator">-</span> nowTime<span class="token punctuation">;</span>
+        
+        <span class="token comment" spellcheck="true">// 如果到时间了，则立即执行</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>deltaTime <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token function">doTimeEvent</span><span class="token punctuation">(</span>timeEvent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">continue</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        
+        <span class="token comment" spellcheck="true">// 否则等待堵塞文件事件产生</span>
+        <span class="token comment" spellcheck="true">// 堵塞等待的最大时间为 deltaTime</span>
+        fileEvent <span class="token operator">=</span> <span class="token function">aeApiPoll</span><span class="token punctuation">(</span>deltaTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        <span class="token comment" spellcheck="true">// 如果有文件事件发生，则执行文件事件</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>fileEvent <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token function">doFileEvent</span><span class="token punctuation">(</span>fileEvent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        
+        <span class="token comment" spellcheck="true">// 如果到时间了，则执行时间事件，注意由于可能会等待文件事件执行完毕，deltaTime 可能为负</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>deltaTime <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token function">doTimeEvent</span><span class="token punctuation">(</span>timeEvent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>Redis 服务器是一个事件驱动程序， 服务器处理的事件分为<strong>时间事件和文件事件</strong>两类。</li>
+<li>文件事件处理器是基于 Reactor 模式实现的网络通讯程序。</li>
+<li>文件事件是对套接字操作的抽象： 每次套接字变得可应答（acceptable）、可写（writable）或者可读（readable）时， 相应的文件事件就会产生。</li>
+<li>文件事件分为 <code>AE_READABLE</code> 事件（读事件）和 <code>AE_WRITABLE</code> 事件（写事件）两类。</li>
+<li>时间事件分为定时事件和周期性事件： 定时事件只在指定的时间达到一次， 而周期性事件则每隔一段时间到达一次。</li>
+<li><strong>服务器在一般情况下只执行 <code>serverCron</code> 函数一个时间事件， 并且这个事件是周期性事件。</strong></li>
+<li>文件事件和时间事件之间是合作关系， 服务器会轮流处理这两种事件， 并且处理事件的过程中也不会进行抢占。</li>
+<li>时间事件的实际处理时间通常会比设定的到达时间晚一些。</li>
+</ul>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> redisClient <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 使用哪个数据库</span>
+    <span class="token keyword">int</span> db<span class="token punctuation">;</span>
+    
+    <span class="token comment" spellcheck="true">// 套接字描述符，当为 -1 时表示伪客户端</span>
+    <span class="token keyword">int</span> fd<span class="token punctuation">;</span>
+    
+    <span class="token comment" spellcheck="true">// 客户名字</span>
+    robj <span class="token operator">*</span>name<span class="token punctuation">;</span>
+    
+    <span class="token comment" spellcheck="true">// 输入缓冲区，客户发来的请求命令会暂时的保存在这个简单字符串缓存中</span>
+    sds querybuf<span class="token punctuation">;</span>
+    
+    <span class="token comment" spellcheck="true">// 命令参数，由服务器对 querybuf 解析得出</span>
+    robj <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">;</span>
+    
+    <span class="token comment" spellcheck="true">// 命令参数长度，由服务器对 querybuf 解析得出</span>
+    <span class="token keyword">int</span> argc<span class="token punctuation">;</span>
+    
+    <span class="token comment" spellcheck="true">// 命令类型，指向一个具体的解决函数，由服务器对 querybuf 解析得出</span>
+    <span class="token keyword">struct</span> redisCommand <span class="token operator">*</span>cmd<span class="token punctuation">;</span>
+    
+    <span class="token comment" spellcheck="true">// 回复缓存，服务器的回复，暂时存放</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span>REDIS_REPLY_CHUNK_BYTES<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// ...</span>
+
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span> redisClient<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>服务器状态结构使用 <code>clients</code> 链表连接起多个客户端状态， 新添加的客户端状态会被放到链表的末尾。</li>
+<li>客户端状态的 <code>flags</code> 属性使用不同标志来表示客户端的角色， 以及客户端当前所处的状态，例如集群中任何一太服务器可能都是一个客户端，执行 AOF 文件时也需要一个伪客户端。</li>
+<li>输入缓冲区记录了客户端发送的命令请求， 这个缓冲区的大小不能超过 1 GB 。</li>
+<li>命令的参数和参数个数会被记录在客户端状态的 <code>argv</code> 和 <code>argc</code> 属性里面， 而 <code>cmd</code> 属性则记录了客户端要执行命令的实现函数。</li>
+<li>客户端有固定大小缓冲区和可变大小缓冲区两种缓冲区可用， 其中固定大小缓冲区的最大大小为 16 KB ， 而可变大小缓冲区的最大大小不能超过服务器设置的硬性限制值。</li>
+<li>输出缓冲区限制值有两种， 如果输出缓冲区的大小超过了服务器设置的硬性限制， 那么客户端会被立即关闭； 除此之外， 如果客户端在一定时间内， 一直超过服务器设置的软性限制， 那么客户端也会被关闭。</li>
+<li>当一个客户端通过网络连接连上服务器时， 服务器会为这个客户端创建相应的客户端状态。 网络连接关闭、 发送了不合协议格式的命令请求、 成为 CLIENT_KILL 命令的目标、 空转时间超时、 输出缓冲区的大小超出限制， 以上这些原因都会造成客户端被关闭。</li>
+<li>处理 Lua 脚本的伪客户端在服务器初始化时创建， 这个客户端会一直存在， 直到服务器关闭。</li>
+<li>载入 AOF 文件时使用的伪客户端在载入工作开始时动态创建， 载入工作完毕之后关闭。</li>
+</ul>
+<h3 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h3><p>现在，我们终于可以来看看客户键入命令后到收到回复这段时间发生了什么，举个例子， 如果我们使用客户端执行以下命令：</p>
+<pre><code>redis&gt; SET KEY VALUE
+OK
+</code></pre>
+<ol>
+<li>客户端发送命令请求到服务器。当用户键入 <code>SET KEY VALUE</code> 时，<strong>redis-cli 会将命令封装成符合 redis 协议的命令</strong>，例如<code>*3\r\n$3\r\nSET\r\n$3\r\nKEY\r\n$5\r\nVALUE\r\n</code>。</li>
+<li>服务器接收到客户端网络套接字，由 IO 多路复用程序读取套接字，<strong>事件分发器根据协议类型交由命令请求处理器。</strong></li>
+<li>处理器解析客户请求，将请求放入 redisClient 请求缓存中，并解析参数和参数长度。随后命令请求处理器会调用<strong>命令执行器</strong>执行命令。</li>
+<li>命令执行器首先会根据请求类型到内置命令哈希表中查找对应的 redisCommand（执行对应命令的函数），例如这里会找到 setCommand，然后将它放入 redisClient 结构体中。</li>
+<li>接下来命令执行器会进行一些健壮性检查，例如：<ul>
+<li>redisCommand 是否为 NULL。</li>
+<li>客户是否通过了身份验证。</li>
+<li>如果服务器正在进行 AOF 或 RDB 载入，则拒绝执行。</li>
+<li>客户端是否开启了订阅功能，如果开启则拒绝执行与订阅无关的命令。</li>
+<li>……</li>
+</ul>
+</li>
+<li>如果检查都能通过，命令执行器会调用 redisCommand，传入参数执行命令。</li>
+<li>执行完命令后，命令执行器会进行一些代理操作，例如增加客户调用次数，检查是否需要写入 AOF，记录脏数据次数……</li>
+<li>一切都完成后，命令执行器为客户端的套接字描述符关联<strong>命令回复处理器</strong>，一旦 IO 多路复用程序检测到套接字变的可写，会调用命令回复处理器，命令回复处理器会将处理结果发送给客户端。</li>
+<li>客户端收到回复后，由于回复也是符合 redis 协议字符串，客户端会转换成客户可读的模式。例如服务器发送<code>+ok\r\n1</code> 会被转换成<code>ok\r\n</code>。</li>
+</ol>
+<p>重点回顾：</p>
+<ul>
+<li>一个命令请求从发送到完成主要包括以下步骤： 1. 客户端将命令请求发送给服务器； 2. 服务器读取命令请求，并分析出命令参数； 3. 命令执行器根据参数查找命令的实现函数，然后执行实现函数并得出命令回复； 4. 服务器将命令回复返回给客户端。</li>
+<li><code>serverCron</code> 函数默认每隔 <code>100</code> 毫秒执行一次， 它的工作主要包括更新服务器状态信息， 处理服务器接收的 <code>SIGTERM</code> 信号， 管理客户端资源和数据库状态， 检查并执行持久化操作， 等等。</li>
+<li>服务器从启动到能够处理客户端的命令请求需要执行以下步骤： 1. 初始化服务器状态； 2. 载入服务器配置； 3. 初始化服务器数据结构； 4. 还原数据库状态； 5. 执行事件循环。</li>
+</ul>
+<h2 id="第三部分：多机数据库的实现"><a href="#第三部分：多机数据库的实现" class="headerlink" title="第三部分：多机数据库的实现"></a>第三部分：多机数据库的实现</h2><h3 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h3><p>复制通常是针对主从复制的，主服务器需要向从服务器发送写命令，而从服务器也可以要求主服务器进行同步复制，前者是命令传播，进行增量更新，后者是复制快照。</p>
+<p>早期版本的 SYNC 命令十分暴力，主服务器会发送所有的 RDB 文件给从服务器，复制是异步的，在发送的这段时间，所有的数据变更被积累在一个缓冲区中，发送完成后在同步将缓冲区的数据变更全部发送即可完成复制。</p>
+<p><img src="https://atts.w3cschool.cn/attachments/image/cimg/2015-09-13_55f5274336096.png" alt="img"></p>
+<p>SYNC 命令的缺陷十分明显，不能实现增量更新，即部分复制，后来的 PSYNC 解决了这个缺陷，<strong>PSYNC 拥有完全同步和部分同步两个语义</strong>。</p>
+<p>在 PSYNC 的实现中，部分重同步通过复制偏移量、复制积压缓冲区、服务器运行 ID 三个部分来实现。</p>
+<p>在命令传播时，主从服务器各自维护复制语句的偏移量，例如如果主服务器偏移量为 100，而从服务器偏移量为 50，服务器应该补偿 50 ~ 100 字节的数据给服务器，RDB 肯定无法做到这一点，因为 RDB 存储的是整个数据库数据，没办法抽离，因此需要引入<strong>复制积压缓冲区</strong>.</p>
+<p>主服务器传播命令时还会将命令写入复制积压缓冲区，命令会有一个对应的偏移量为标识，如果从服务器发来的偏移量能够在复制积压缓冲区找到，那么就执行部分复制，否则执行完全同步。<strong>当然，前提是双方维护的主服务器 RUN ID 确实一致，如果从服务器之前 salve 的不是当前的主服务器，那么自然就不能执行部分复制。</strong></p>
+<p>有了 PSYNC 命令后，主从复制也能更加高效的应对网络问题，例如如果某条命令因为网络问题没有同步到从服务器怎么办？</p>
+<p>在 Redis 中，每个从服务器如果超过一定时间没有收到命令后，就会发送命令请求主服务器执行一次 PSYNC 增量更新，从而解决这个问题。</p>
+<ul>
+<li>Redis 2.8 以前的复制功能不能高效地处理断线后重复制情况， 但 Redis 2.8 新添加的部分重同步功能可以解决这个问题。</li>
+<li>部分重同步通过复制偏移量、复制积压缓冲区、服务器运行 ID 三个部分来实现。服务器 ID 主要是让从服务器确认主服务器是不是之前的那个。</li>
+<li>在复制操作刚开始的时候， 从服务器会成为主服务器的客户端， 并通过向主服务器发送命令请求来执行复制步骤， 而在复制操作的后期， 主从服务器会互相成为对方的客户端。</li>
+<li>主服务器通过向从服务器传播命令来更新从服务器的状态， 保持主从服务器一致， 而从服务器则通过向主服务器发送命令来进行心跳检测， 以及命令丢失检测。</li>
+</ul>
+<p>若想让一台服务器成为从服务器，只需要在配置文件中加入：</p>
+<pre><code># 假设 192.168.88.111 为主节点ip，6379为端口
+slaveof 192.168.88.111 6379
+</code></pre>
+<p>然后以该配置文件启动 redis 即可：<code>redis-server redis.conf</code></p>
+<h3 id="哨兵-Sentinel"><a href="#哨兵-Sentinel" class="headerlink" title="哨兵 Sentinel"></a>哨兵 Sentinel</h3><p>一致性与共识就是经典的 Raft 算法了，不过 redis 做到巧妙的一点是，每个 Sentinel 都订阅同一个频道，它们会以每两秒一次的频率， 通过该频道发送消息来向其他 Sentinel 宣告自己的存在，这就使得每个 Sentinel 不必互相见面就能知道彼此的存在。</p>
+<p>启动一个 Sentinel 需要在配置文件加上：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># sentinel monitor [master-group-name] [ip] [port] [quorum]</span>
+<span class="token comment" spellcheck="true"># 该行的意思是：监控的master的名字叫做mymaster （可以自定义），地址为192.168.88.111:6379</span>
+<span class="token comment" spellcheck="true"># 行尾最后的一个2代表在sentinel集群中，多少个sentinel认为master死了，才能真正认为该master不可用了。</span>
+sentinel monitor my_master 192.168.88.111 6379 2
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以使用命令启动：</p>
+<pre><code>$ redis-sentinel redis.conf
+</code></pre>
+<p>或者命令：</p>
+<pre><code>$ redis-server redis.conf --sentinel
+</code></pre>
+<p>这两个命令的效果完全相同。</p>
+<p>当一个 Sentinel 启动时， 它需要执行以下步骤：</p>
+<ol>
+<li>初始化服务器。</li>
+<li>将普通 Redis 服务器使用的代码替换成 Sentinel 专用代码。</li>
+<li>初始化 Sentinel 状态。</li>
+<li>根据给定的配置文件， 初始化 Sentinel 的监视主服务器列表。</li>
+<li>创建连向主服务器的网络连接。</li>
+</ol>
+<ul>
+<li>Sentinel 只是一个运行在特殊模式下的 Redis 服务器， 它使用了和普通模式不同的命令表， 所以 Sentinel 模式能够使用的命令和普通 Redis 服务器能够使用的命令不同。</li>
+<li><strong>Sentinel 会读入用户指定的配置文件， 为每个要被监视的主服务器创建相应的实例结构， 并创建连向主服务器的命令连接和订阅连接， 其中命令连接用于向主服务器发送命令请求， 而订阅连接则用于接收指定频道的消息。</strong></li>
+<li>Sentinel 通过向主服务器发送 INFO 命令来获得主服务器属下所有从服务器的地址信息， 并为这些从服务器创建相应的实例结构， 以及连向这些从服务器的命令连接和订阅连接。</li>
+<li>在一般情况下， Sentinel 以每十秒一次的频率向被监视的主服务器和从服务器发送 INFO 命令， 当主服务器处于下线状态， 或者 Sentinel 正在对主服务器进行故障转移操作时， Sentinel 向从服务器发送 INFO 命令的频率会改为每秒一次。</li>
+<li><strong>对于监视同一个主服务器和从服务器的多个 Sentinel 来说， 它们会以每两秒一次的频率， 通过向被监视服务器的 <code>__sentinel__:hello</code>频道发送消息来向其他 Sentinel 宣告自己的存在。</strong></li>
+<li><strong>每个 Sentinel 也会从 <code>__sentinel__:hello</code> 频道中接收其他 Sentinel 发来的信息， 并根据这些信息为其他 Sentinel 创建相应的实例结构， 以及命令连接。</strong></li>
+<li>Sentinel 只会与主服务器和从服务器创建命令连接和订阅连接， Sentinel 与 Sentinel 之间则只创建命令连接。</li>
+<li>Sentinel 以每秒一次的频率向实例（包括主服务器、从服务器、其他 Sentinel）发送 PING 命令， 并根据实例对 PING 命令的回复来判断实例是否在线： 当一个实例在指定的时长中连续向 Sentinel 发送无效回复时， Sentinel 会将这个实例判断为主观下线。</li>
+<li><strong>当 Sentinel 将一个主服务器判断为主观下线时， 它会向同样监视这个主服务器的其他 Sentinel 进行询问， 看它们是否同意这个主服务器已经进入主观下线状态。</strong></li>
+<li>当 Sentinel 收集到足够多的主观下线投票之后， 它会将主服务器判断为客观下线， 并发起一次针对主服务器的故障转移操作。</li>
+</ul>
+<p>让我们来考虑具体的细节，当哨兵进行选举之前，必须要选举出一个领头哨兵进行选举，在 Redis 的实现中，<strong>它默认任何一个哨兵都能够进行故障转移</strong>，于是最先发现主节点宕机的哨兵将自己的<strong>纪元</strong>加一，并且询问其他哨兵，其他哨兵检查主节点是否下线，如果确实下线并且当前纪元小于对方纪元（或者是等于但没投票），这个时候会投票给对方，并且更新纪元为对方纪元，只有一个节点收到了半数以上的节点的赞成，它才会成为领头节点。</p>
+<p>这个其实就是 Raft 算法，每个节点在一个纪元内只会投一票，并且只有半数以上的节点投赞成票才会成功，这就会使得任意一个纪元内只能有一个领头，从而保障安全性，如果一时间没有协商出来，那么哨兵会间隔一段时间重新自增纪元发起投票。</p>
+<p>领头哨兵选举出来后，接下来就是选举从节点了，这首先哨兵会过滤掉长时间没有和主服务器通信的节点，然后按照一定的排序规则：用户设定优先级、从节点复制偏移、RUN ID 选举一个最优的节点，然后执行 SLEAVEOF NO ONE 命令让其成为主节点，随后就是广播告知。</p>
+<h3 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h3><p>一个 Redis 集群通常由多个节点（node）组成， 在刚开始的时候， 每个节点都是相互独立的， 它们都处于一个只包含自己的集群当中， 要组建一个真正可工作的集群， 我们必须将各个独立的节点连接起来， 构成一个包含多个节点的集群。</p>
+<p>连接各个节点的工作可以使用 CLUSTER MEET 命令来完成， 该命令的格式如下：</p>
+<pre><code>CLUSTER MEET &lt;ip&gt; &lt;port&gt;
+</code></pre>
+<p>向一个节点 <code>node</code> 发送 CLUSTER MEET 命令， 可以让 <code>node</code> 节点与 <code>ip</code> 和 <code>port</code> 所指定的节点进行握手（handshake）， 当握手成功时， <code>node</code>节点就会将 <code>ip</code> 和 <code>port</code> 所指定的节点添加到 <code>node</code> 节点当前所在的集群中。</p>
+<p>不过，如果想要进入集群模式，还必须要将配置中的 cluster-enabled 选项配置为 true。</p>
+<ul>
+<li>节点通过握手来将其他节点添加到自己所处的集群当中。</li>
+<li>集群中的 <code>16384</code> 个槽可以分别指派给集群中的各个节点， 每个节点都会记录哪些槽指派给了自己， 而哪些槽又被指派给了其他节点。槽位是针对数据库中的所有的 key 而言的，redis 会将所有的 key 尽可能均匀映射到 0 ~ 16384，用户请求相关key时，会根据key的槽位选择对应的节点。槽位信息必须在集群中传播，节点可以通过 bitset 来快速查看相关槽位是否是自己负责的。</li>
+<li>节点在接到一个命令请求时， 会先检查这个命令请求要处理的键所在的槽是否由自己负责， 如果不是的话， 节点将向客户端返回一个<code>MOVED</code> 错误， <code>MOVED</code> 错误携带的信息可以指引客户端转向至正在负责相关槽的节点，客户端会自动完成重定向，这对用户是不可见的。</li>
+<li>对 Redis 集群的重新分片工作是由客户端执行的， 重新分片的关键是将属于某个槽的所有键值对从一个节点转移至另一个节点。</li>
+<li>如果节点 A 正在迁移槽 <code>i</code> 至节点 B ， 那么当节点 A 没能在自己的数据库中找到命令指定的数据库键时， 节点 A 会向客户端返回一个 <code>ASK</code> 错误， 指引客户端到节点 B 继续查找指定的数据库键。</li>
+<li>单个 Key 的迁移操作是原子的，在迁移过程中，会堵塞客户端的访问。</li>
+<li><code>MOVED</code> 错误表示槽的负责权已经从一个节点转移到了另一个节点， 而 <code>ASK</code> 错误只是两个节点在迁移槽的过程中使用的一种临时措施。</li>
+<li>集群里的从节点用于复制主节点， 并在主节点下线时， 代替主节点继续处理命令请求。</li>
+<li>集群中的节点通过发送和接收消息来进行通讯， 常见的消息包括 <code>MEET</code> 、 <code>PING</code> 、 <code>PONG</code> 、 <code>PUBLISH</code> 、 <code>FAIL</code> 五种。</li>
+</ul>
+<p>集群中的通信是采用 Gossip 协议（流行病协议）进行通信的，这个通信协议并不是实时传输的，而是具有一定的滞后性，但优点是即使集群非常多，每个节点仍然只需要和固定的几个节点打交道就行了，减少了节点的压力。</p>
+<p>这个协议具体的工作原理就像传染病一样，不停的传播消息，节点没必要向其他所有节点传播，而是根据一定的规则选取一些节点进行传播，而这些节点按照同样的方式进行传播（就像病毒一样感染），一段时间后集群中任意一个节点都会被感染，这样所有节点都能维护一张集群中的槽指派表</p>
+<p>每个节点每隔一定周期时都会向周围节点发送 PING、PUBLISH 等命令广播消息，<strong>集群中允许主节点向从节点进行复制，并且集群中有着自动的故障转移机制，这和哨兵机制有所不同。</strong></p>
+<p>当一个节点向周围节点发送 PING 消息却 PING 不通时，节点就会认为该节点疑是下线，然后就在集群中依赖 Gossip 传递消息，每个节点都记录下“谁认为谁疑是下线”，并且一旦有半数以上的<strong>主节点</strong>都认为某个节点疑是下线，就会在集群中广播该节点客观下线的实时，并且集群纪元配置加一。</p>
+<p>一旦从节点收到自己主节点下线的通知，这里<strong>每个从节点都会自己发起选举，这和哨兵机制有很大的不同，集群中是一种毛遂自荐的方式</strong>，每个从节点都向主节点（携带纪元配置）发送投票请求，如果从节点纪元不小于当前节点并且主节点没投过票，则可以投给从节点。</p>
+<p>一旦一个节点收到半数以上（所以只会有一个节点胜出）的投票时，它将成为主节点，否则，将间隔一段时间重新开始。</p>
+<p>这里的问题是，如何选取最优的从节点呢？事实上集群并不能保障全局出来的从节点是最优的，但是集群仍然会尽力的去保证，它有如下机制：<strong>从节点检测到主节点下线时，会间隔一段时间后才会发起选举，而间隔时间是通过一定算法生成的，优先级越低（参考哨兵机制）的间隔时间越长。</strong></p>
+<p>当主节点重新上线时，由于主节点纪元低于其他节点，其他节点不会接受该节点的请求，而当主节点收到其他节点传播的消息时，发现已经有新主节点了，并且自己的确已经“落伍”（纪元配置低于集群中纪元配置），于是更新纪元配置，心甘情愿成为从节点。</p>
+
+        </div>
+
+
+
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent">
+        </div>
+        <!-- 评分 -->
+        <div class="single-reward">
+          
+          <!-- 五星评分 -->
+<div id="wpac-rating"></div>
+<script type="text/javascript">
+wpac_init = window.wpac_init || [];
+wpac_init.push({widget: 'Rating', id: 23889});
+(function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = 'https://embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+})();
+</script>
+<!-- <a target="_blank" rel="noopener" href="https://widgetpack.com" class="wpac-cr">Star Rating WIDGET PACK</a> -->
+          
+        </div>
+        <!-- 自定义署名方式 -->
+        <footer class="post-footer">
+          <div class="post-lincenses" style="color: #ff9966;">
+            欢迎转载，转载时请注明来源哦！
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" style="color: #ff9966;" target="_blank"
+              rel="nofollow">
+              <i class="fa fa-creative-commons" aria-hidden="true"></i>ncsa4.0</a>
+          </div>
+          
+          <div class="post-tags" style="color: #a39391">
+            <span><i class="fa fa-tags"></i>
+              
+              <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="color: #716e77;">暂无标签<em>·</em></a>
+              
+            </span>
+            <span>
+              <i class="iconfont icon-file"></i>
+              
+              <a href="/blog/categories/%E6%9A%82%E6%97%A0%E5%88%86%E7%B1%BB/" style="color: #716e77;">暂无分类</a>
+              
+            </span>
+          </div>
+          
+          <div class="post-share" >
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+        <!-- <div class="tag-cloud">
+          <div class="tag-cloud-title">
+          </div>
+          <div class="tag-cloud-tags">
+            <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="font-size: 10px; color: #f06966">暂无标签</a>
+          </div>
+        </div> -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+        <div class="post-nepre half previous">
+          
+            <a href="/blog/post/2e4c.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                  style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)"
+                  src="">
+              </div>
+              <span class="label">Previous Post</span>
+              <div class="info">
+                <h3>Redis 高可用</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+          
+          
+          
+          <div class="post-nepre half next">
+            
+              <a href="/blog/post/2681.html" rel="next">
+                <div class="background">
+                  <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                    style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"
+                    onerror="imgError(this,3)" src="">
+                </div>
+                <span class="label">Next Post</span>
+                <div class="info">
+                  <h3>TCP详解</h3>
+                  <hr>
+                </div>
+              </a>
+            </div>
+            
+      </section>
+      <!-- 加密文章隐藏评论 -->
+      <section class="comment" >
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container" class="comment"></div> 
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<script type="text/javascript">
+	var gitalk = new Gitalk({
+  	clientID: '',
+  	clientSecret: '',
+  	repo: 'cungudafa.github.io',
+  	owner: 'cungudafa',
+	admin: ['cungudafa'],
+	distractionFreeMode: 'true',
+    id: md5(location.pathname)
+})
+gitalk.render('gitalk-container') 
+</script>
+
+      </section>
+      <!-- 加密文章隐藏作者信息 -->
+      
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+<!--评论配置-->
+
+
+
+      <!-- body.end -->
+    </div>
+    <!-- search -->    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/blog/',
+        CONTENT_URL: '/blog/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- footer-->    
+    
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <div class="footertext">
+          <div class="img-preload">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+          </div>
+        </div>
+        <!-- 网站数据统计 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #ff9999;padding-left: 20px;">
+                <!-- 网站运行时间统计 -->
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span id="time" align="center">载入时间中...</span>
+                <script>
+                var now = new Date(); 
+                function createtime() { 
+                      var grt= new Date("Wed Feb 12 2020 01:20:00 GMT+0800 (中国标准时间)");//在此处修改你的建站时间
+                      now.setTime(now.getTime()+250); 
+                      days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+                      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+                      if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+                      mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+                      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+                      snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+                      document.getElementById("time").innerHTML = "小破站在各种灾难中苟活了 "+ dnum +" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";      
+                  } 
+                  setInterval("createtime()",250);
+                </script>
+            </span> 
+          </p>
+        </div>
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #b9b9b9;padding-left: 20px;">
+              <!-- 全网站字数统计wordcount -->
+              
+              <!-- 不蒜子网页计数器 -->
+              
+              <span style="padding-left: 20px;"><i class="fa fa-fire" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_pv">总访问量： <span id="busuanzi_value_site_pv" style="color:#ff9999;"></span>次</span>
+              </span>
+              
+              
+              <span style="padding-left: 20px;"><i class="fa fa-user" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_uv">总访问人数： <span id="busuanzi_value_site_uv" style="color:#ff9999;"></span>人</span>
+              </span>
+              
+            </span>
+          </p>
+        </div>
+        <!-- 作者注明 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #b9b9b9;">
+                Copyright &copy; 2023
+                &nbsp;<a style="color: #ff9999;display:inline-block"> Happysnaker </a>
+                &nbsp;<i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> 
+                &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank" style="color: #ff9999;display:inline-block">Hexo</a>
+                |&nbsp;Theme&nbsp;<a href="https://gitee.com/cungudafa/hexo-theme-sakuraplus" target="_blank" style="color: #ff9999;display:inline-block">SakuraPlus</a>
+              </span>
+          </p>
+        </div>
+         <!-- 网站作者版权注明 -->
+         
+          <div id="footer-info" class="inner">
+            <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #ff9999;">
+                
+              </span>
+            </p>
+          </div>
+        
+    </div><!-- .site-info -->
+</footer>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/InsightSearch.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/sakura-app.js"></script>
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- fancybox大图查看 需jq -->
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/jquery.fancybox.min.js"></script>
+  <script>
+    $('[data-fancybox="images"]').fancybox({
+      thumbs : {
+        autoStart : true //缩略图
+      }
+    });
+    $('[data-fancybox]').fancybox({
+      protect: true,//图片右键不能下载
+      youtube : {
+          controls : 0,
+          showinfo : 0
+      },
+      vimeo : {
+          color : 'f00'
+      }
+    });
+  </script>
+
+
+<!-- 自适应浏览器 -->
+<script type="text/javascript">
+  /* <![CDATA[ */
+  if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  } else {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  }
+  /* ]]> */
+  
+  </script>
+  <script>
+  $(document).ready(function() {
+    if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+      if ($(".pattern-center").length > 0) { //有图的情况
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -400,
+            scrollSmoothOffset: -85
+        });
+      } else {
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -85,
+            scrollSmoothOffset: -85
+        });
+      }
+      var offsetTop = $('.toc').offset().top - 95;
+      window.onscroll = function() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop >= offsetTop) {
+          $('.toc').addClass('toc-fixed');
+        } else {
+          $('.toc').removeClass('toc-fixed');
+        }
+      }
+    }
+  });
+  </script>
+    <!-- Side menu -->
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- Floating window -->
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">happysnaker开心</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="http://github.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="http://gitee.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/archives/">
+                  <i class="fa fa-line-chart" aria-hidden="true"></i>
+                  统计
+                </a>
+              </li>
+            
+              <li>
+                <a href="/blog/tags">
+                  <i class="fa fa-tags" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2020 hexo-sakuraplus</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  
+   <!-- pages壁纸切换 -->
+ 
+    <div class="skin-menu no-select" id="mainskin"  style="position: fixed">
+        <div class="theme-controls row-container">
+            <ul class="menu-list">
+                <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+                <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+                <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+                <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+                <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+                <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+                <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+                <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+            </ul>
+        </div>
+        <div class="font-family-controls row-container">
+            <button type="button" class="control-btn-serif selected" data-mode="serif" onclick="mashiro_global.font_control.change_font()">Serif</button>
+            <button type="button" class="control-btn-sans-serif" data-mode="sans-serif" onclick="mashiro_global.font_control.change_font()">Sans Serif</button>
+        </div>
+    </div>   
+    <canvas id="night-mode-cover"></canvas> 
+        <div class="changeSkin-gear no-select">
+        <div class="keys" id="setbtn"> <span id="open-skinMenu"> 切换壁纸 | SCHEME TOOL 
+            &nbsp;<i class="iconfont icon-gear inline-block rotating"></i> </span></div>
+    </div><!-- skin.end -->
+
+  <!-- left side bar -->
+
+ </body>
+</html>

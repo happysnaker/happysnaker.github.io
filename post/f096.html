@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <!-- cungudafa百度收录验证编号 -->
+  <!-- <meta name="baidu-site-verification" content="LukfTcyXmC" /> -->
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">深入解析分段与分页 | Hexo</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/style.css" type="text/css" media="all" id="saukra_css-css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/jquery.fancybox.min.css" media="all">  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/tags.css" media="all">
+  
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/logo.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/fonts/LOGO/logo.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+  <!-- 分析 -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+  <!-- Baidu Analytics -->
+
+  
+  <!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+  " type="text/css" media="all"> -->
+  <script>
+    /*Initial Variables*/
+    var mashiro_option = new Object();
+    var mashiro_global = new Object();
+    mashiro_option.NProgressON = true;
+    /* 
+    * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+    * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+    */
+    mashiro_option.email_domain = "";
+    mashiro_option.email_name = "";
+    mashiro_option.cookie_version_control = "";
+    mashiro_option.qzone_autocomplete = false;
+    mashiro_option.site_name = "happysnaker开心";
+    mashiro_option.author_name = "开心";
+    mashiro_option.site_url = "http://happysnaker.gitee.io/blog";
+    mashiro_option.v_appId = "";//
+    mashiro_option.v_appKey = "";//
+    mashiro_option.mathjax = "1";
+    mashiro_option.copyright_enable = "false" ;
+    mashiro_option.copyright_minCharNumber = parseInt("120") ;
+    mashiro_option.copyright_description = "本文章著作权归作者所有，任何形式的转载都请注明出处。" ;
+    mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+    mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+    // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+    // mashiro_option.float_player_on = true;
+
+    /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+    var bg = "https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(0).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(1).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(2).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(3).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(4).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(5).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(6).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(7).jpg.webp".split(",");
+    var bgindex = Math.floor(Math.random()*bg.length);
+    if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+      alert('朋友，IE浏览器未适配哦~');
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"><link rel="stylesheet" href="/blog/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/blog/css/prism-line-numbers.css" type="text/css"></head> 
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <!-- Dynamic sliders -->
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <!-- Main content -->
+  <section id="main-container">
+    <!-- Top menu -->
+    <div class="headertop filter-dot">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="http://happysnaker.gitee.io/blog">
+          <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>且停且忘且随风，且行且看且从容</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="http://github.com/happysnaker" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://gitee.com/happysnaker" target="_blank" class="social-github" title="gitee">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/gitee.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  
+  <div id="video-container">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <!-- banner -->
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+        <span class="site-title">
+            <span class="logolink logo">
+                <a href="/">
+                    <ruby>
+                    <span class="sakuraso">Happysnaker</span>
+                    <span class="no">の</span>
+                    <span class="shironeko">小屋</span>
+                    <rp></rp>
+                    <rt class="logo">happysnaker</rt>
+                    <rp></rp>
+                    </ruby>
+                  </a>
+            </span>
+          </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/archives/">
+                          <i class="fa fa-line-chart" aria-hidden="true"></i>
+                          统计
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/blog/tags">
+                          <i class="fa fa-tags" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      
+      <!-- body -->
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1"
+        class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content">  -->
+        <!--套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <p>文章已收录我的仓库：<a target="_blank" rel="noopener" href="https://github.com/happysnaker/JavaLearningNotes">Java学习笔记与免费书籍分享</a></p>
+<h1 id="分段、分页"><a href="#分段、分页" class="headerlink" title="分段、分页"></a>分段、分页</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h3 id="什么是碎片？"><a href="#什么是碎片？" class="headerlink" title="什么是碎片？"></a>什么是碎片？</h3><p>碎片分为内部碎片与外部碎片，都是指浪费而不能使用的空间。</p>
+<p>内部碎片是指<strong>已分配但未被使用的地址空间。</strong>例如在64位空间内，你只使用 7 字节但由于内存对齐不得不为你分配8字节空间，这就产生了1字节内部碎片。</p>
+<p>外部碎片是指<strong>未分配且未使用的地址空间。</strong>例如，你申请4字节的Int类型，再申请8字节的long类型，为了内存对齐，其中4字节无法装入8字节类型，这就产生了4字节的外部碎片，如下图所示。</p>
+<p><strong>内部碎片是已被分配的空间，是操作系统不可利用的空间；外部碎片是未被分配的，是可分配的，但该空间过小(碎片的含义)无法装入资源，导致不可利用，但外部碎片是可解决的，可以将多个外部碎片紧凑成一个大的空闲空间，但这需要大量成本。</strong></p>
+<p><img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210912170423902.png" alt="外部碎片"></p>
+<h3 id="段式模型的前身：基址加界限寄存器-动态重定位"><a href="#段式模型的前身：基址加界限寄存器-动态重定位" class="headerlink" title="段式模型的前身：基址加界限寄存器(动态重定位)"></a>段式模型的前身：基址加界限寄存器(动态重定位)</h3><p>要想理解分段与分页，必须先谈谈早期的虚拟内存模型。</p>
+<p>在经历了纯物理地址后，科学家们期望解决这种内存模型难以统一的问题，于是虚拟内存技术孕育而生，但困扰科学家们的是，如何将虚拟地址转换成物理地址。</p>
+<p>早期的科学家们很容易的想到将整个程序作为一个整体，并为每个进程分配一个基址寄存器和界限寄存器<strong>，基址寄存器存放该虚拟地址在实际物理地址的起点，而界限寄存器则用以判定程序是否访问非法地址</strong>。</p>
+<p>通过这种方式，实际的地址很好计算:<br>$$<br>实际地址 &#x3D; 虚拟地址 + 基址<br>$$<br>但是，这种方式仍然将进程的全部地址空间加载内存中，虽然解决了地址翻译问题，但仍然产生了大量的内部碎片，如下图中该进程栈堆区很小，于是在栈堆区之间产生了<strong>内部碎片</strong>。</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210912181943123.png" alt="image-20210912181943123" style="zoom: 50%;" />
+
+
+
+<p>从图中可以看出，如果我们将整个地址空间放入物理内存，那么栈和堆之间的空间并没有被进程使用，却依然占用了实际的物理内存。因此，简单的通过基址寄存器和界限寄存器实现的虚拟内存很浪费。</p>
+<p>另外，我们必须要确保内存足够放得下进程的虚拟地址空间，但通常主存成本是比较昂贵的，不如磁盘廉价，这种方式通常不支持大的虚拟地址，如果剩余物理内存无法提供连续区域来放置完整的地址空间，进程便无法运行。例如现在32位的进程空间通常是4GB，主存根本就装不下几个进程。</p>
+<p>关键问题是：<strong>怎样支持大虚拟地址空间</strong>，同时栈和堆之间（可能）有大量空闲空间？在之前的例子里，地址空间非常小，所以这种浪费并不明显。但设想一个32位（4GB）的地址空间，通常的程序只会使用几兆的内存，但却需要一次性的将整个地址空间都放在内存中。</p>
+<p><strong>我们需要更复杂的机制以利用物理内存，避免内部碎片，早期的科学家们想出了分段这种思想。</strong></p>
+<h2 id="分段式管理"><a href="#分段式管理" class="headerlink" title="分段式管理"></a>分段式管理</h2><h3 id="分段思想"><a href="#分段思想" class="headerlink" title="分段思想"></a>分段思想</h3><p>分段思想其实就是将基址加界限的概念泛化，现在，我们<strong>为代码、堆和栈段分别维护一个段基址加段界限寄存器</strong>，这样我们不必要每次都强制的装入整个进程空间，<strong>每个基址寄存器存放该段在物理地址的实际空间，界限寄存器仍然用于保护地址空间。</strong></p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210912185535856.png" alt="image-20210912185535856" style="zoom: 25%;" />
+
+<p>现在对于程序未使用的<strong>段空间</strong>，我们没必要为其分配了，因为每个段之间的耦合度降低了，一个空闲的段并不会影响其他的段，等到需要用时，段可以动态生长，但一旦超过段长，仍然会触发异常。</p>
+<p>操作系统也可以离散的分配空间，例如堆和栈不必是连续的空间（基质寄存器不同），即各个段之间物理内存中的地址不一定是连续的，这也能大大的提高对物理地址的利用率。</p>
+<p><strong>从某种层面上说，由于段是动态生长的，未使用的空间将不会进行分配，此时可以认为段不会产生内部碎片。</strong></p>
+<p><strong>但是，剩下的空间也必须预留给这个段，以支持段的生长，如果将段长分的小一点，那么内部碎片最大不超过这个段的大小，合理的设置段大小可以有效避免内部碎片。</strong> 当然，如果内存空间没有限制，操作系统可以动态的去修改段表中的段长。</p>
+<p><strong>此外，由物理地址不必是连续的，一些地址可以在运行时额外分配一个段，增添了灵活性。</strong></p>
+<h3 id="分段地址转换"><a href="#分段地址转换" class="headerlink" title="分段地址转换"></a>分段地址转换</h3><p>分段地址转换与基址加界限的思想大同小异，在分段思想中，程序可能具有多个段，操作系统通过一个段表来维护各段信息：</p>
+<p><img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/18464438-8616b82e029c8070.png"></p>
+<p><strong>段表的地址是操作系统维护的，段表项主要维护段长和段基址，段基址指该段在物理内存中的起始地址，那么该段中的虚拟地址对于实际的地址即为 <code>段基址 + 段内偏移</code>。</strong></p>
+<p>分段系统的逻辑地址结构是由<strong>段号</strong>（段名）和<strong>段内地址</strong>（段内偏移量）所组成。</p>
+<p>例如，若系统是按字节寻址，用32个二进制位表示逻辑地址，如果段号和段内地址各占16位，那么它的虚拟逻辑地址结构图如下所示。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18464438-e78471b02d4c7e02.png?imageMogr2/auto-orient/strip"></p>
+<p>那么我们读取前16位作为段号，后16位作为段内偏移，<strong>操作系统通过计算 addr &#x3D; 段号 * 段表项大小 + 段表地址得出对应的段表项地址，通过查询该段表项得出段基址，通过计算 段基址 + 段内偏移得出物理地址。</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200507144834316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkxNDYwNA==,size_16,color_FFFFFF,t_70"></p>
+<p>你可能发现了，在虚拟地址中，每个段的起始地址都是固定的，每个段的总大小都是固定的，其大小为：<br>$$<br>size &#x3D; 2^p字节，p &#x3D; 段内地址的位数<br>$$<br>如下图所示，注意展示的是虚拟地址的空间：</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210912204532734.png" alt="image-20210912204532734" style="zoom: 50%;" />
+
+<p>此外，栈地址是反向增长的，因此段表中必须维护一个比特位，描述是否为栈段。</p>
+<h3 id="段的另一个优点：很好的支持共享"><a href="#段的另一个优点：很好的支持共享" class="headerlink" title="段的另一个优点：很好的支持共享"></a>段的另一个优点：很好的支持共享</h3><p>随着分段机制的不断改进，系统设计人员很快意识到，通过再多一点的硬件支持，就能实现新的效率提升。具体来说，要节省内存，有时候在地址空间之间共享（share）某些内存段是有用的。尤其是，代码共享很常见，今天的系统仍然在使用。</p>
+<p>为了支持共享，需要一些额外的硬件支持，这就是保护位（protection bit）。基本为每个段增加了几个位，标识程序是否能够读写该段，或执行其中的代码。通过将代码段标记为只读，同样的代码可以被多个进程共享，而不用担心破坏隔离。</p>
+<p><strong>为什么页不行？</strong>页的分配是随机的，一个页通常只有 4kb，例如如果需要共享的数据有 64kb，则需要分配16 个页，这些页可能是不连续的，因此无法很好的支持共享。如果将多个页组成一个逻辑页，这已经就是分段的思想了（段页式）。</p>
+<p><strong>因此我们常说，段式管理是符合用户逻辑的，是利于保护和共享的。</strong></p>
+<h3 id="虚拟地址翻译太慢？"><a href="#虚拟地址翻译太慢？" class="headerlink" title="虚拟地址翻译太慢？"></a>虚拟地址翻译太慢？</h3><p>我们每次翻译一个虚拟地址都需要去找寻段表中的段表项，相当于多义词地址访问，这太慢了！解决方案是为计算机设置一个小型的硬件设备，将虚拟地址直接映射到物理地址，而不必再访问段表。这种设备称为转换检测缓冲区 （Translation Lookaside Buffer，TLB），有时又称为快表。</p>
+<p>快表是一个小的高速缓存，现代操作系统无论是分段还是分页中都利用了这种软件技术，有关于快表地址翻译的问题我们将在专门针对地址翻译的文中讲解。</p>
+<h3 id="段的缺点：过多的外部碎片"><a href="#段的缺点：过多的外部碎片" class="headerlink" title="段的缺点：过多的外部碎片"></a>段的缺点：过多的外部碎片</h3><p>分段可以避免产生内部碎片，但由于分段是离散的在主存内找到空闲的槽块并插入，问题是物理内存很快充满了许多空闲空间的小洞，因而很难分配给新的段，或扩大已有的段 —— <strong>大量外部碎片。</strong></p>
+<p>例如4kb的空间装入3kb的段，产生的1kb的空间无法在装入任何段，产生碎片的主要原因是因为分段使用的大小是不确定的。</p>
+<p>当然前面也提到过，外部碎片可通过<em>紧凑</em>的方式以合成较大的空闲空间，但这需要大量成本，操作系统难以维护。</p>
+<p>这种情况下，分页式管理应运而生。</p>
+<p><img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210912210836008.png" alt="image-20210912210836008"></p>
+<hr>
+<h2 id="分页式管理"><a href="#分页式管理" class="headerlink" title="分页式管理"></a>分页式管理</h2><h3 id="分页思想"><a href="#分页思想" class="headerlink" title="分页思想"></a>分页思想</h3><p>对于分段式的管理，一段时间后主存上将会遍布大大小小的外部碎片，操作系统难以进行维护，<strong>分段的思想是将内存空间分割成不同长度的分片，由于长度不是固定的，产生外部碎片是必然的</strong>，之前提到的将整个程序一起装入的方法虽然不会产生外部碎片，但会产生巨大的内部碎片，我们需要更细粒度的划分，以减少内部碎片的产生，解决这一问题的办法是<strong>将空间分割成较小的、固定长度的分片，这就是分页式管理。</strong></p>
+<p>分页式管理将程序资源划分为固定大小的页，将每一个虚拟页映射到物理页之中，由于每个页是固定大小的，操作系统可以整齐的分配物理内存空间，<strong>避免产生了外部碎片</strong>，例如一个页大小是4kb，而主存是40kb，操作系统稍加管理便能确保无论何时都能整齐的装入10个页面。</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913101838707.png" alt="image-20210913101838707" style="zoom:33%;" />
+
+<p>要注意到页在物理内存中也不是连续存在的，进程未使用的页也没必要为其分配内存，通过这种方式我们就解决了由分段产生大量外部碎片的问题，同时由于页较小，<strong>只有在已使用的页才会产生少量的内存碎片</strong>，这也是可以接受的，目前来看，分页是一个良好的解决办法。</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913102317080.png" alt="image-20210913102317080" style="zoom:33%;" />
+
+<h3 id="分页地址转换"><a href="#分页地址转换" class="headerlink" title="分页地址转换"></a>分页地址转换</h3><p>正如同分段一样，分页地址转换也需要<code>基址+页内偏移</code>来完成，在分段中采用段表来存储段基址，而在分页中则采用页表来存储页基址，页基址表示页在实际内存中的起始地址，那么实际的地址：<br>$$<br>addr &#x3D; 页基址 + 页内偏移<br>$$<br>页表是由操作系统维护的，操作系统知道页表的起始位置，页表项的大小是固定的，在32位地址空间中，通常是8字节，这64比特中不仅存储了页基址，还存放着一些其他重要的数据，如：有效位、可读位、脏位等。</p>
+<p>虚拟地址是由页表号 + 页内偏移组成的，这与分段中的虚拟地址类似，我们来进行一个简单的计算以得出32位程序中页表号所占用的位数，其中一个页表的大小通常是4kb，那么：<br>$$<br>虚拟地址的总空间大小&#x3D;2^{32}&#x3D;4GB\<br>页表项的个数&#x3D;\frac{4GB}{4kb}&#x3D;2^{20}\<br>4kb&#x3D;2^12byte<br>$$<br>要能表示2<sup>20</sup>个页表项，我们必须分配20位地址，剩余12位代表页内偏移，即下图中p&#x3D;12，n&#x3D;32，我们通常称虚拟页号为VPN，而称页偏移量为VPO，如下图所示：</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913115545830.png" alt="image-20210913115545830" style="zoom:67%;" />
+
+<p>为什么直接取VPO就代表了页偏移量？这也是很好理解的，因为：页偏移量 &#x3D; 虚拟地址 - 页起始地址，而页起始地址其实是固定的，即当VPO位全为0时，为对应页的起始地址 ，此时 虚拟地址 - 页起始地址 即为VPO表示数值。</p>
+<p>现在操作系统取出虚拟地址，我们设其为vAddr，便可以通过如下步骤翻译成物理地址：</p>
+<ol>
+<li>获取VPN与VPO，即<code>VPN = vAddr &amp; 0XFFFFF000;VPO = vAddr &amp; 0X00000FFF; </code></li>
+<li>获取页表项地址，$页表项地址 &#x3D; 页表起始地址 + VPN × 页表大小$;</li>
+<li>从该页表项内取出页基址，即实际物理起始地址PPN(注意这里仅有20位，需要左移动12位才是真正的地址);</li>
+<li>将PPN与VPO连接起来，即$真实地址 &#x3D; (PPN &lt;&lt; 12) \ | \ VPO$</li>
+</ol>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913121551686.png" alt="image-20210913121551686" style="zoom: 50%;" />
+
+<p><strong>实际的页表项还包含其他一些信息，如下图便是酷睿I7操作系统中的页表项：</strong></p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913121745079.png" alt="image-20210913121745079" style="zoom:50%;" />
+
+<h3 id="分页的缺点：页表过大怎么办？"><a href="#分页的缺点：页表过大怎么办？" class="headerlink" title="分页的缺点：页表过大怎么办？"></a>分页的缺点：页表过大怎么办？</h3><p>正如我们上面所计算的，对于32位操作系统而言，假定页大小为4kb，我们得出大概需要2<sup>20</sup>个页表项，而每个页表项大小通常是8字节，这意味着页表的大小将是$2^20 × 8byte &#x3D; 4Mb$，这大的令人发指，然而大多数程序可能仅使用几mb的大小，页表的大小甚至比整个进程所需的所有资源还大，我们必须想办法解决这个问题，但前提是，我们仍然要支持进程的虚拟大地址空间，尽管进程可能用不上这么多。</p>
+<p>你可能会想到，对于进程未使用的空间，操作系统不为其分配页表项以节省空间。</p>
+<p>的确，这确实解决问题的办法，但关键在于，操作系统根本不可能做到真正意义上的不分配页表项，操作系统必须要确保每一个虚拟地址都具有意义。这句话也许优点拗口，让我们来看一个例子：</p>
+<p>我们假设地址空间是三位的，前两位代表页号，后一位代表页偏移，那么进程虚拟地址共有8个，进程空间大小为8字节：<br>$$<br>\begin{cases}<br>000&amp;页号为0,偏移为0的地址\<br>001&amp;页号为0,偏移为1的地址\<br>010&amp;页号为1,偏移为0的地址\<br>011&amp;页号为1,偏移为1的地址\<br>100&amp;页号为2,偏移为0的地址\<br>101&amp;页号为2,偏移为1的地址\<br>110&amp;页号为3,偏移为0的地址\<br>111&amp;页号为3,偏移为1的地址\<br>\end{cases}<br>$$</p>
+<p>那么我们必须准备四个页表项，存放页0 ~ 3的物理起始地址，现在该进程没有使用页0与页1，我们假设操作系统没有维护0 ~ 1的页表项，现在对于页表而言，页号3是该页表的第一个偏移量，<strong>这不对，页号3无法被正确访问！</strong></p>
+<p>即时你想出某个办法使得页3能被正确翻译，但假设此时进程收到访问地址为000的指令呢？这是可能的，由程序在运行时生成的。现在整个系统都将陷入苦恼，根本没有任何关于地址000的信息。现在你可能理解了，操作系统必须要确保每一个虚拟地址都具有意义，当该虚拟地址未被使用时，也必须有一些信息来标识该地址未被进程使用，属于非法地址。</p>
+<p>所以直接的方法是不管用的，解决这一问题的办法是在加一层抽象。</p>
+<h4 id="多级页表"><a href="#多级页表" class="headerlink" title="多级页表"></a>多级页表</h4><p>在多级页表中，<strong>上一级页表存放的是对应的下一级页表的起始地址，并至少存在一个有效位标识以标识下一级页表是否存在。</strong></p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913195940092.png" alt="image-20210913195940092" style="zoom:50%;" />
+
+<p>看一个例子，仍然假设3位地址的操作系统，第一位表示一级页表，第二位表示二级页表，第三位表示页偏移：<br>$$<br>\begin{cases}<br>000&amp;一级页表页号为0，二级页表页号为0，偏移为0的地址\<br>001&amp;一级页表页号为0，二级页表页号为0，偏移为1的地址\<br>010&amp;一级页表页号为0，二级页表页号为1，偏移为0的地址\<br>011&amp;一级页表页号为0，二级页表页号为1，偏移为1的地址\<br>100&amp;一级页表页号为1，二级页表页号为0，偏移为0的地址\<br>101&amp;一级页表页号为1，二级页表页号为0，偏移为1的地址\<br>110&amp;一级页表页号为1，二级页表页号为1，偏移为0的地址\<br>111&amp;一级页表页号为1，二级页表页号为1，偏移为1的地址\<br>\end{cases}<br>$$<br>我们有一个一级页表，一级页表有两项，一级页表项至少存在一个有效位，如果确实有效则还要保存下一级页表的起始地址。</p>
+<p>我们仍然假设<code>000;001;010;011</code>这些地址进程未使用，现在假设进程访问地址010，MMU(地址翻译单元)取出一级页号 0，并访问一级页表偏移为0的页表项，此时操作系统发现该使用位设置为0(未使用)，则无须访问二级页表，并立即返回，告知进程该地址非法，抛出异常或终止进程。</p>
+<p>现在一级页表中页号为0对应的二级页表无须再加载进来了，我们仅需要一级页表的两个表项和一级页表页号为1的两个二级表项，共四个页表表项，这个例子中我们所需页表表项没有改变，这是因为我们假设的页表太小了，在实际中，一旦一级页表使用未设置为0，可以有几千个二级页表项不被加载进来，极大的减小页表大小。</p>
+<p><strong>事实上，多级页表中每一级页表都可以设置的被恰好装进一个页，这样将不会产生任何内部碎片或外部碎片。</strong></p>
+<p>例如在酷睿i7中采用4级页表，每个页表9位，每一级占9位，每个页表项8字节，那么每一级页表大小是$2^{9} × 8byte &#x3D; 4kb$，刚好是一个页的大小。</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913202938886.png" alt="image-20210913202938886" style="zoom: 50%;" />
+
+<p>考虑一个极端的例子，如上图 VPN 为 36 位，我们极端的假设程序一点空间都不使用，那么采用上图的 4 级页表只需要装载一个大小为 4kb 的一级页表而已，而如果没有多级页表的机制，我们需要装载全部的页表项，总大小为 $2^{36} \ × \ 8byte &#x3D; 512GB$！</p>
+<p>应该指出，多级页表是有成本的。在TLB未命中时，需要从内存加载多次，才能从页表中获取正确的地址转换信息（一次用于页目录，其他用于PTE本身）。因此，多级表是一个时间—空间折中（time-space trade-off）的小例子。我们想要更小的表（并得到了），但不是没代价。尽管在常见情况下（TLB命中），性能显然是相同的，但TLB未命中时，则会因较小的表而导致较高的成本。</p>
+<p>另一个明显的缺点是复杂性。无论是硬件还是操作系统来处理页表查找（在TLB未命中时），这样做无疑都比简单的线性页表查找更复杂。通常我们愿意增加复杂性以提高性能或降低管理费用。在多级表的情况下，为了节省宝贵的内存，我们使页表查找更加复杂。</p>
+<h4 id="段页式存储"><a href="#段页式存储" class="headerlink" title="段页式存储"></a>段页式存储</h4><p>应该想到，在加一层抽象时，我们不仅仅可以加页，还可以加段，多年前，Multics的创造者（特别是Jack Dennis）在构建Multics虚拟内存系统时，偶然发现了这样的想法。具体来说，Dennis想到将分页和分段相结合，以减少页表的内存开销。</p>
+<p>现在，我们仍然<strong>将应用程序分段，但我们对于每一个段实施页式管理</strong>，结合分段的思想，很容易可以理解为什么为什么这种想法可以减少内存开销：由于每个段都是被使用的（未使用的段不会分配空间），那么对每个段分页，至少可以保证页的使用率不会很低。</p>
+<p>举个例子，假设程序分为代码段、堆段、栈段，4GB的虚拟空间，程序仅仅使用了15kb，其中代码段7kb，栈段4kb，堆段4kb，那么实际物理空间占用情况如图所示：</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913204619350.png" alt="image-20210913204619350" style="zoom:50%;" />
+
+<p>我们来思考段页式的地址转换，这需要我们结合分段与分页，此时段描述符(段表项)不再存放段基址和段长了，而是存放该段对应页表的地址，段长页存放页表的长度：</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913205438064.png" alt="image-20210913205438064" style="zoom: 50%;" />
+
+<p>下图地址向上增长：<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913205507730.png" alt="image-20210913205507730" style="zoom:50%;" /></p>
+<p>那么此时的虚拟地址也应该表示为 <code>段号 + 页号 + 偏移量</code>：</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210913205645467.png" alt="image-20210913205645467" style="zoom:50%;" />
+
+<p>我们执行如下算法：</p>
+<p>1)根据段号找到段描述符。 </p>
+<p>2)检查该段的页表是否在内存中。如果在，则找到它的位置；如果不在，则 产生一个段错误。如果访问违反了段的保护要求就发出一个越界错误（陷阱）。 </p>
+<p>3)检查所请求虚拟页面的页表项，如果该页面不在内存中则产生一个缺页中断，如果在内存就从页表项中取出这个页面在内存中的起始地址。 </p>
+<p>4)把偏移量加到页面的起始地址上，得到要访问的字在内存中的地址。 </p>
+<p><strong>段页式管理还使得操作系统对于某些保护或共享片段非常好管理，我们可以将一整个共享代码作为一段而不必如分页中标记页内哪些代码是共享的，此外可以发现这种管理还消除了分页管理中可能存在的少许内部碎片，同时又如分页一般，不含有任何外部碎片，易于管理，真是一个巧妙的思想。</strong></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>段式管理：</strong></p>
+<p>优点：经过巧妙的设计，可以有效的减少内部碎片，可以提高了对物理内存的利用率；将应用按逻辑分段，人们可以编写不同类型的代码，可以方便的进行共享或保护。</p>
+<p>缺点：会产生大量的外部碎片，使得操作系统难以分配空闲空间。</p>
+<p><strong>页式管理</strong>：</p>
+<p>优点：消除了外部碎片，提高了对物理内存的利用率，利于操作系统管理空闲空间。</p>
+<p>缺点：仍然会产生内部碎片，尽管每个页碎片不超过页的大小；页表过大，占用大量空间，可以采用多级页表思想解决。</p>
+<p><strong>段页式管理</strong>：</p>
+<p>优点：同时具备段式和页式的所有优点。</p>
+<p>缺点：需要更多的硬件支持；当TLB未命中，需要更多的时间访问内存。</p>
+
+        </div>
+
+
+
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent">
+        </div>
+        <!-- 评分 -->
+        <div class="single-reward">
+          
+          <!-- 五星评分 -->
+<div id="wpac-rating"></div>
+<script type="text/javascript">
+wpac_init = window.wpac_init || [];
+wpac_init.push({widget: 'Rating', id: 23889});
+(function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = 'https://embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+})();
+</script>
+<!-- <a target="_blank" rel="noopener" href="https://widgetpack.com" class="wpac-cr">Star Rating WIDGET PACK</a> -->
+          
+        </div>
+        <!-- 自定义署名方式 -->
+        <footer class="post-footer">
+          <div class="post-lincenses" style="color: #ff9966;">
+            欢迎转载，转载时请注明来源哦！
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" style="color: #ff9966;" target="_blank"
+              rel="nofollow">
+              <i class="fa fa-creative-commons" aria-hidden="true"></i>ncsa4.0</a>
+          </div>
+          
+          <div class="post-tags" style="color: #a39391">
+            <span><i class="fa fa-tags"></i>
+              
+              <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="color: #716e77;">暂无标签<em>·</em></a>
+              
+            </span>
+            <span>
+              <i class="iconfont icon-file"></i>
+              
+              <a href="/blog/categories/%E6%9A%82%E6%97%A0%E5%88%86%E7%B1%BB/" style="color: #716e77;">暂无分类</a>
+              
+            </span>
+          </div>
+          
+          <div class="post-share" >
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+        <!-- <div class="tag-cloud">
+          <div class="tag-cloud-title">
+          </div>
+          <div class="tag-cloud-tags">
+            <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="font-size: 10px; color: #f06966">暂无标签</a>
+          </div>
+        </div> -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+        <div class="post-nepre half previous">
+          
+            <a href="/blog/post/8aae.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                  style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)"
+                  src="">
+              </div>
+              <span class="label">Previous Post</span>
+              <div class="info">
+                <h3>类加载机制</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+          
+          
+          
+          <div class="post-nepre half next">
+            
+              <a href="/blog/post/291a.html" rel="next">
+                <div class="background">
+                  <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                    style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"
+                    onerror="imgError(this,3)" src="">
+                </div>
+                <span class="label">Next Post</span>
+                <div class="info">
+                  <h3>线程池原理</h3>
+                  <hr>
+                </div>
+              </a>
+            </div>
+            
+      </section>
+      <!-- 加密文章隐藏评论 -->
+      <section class="comment" >
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container" class="comment"></div> 
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<script type="text/javascript">
+	var gitalk = new Gitalk({
+  	clientID: '',
+  	clientSecret: '',
+  	repo: 'cungudafa.github.io',
+  	owner: 'cungudafa',
+	admin: ['cungudafa'],
+	distractionFreeMode: 'true',
+    id: md5(location.pathname)
+})
+gitalk.render('gitalk-container') 
+</script>
+
+      </section>
+      <!-- 加密文章隐藏作者信息 -->
+      
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+<!--评论配置-->
+
+
+
+      <!-- body.end -->
+    </div>
+    <!-- search -->    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/blog/',
+        CONTENT_URL: '/blog/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- footer-->    
+    
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <div class="footertext">
+          <div class="img-preload">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+          </div>
+        </div>
+        <!-- 网站数据统计 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #ff9999;padding-left: 20px;">
+                <!-- 网站运行时间统计 -->
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span id="time" align="center">载入时间中...</span>
+                <script>
+                var now = new Date(); 
+                function createtime() { 
+                      var grt= new Date("Wed Feb 12 2020 01:20:00 GMT+0800 (中国标准时间)");//在此处修改你的建站时间
+                      now.setTime(now.getTime()+250); 
+                      days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+                      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+                      if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+                      mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+                      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+                      snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+                      document.getElementById("time").innerHTML = "小破站在各种灾难中苟活了 "+ dnum +" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";      
+                  } 
+                  setInterval("createtime()",250);
+                </script>
+            </span> 
+          </p>
+        </div>
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #b9b9b9;padding-left: 20px;">
+              <!-- 全网站字数统计wordcount -->
+              
+              <!-- 不蒜子网页计数器 -->
+              
+              <span style="padding-left: 20px;"><i class="fa fa-fire" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_pv">总访问量： <span id="busuanzi_value_site_pv" style="color:#ff9999;"></span>次</span>
+              </span>
+              
+              
+              <span style="padding-left: 20px;"><i class="fa fa-user" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_uv">总访问人数： <span id="busuanzi_value_site_uv" style="color:#ff9999;"></span>人</span>
+              </span>
+              
+            </span>
+          </p>
+        </div>
+        <!-- 作者注明 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #b9b9b9;">
+                Copyright &copy; 2023
+                &nbsp;<a style="color: #ff9999;display:inline-block"> Happysnaker </a>
+                &nbsp;<i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> 
+                &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank" style="color: #ff9999;display:inline-block">Hexo</a>
+                |&nbsp;Theme&nbsp;<a href="https://gitee.com/cungudafa/hexo-theme-sakuraplus" target="_blank" style="color: #ff9999;display:inline-block">SakuraPlus</a>
+              </span>
+          </p>
+        </div>
+         <!-- 网站作者版权注明 -->
+         
+          <div id="footer-info" class="inner">
+            <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #ff9999;">
+                
+              </span>
+            </p>
+          </div>
+        
+    </div><!-- .site-info -->
+</footer>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/InsightSearch.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/sakura-app.js"></script>
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- fancybox大图查看 需jq -->
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/jquery.fancybox.min.js"></script>
+  <script>
+    $('[data-fancybox="images"]').fancybox({
+      thumbs : {
+        autoStart : true //缩略图
+      }
+    });
+    $('[data-fancybox]').fancybox({
+      protect: true,//图片右键不能下载
+      youtube : {
+          controls : 0,
+          showinfo : 0
+      },
+      vimeo : {
+          color : 'f00'
+      }
+    });
+  </script>
+
+
+<!-- 自适应浏览器 -->
+<script type="text/javascript">
+  /* <![CDATA[ */
+  if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  } else {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  }
+  /* ]]> */
+  
+  </script>
+  <script>
+  $(document).ready(function() {
+    if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+      if ($(".pattern-center").length > 0) { //有图的情况
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -400,
+            scrollSmoothOffset: -85
+        });
+      } else {
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -85,
+            scrollSmoothOffset: -85
+        });
+      }
+      var offsetTop = $('.toc').offset().top - 95;
+      window.onscroll = function() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop >= offsetTop) {
+          $('.toc').addClass('toc-fixed');
+        } else {
+          $('.toc').removeClass('toc-fixed');
+        }
+      }
+    }
+  });
+  </script>
+    <!-- Side menu -->
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- Floating window -->
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">happysnaker开心</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="http://github.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="http://gitee.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/archives/">
+                  <i class="fa fa-line-chart" aria-hidden="true"></i>
+                  统计
+                </a>
+              </li>
+            
+              <li>
+                <a href="/blog/tags">
+                  <i class="fa fa-tags" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2020 hexo-sakuraplus</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  
+   <!-- pages壁纸切换 -->
+ 
+    <div class="skin-menu no-select" id="mainskin"  style="position: fixed">
+        <div class="theme-controls row-container">
+            <ul class="menu-list">
+                <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+                <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+                <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+                <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+                <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+                <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+                <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+                <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+            </ul>
+        </div>
+        <div class="font-family-controls row-container">
+            <button type="button" class="control-btn-serif selected" data-mode="serif" onclick="mashiro_global.font_control.change_font()">Serif</button>
+            <button type="button" class="control-btn-sans-serif" data-mode="sans-serif" onclick="mashiro_global.font_control.change_font()">Sans Serif</button>
+        </div>
+    </div>   
+    <canvas id="night-mode-cover"></canvas> 
+        <div class="changeSkin-gear no-select">
+        <div class="keys" id="setbtn"> <span id="open-skinMenu"> 切换壁纸 | SCHEME TOOL 
+            &nbsp;<i class="iconfont icon-gear inline-block rotating"></i> </span></div>
+    </div><!-- skin.end -->
+
+  <!-- left side bar -->
+
+ </body>
+</html>

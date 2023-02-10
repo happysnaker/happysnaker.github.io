@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <!-- cungudafa百度收录验证编号 -->
+  <!-- <meta name="baidu-site-verification" content="LukfTcyXmC" /> -->
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">分布式系统中的复制问题 | Hexo</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/style.css" type="text/css" media="all" id="saukra_css-css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/jquery.fancybox.min.css" media="all">  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/tags.css" media="all">
+  
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/logo.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/fonts/LOGO/logo.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+  <!-- 分析 -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+  <!-- Baidu Analytics -->
+
+  
+  <!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+  " type="text/css" media="all"> -->
+  <script>
+    /*Initial Variables*/
+    var mashiro_option = new Object();
+    var mashiro_global = new Object();
+    mashiro_option.NProgressON = true;
+    /* 
+    * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+    * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+    */
+    mashiro_option.email_domain = "";
+    mashiro_option.email_name = "";
+    mashiro_option.cookie_version_control = "";
+    mashiro_option.qzone_autocomplete = false;
+    mashiro_option.site_name = "happysnaker开心";
+    mashiro_option.author_name = "开心";
+    mashiro_option.site_url = "http://happysnaker.gitee.io/blog";
+    mashiro_option.v_appId = "";//
+    mashiro_option.v_appKey = "";//
+    mashiro_option.mathjax = "1";
+    mashiro_option.copyright_enable = "false" ;
+    mashiro_option.copyright_minCharNumber = parseInt("120") ;
+    mashiro_option.copyright_description = "本文章著作权归作者所有，任何形式的转载都请注明出处。" ;
+    mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+    mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+    // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+    // mashiro_option.float_player_on = true;
+
+    /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+    var bg = "https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(0).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(1).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(2).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(3).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(4).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(5).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(6).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(7).jpg.webp".split(",");
+    var bgindex = Math.floor(Math.random()*bg.length);
+    if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+      alert('朋友，IE浏览器未适配哦~');
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"><link rel="stylesheet" href="/blog/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/blog/css/prism-line-numbers.css" type="text/css"></head> 
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <!-- Dynamic sliders -->
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <!-- Main content -->
+  <section id="main-container">
+    <!-- Top menu -->
+    <div class="headertop filter-dot">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="http://happysnaker.gitee.io/blog">
+          <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>且停且忘且随风，且行且看且从容</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="http://github.com/happysnaker" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://gitee.com/happysnaker" target="_blank" class="social-github" title="gitee">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/gitee.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  
+  <div id="video-container">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <!-- banner -->
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+        <span class="site-title">
+            <span class="logolink logo">
+                <a href="/">
+                    <ruby>
+                    <span class="sakuraso">Happysnaker</span>
+                    <span class="no">の</span>
+                    <span class="shironeko">小屋</span>
+                    <rp></rp>
+                    <rt class="logo">happysnaker</rt>
+                    <rp></rp>
+                    </ruby>
+                  </a>
+            </span>
+          </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/archives/">
+                          <i class="fa fa-line-chart" aria-hidden="true"></i>
+                          统计
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/blog/tags">
+                          <i class="fa fa-tags" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      
+      <!-- body -->
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1"
+        class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content">  -->
+        <!--套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="分布式系统中的复制"><a href="#分布式系统中的复制" class="headerlink" title="分布式系统中的复制"></a>分布式系统中的复制</h1><h2 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h2><ul>
+<li><p>存储数据库副本的每个节点称为 <strong>副本（replica）。</strong></p>
+</li>
+<li><p>多副本的问题：如何确保数据都落在了所有的副本上。</p>
+<ul>
+<li>每次对数据库的写入都要传播到所有副本上，否则副本就会有不一样的数据。</li>
+<li>常见的解决方案：基于领导者的复制（主从复制）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="主从复制工作原理"><a href="#主从复制工作原理" class="headerlink" title="主从复制工作原理"></a>主从复制工作原理</h3><ul>
+<li><p>副本之一被指定为领导者（leader，也被称作主库）</p>
+<ol>
+<li><p>客户端写数据时，要把请求发送给领导者；</p>
+</li>
+<li><p>领导者把新输入写入本地存储。</p>
+</li>
+</ol>
+</li>
+<li><p>其他副本被称为追随者（followers，也被称作只读副本、从库、热备）</p>
+<ol>
+<li>每当领导者将新数据写入本地存储时，他会把数据变更发送给所有的追随者，称之为复制日志或变更。</li>
+<li>每个追随者从领导者拉取日志，并相应更新其本地数据库副本，方法是按照领导者处理的相同顺序应用所有写入。</li>
+</ol>
+</li>
+<li><p>当客户想要从数据库中读取数据时，它可以向领导者或追随者查询。 但只有领导者才能接受写操作，从客户端的角度来看从库都是只读的。</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1633924374819-0ece53d9-407b-4e36-85a9-fb86002e8813.png" alt="img"></p>
+<h3 id="新增从库"><a href="#新增从库" class="headerlink" title="新增从库"></a>新增从库</h3><p>有时会增加一个新的从库，通常会经历如下步骤：</p>
+<ol>
+<li><p>在某个时刻获取主库的一致性快照，大多数数据库都具有这个功能，因为它是备份必需的。</p>
+</li>
+<li><p>将快照复制到新的从库节点。</p>
+</li>
+<li><p>从库连接到主库，拉取从快照开始到快照复制完成时所发生的所有数据变更。这要求快照与主库复制日志中的位置精确关联。该位置有不同的名称：例如，PostgreSQL将其称为 <strong>日志序列号（log sequence number, LSN）</strong>，MySQL将其称为 <strong>二进制日志坐标（binlog coordinates）</strong>。</p>
+</li>
+<li><p>当从库处理完快照之后积压的数据变更，我们说它 <strong>赶上（caught up）</strong> 了主库。现在它可以继续处理主库产生的数据变化了。</p>
+</li>
+</ol>
+<h3 id="处理节点宕机"><a href="#处理节点宕机" class="headerlink" title="处理节点宕机"></a>处理节点宕机</h3><p>我们的目标：即使个别节点失效，也要能保持整个系统运行，并尽可能控制节点停机带来的影响，即保障分区容错性，即 CAP 理论中的 “P”。</p>
+<h4 id="从库失效：追赶恢复"><a href="#从库失效：追赶恢复" class="headerlink" title="从库失效：追赶恢复"></a>从库失效：追赶恢复</h4><ul>
+<li><p>从库可以从日志知道，在发生故障前处理的最后一个事务。</p>
+</li>
+<li><p>所以从库可以连接到主库，并拉取断开连接后的所有数据变更。</p>
+</li>
+<li><p>应用完成所有变更之后，它就赶上了主库，继续接收数据变更流。</p>
+</li>
+</ul>
+<h4 id="主库失效：故障切换"><a href="#主库失效：故障切换" class="headerlink" title="主库失效：故障切换"></a>主库失效：故障切换</h4><ul>
+<li>故障切换：需要把一个从库提升为新的主库，重新配置客户端，其他从库需要开始拉取来自新主库的变更。</li>
+<li>故障切换可以手动或者自动进行。</li>
+</ul>
+<p>故障切换是个经典的问题，例如，可能会有如下场景发生：</p>
+<ul>
+<li>主库接收到了新的数据，但主库只更新了少量的从库，然后主库宕机，现在只有少量节点是最新的数据，而绝大多数节点都是陈旧的数据，现在如何选取新的主库？是相信民主，选择多数节点的一方，还是相信科学，选择较新数据的一方？</li>
+<li>可能主库短暂的断开连接，而此时从库认为主库宕机，选举出新的主库，这是旧的主库重新恢复连接，此时可能会出现两个主库的情况，这种情况被称为 <strong>“脑裂”</strong>。</li>
+</ul>
+<p>这是经典的一致性与共识问题，现在较为成熟并且广被接受的解决办法是 <strong>Raft</strong> 算法，我们会好好学习学习它的。</p>
+<h3 id="复制日志的实现"><a href="#复制日志的实现" class="headerlink" title="复制日志的实现"></a>复制日志的实现</h3><p>基于主从库的复制，底层工作有几种不同的复制方式。</p>
+<h4 id="基于语句的复制"><a href="#基于语句的复制" class="headerlink" title="基于语句的复制"></a>基于语句的复制</h4><p>在最简单的情况下，主库记录下它执行的每个写入请求（<strong>语句（statement）</strong>）并将该语句日志发送给其从库，从库执行语句而 “复制” 主库。</p>
+<p>问题：</p>
+<ul>
+<li><p>任何调用 <strong>非确定性函数（nondeterministic）</strong> 的语句，可能会在每个副本上生成不同的值。比如 NOW(), RAND()。</p>
+</li>
+<li><p>如果语句使用了<strong>自增列（auto increment）</strong>，或者依赖于数据库中的现有数据（例如，UPDATE … WHERE &lt;某些条件&gt;），则必须在每个副本上按照完全相同的顺序执行它们，否则可能会产生不同的效果。影响并发。</p>
+</li>
+<li><p>有副作用的语句（例如，触发器，存储过程，用户定义的函数）可能会在每个副本上产生不同的副作用，除非副作用是绝对确定的。</p>
+</li>
+</ul>
+<h4 id="传输预写式日志（WAL）"><a href="#传输预写式日志（WAL）" class="headerlink" title="传输预写式日志（WAL）"></a>传输预写式日志（WAL）</h4><p>写操作通常追加到日志中：</p>
+<ul>
+<li>对于<strong>日志结构存储引擎</strong>（SSTables 和 LSM 树），日志是主要存储位置。日志段在后台压缩，并进行垃圾回收。</li>
+<li>覆盖单个磁盘块的 B 树，每次修改会先写入<strong>预写式日志（Write Ahead Log, WAL）</strong>，以便崩溃后索引可以恢复到一个一致的状态。</li>
+</ul>
+<p>所以，日志都是包含所有数据库写入的仅追加字节序列。可以使用完全相同的日志在另一个节点上构建副本：主库把日志发送给从库。</p>
+<p>PostgreSQL和Oracle等使用这种复制方法。</p>
+<p>缺点：</p>
+<ul>
+<li><p>复制与存储引擎紧密耦合。</p>
+</li>
+<li><p>不可能使主库和从库上运行不同版本的数据库软件。</p>
+</li>
+<li><p>运维时如果升级软件版本，有可能会要求停机。</p>
+</li>
+</ul>
+<h4 id="逻辑日志复制（基于行）"><a href="#逻辑日志复制（基于行）" class="headerlink" title="逻辑日志复制（基于行）"></a>逻辑日志复制（基于行）</h4><p>采用逻辑日志，可以把复制与存储逻辑分离，例如 Mysql 中的 bing-log。</p>
+<p>关系型数据库通常以行作为粒度描述数据库写入的记录序列：</p>
+<ul>
+<li><p>对于插入的行，日志包含所有列的新值；</p>
+</li>
+<li><p>对于删除的行，日志包含足够的信息来唯一标识已删除的行。通常是主键，或者所有列的旧值。</p>
+</li>
+<li><p>对于更新的行，日志包含足够的信息来唯一标识更新的行，以及所有列（至少是更新列）的新值。</p>
+</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>逻辑日志与存储引擎分离，方便向后兼容。可以让领导者和跟随者运行不同版本的数据库软件。</li>
+<li>对于外部应用，逻辑日志也更容易解析。比如复制到数据仓库，或者自定义索引和缓存。被称为数据变更捕获。</li>
+</ul>
+<h4 id="基于触发器的复制"><a href="#基于触发器的复制" class="headerlink" title="基于触发器的复制"></a>基于触发器的复制</h4><ul>
+<li><p>上述复制都是数据库自己实现的。也可以自定义复制方法：数据库提供了触发器和存储过程。</p>
+</li>
+<li><p>允许数据库变更时，自动执行应用的程序代码。</p>
+</li>
+<li><p>开销更大，更容易出错。但更灵活。</p>
+</li>
+</ul>
+<h2 id="复制延迟问题"><a href="#复制延迟问题" class="headerlink" title="复制延迟问题"></a>复制延迟问题</h2><ul>
+<li><p>主从异步同步会有延迟：导致同时对主库和从库的查询，结果可能不同。</p>
+</li>
+<li><p>因为从库会赶上主库，所以上述效应被称为「最终一致性」。</p>
+</li>
+<li><p>复制延迟可能超过几秒或者几分钟，下文是 3 个经典的例子。</p>
+</li>
+</ul>
+<h3 id="读己之写"><a href="#读己之写" class="headerlink" title="读己之写"></a>读己之写</h3><p>如果用户把数据提交到了主库，但是主从有延迟，用户马上看数据的时候请求的从库，会感觉到数据丢失。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634010046347-89c15b17-1b17-4529-ab81-020cd881c20e.png" alt="img"></p>
+<p>此时需要「读写一致性」，也成为读己之写一致性。</p>
+<p><strong>解决技术</strong>：</p>
+<ul>
+<li><p>读用户可能已经修改过的内容时，都从主库读；比如读个人资料都从主库读，读别人的资料可以读从库。</p>
+</li>
+<li><p>客户端记住最近一次写入的版本号（或时间戳），客户端查询时，连同版本号（或时间戳）一起发送，从库提供查询时，必须保证对应数据的版本必须大于等于客户提供的版本；否则从另外的从库读，或者等待从库追赶上来。</p>
+</li>
+<li><p>如果副本在多个数据中心，则比较复杂。任何需要从领导者提供服务的请求，都必须路由到包含主库的数据中心。</p>
+</li>
+</ul>
+<h3 id="单调读"><a href="#单调读" class="headerlink" title="单调读"></a>单调读</h3><p>用户可能会遇到 <strong>时光倒流</strong>。</p>
+<p>第一次请求到从库看到了评论，第二次请求到另外一个从库发现评论消失。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634010649056-d413d411-3b1d-4bd8-9702-79d182dee7af.png" alt="img"></p>
+<p>单调读保证了这种异常不会发生。</p>
+<p>方法：</p>
+<ul>
+<li>确保每个用户总是从同一副本来读取。比如基于用户 ID 的散列来选择副本，而不是随机选。但是如果该副本失败，则可能需要路由到另一个副本。</li>
+</ul>
+<h3 id="一致前缀读"><a href="#一致前缀读" class="headerlink" title="一致前缀读"></a>一致前缀读</h3><p>一系列事件可能出现前后顺序不一致问题。比如回答可能在提问之前发生。</p>
+<p>这是分区（分片）数据库或多主数据库中的一个特殊问题：不同分区之间独立，不存在全局写入顺序。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634010909693-6cc91fe9-aa0c-4e73-82c9-585646a15281.png" alt="img"></p>
+<p>需要「一致前缀读」。</p>
+<p>解决方法：</p>
+<ul>
+<li>任何因果相关的写入都写入相同的分区。</li>
+</ul>
+<h3 id="复制延迟的解决方案"><a href="#复制延迟的解决方案" class="headerlink" title="复制延迟的解决方案"></a>复制延迟的解决方案</h3><ul>
+<li>可以使用事务。<strong>事务（transaction）</strong> 存在的原因：<strong>数据库通过事务提供强大的保证</strong>，所以应用程序可以更加简单。通过使用事务，只有当主库写入了所有从库，请求才算完成，但这代价太高了，因此复制延迟本质几乎没办法解决，只能通过不同的解决方案去解决不同的场景，例如上诉三种经典问题。</li>
+</ul>
+<blockquote>
+<p> 单节点事务存在了很长时间，但是分布式数据库中，许多系统放弃了事务，因为事务的代价太高。</p>
+</blockquote>
+<h2 id="多主复制"><a href="#多主复制" class="headerlink" title="多主复制"></a>多主复制</h2><ul>
+<li><p>单个领导者的复制架构是个常见的方法，但也有其他架构。</p>
+</li>
+<li><p>基于领导者复制的主要缺点：只有一个主库，所有的写入都要通过它。</p>
+</li>
+<li><p>多个领导者的复制：允许多个节点接受写入，复制仍然是转发给所有其他节点。每个领导者也是其他领导者的追随者。</p>
+</li>
+</ul>
+<h3 id="多主复制的应用场景"><a href="#多主复制的应用场景" class="headerlink" title="多主复制的应用场景"></a>多主复制的应用场景</h3><ul>
+<li>单个数据中心内部使用多个主库没有太大意义，通常多主复制用于多个数据中心中。</li>
+</ul>
+<h4 id="多个数据中心"><a href="#多个数据中心" class="headerlink" title="多个数据中心"></a>多个数据中心</h4><ul>
+<li><p>多领导配置允许每个数据中心都有自己的主库。</p>
+</li>
+<li><p>每个数据中心内部使用常规的主从复制；</p>
+</li>
+<li><p>数据中心之间，每个数据中心的主库都会将其更改复制到其他数据中心的主库中。</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634094581707-9d2d4ff2-0d5d-43b2-8210-2cf7b2d16684.png" alt="img"></p>
+<p>运维多个数据中心时，单主和多主的适应情况比较：</p>
+<ol>
+<li><p><strong>性能</strong></p>
+<ul>
+<li><p>单主配置中，每个写入都得穿过互联网，进入主库所在的数据中心。会增大写入时间。</p>
+</li>
+<li><p>多主配置中，每个写操作都可以在本地数据中心进行处理，与其他数据中心异步复制。感觉到性能更好。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>容忍数据中心停机</strong></p>
+<ul>
+<li><p>单主配置中，如果主库所在的数据中心发生故障，必须让另一个数据中心的追随者成为主领导者。</p>
+</li>
+<li><p>多主配置中，每个数据中心都可以独立于其他数据中心继续运行。若发生故障的数据中心归队，复制会自动赶上。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>容忍网络问题</strong></p>
+<ul>
+<li><p>数据中心之间的网络需要通过公共互联网，不如数据中心之内的本地网络可靠。</p>
+</li>
+<li><p>单主配置对网络连接问题非常敏感，因为写是同步的。</p>
+</li>
+<li><p>异步复制的多主配置更好地承受网络问题。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="多主复制的缺点"><a href="#多主复制的缺点" class="headerlink" title="多主复制的缺点"></a><strong>多主复制的缺点</strong></h4><ul>
+<li>两个数据中心可能会修改相同的内容，写冲突必须解决。</li>
+<li>多主复制比较危险，应尽可能避免。</li>
+</ul>
+<h4 id="需要离线操作的客户端"><a href="#需要离线操作的客户端" class="headerlink" title="需要离线操作的客户端"></a>需要离线操作的客户端</h4><p>多主复制的另一适用场景：应用程序在断网后仍然需要继续工作。</p>
+<p>在这种情况下，每个设备都有一个充当领导者的本地数据库（它接受写请求），并且在所有设备上的日历副本之间同步时，存在异步的多主复制过程。复制延迟可能是几小时甚至几天，具体取决于何时可以访问互联网。</p>
+<p>每个设备相当于一个“数据中心”</p>
+<h4 id="协同编辑"><a href="#协同编辑" class="headerlink" title="协同编辑"></a>协同编辑</h4><p>协作式编辑不能视为数据库复制问题，但是与离线编辑有许多相似。</p>
+<p>一个用户编辑文档时，所做的更改将立即应用到其本地副本（web 或者客户端），并异步复制到服务器和编辑同一文档的任何其他用户。</p>
+<p>如果想要不发生编辑冲突，则应用程序需要先将文档锁定，然后用户才能进行编辑；如果另一用户想编辑，必须等待第一个用户提交修改并释放锁定。这种协作模式相当于主从复制模型下在主节点上执行事务操作。</p>
+<p>但是，为了加速写作，可编辑的粒度需要非常小（例如单个按键，甚至全程无锁）。</p>
+<p>这会面临所有多主复制都存在的挑战，即如何解决写入冲突。</p>
+<h3 id="处理写入冲突"><a href="#处理写入冲突" class="headerlink" title="处理写入冲突"></a>处理写入冲突</h3><p>多领导者复制的最大问题是可能发生写冲突，因此需要解决冲突。</p>
+<p>假如两个用户同时修改标题：<img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634184003537-ae0266a3-83f2-43a1-ab73-37f83264c59c.png" alt="img"></p>
+<p>在这种情况中，两个标题被分别写入不同数据中心，在这一刻数据写入是成功的，但当领导者之间的复制开始时，它们就会检测到冲突，<strong>这种冲突并不是立即被检测出来的，而是具有一定的延迟</strong>，这是多主复制中的特殊的写入冲突。</p>
+<h4 id="收敛至一致的状态"><a href="#收敛至一致的状态" class="headerlink" title="收敛至一致的状态"></a>收敛至一致的状态</h4><p>在多主配置中，正如我们所讲，冲突检测是具有延迟性的，当检测到冲突时，请求已经完成，冲突无法避免。因此数据库只能以<strong>收敛（convergent）</strong> 的方式解决冲突，即选取一个最终的值，使得所有副本上值都相同。</p>
+<p>实现冲突合并解决有多种途径：</p>
+<ul>
+<li><p>给每个写入一个唯一的ID（例如，一个时间戳，一个长的随机数，一个UUID或者一个键和值的哈希），挑选最高ID的写入作为胜利者，并丢弃其他写入。</p>
+</li>
+<li><p>为每个副本（数据中心、或领导者）分配一个唯一的ID，ID 编号更高的写入具有更高的优先级。</p>
+</li>
+<li><p>上述两种方式都意味着数据丢失，我们可以使用某种方式将这些值合并在一起，例如，按字母顺序排序，然后连接它们。</p>
+</li>
+<li><p>用一种可保留所有信息的显式数据结构来记录冲突，并编写解决冲突的应用程序代码（也许通过提示用户的方式）。</p>
+</li>
+</ul>
+<h3 id="多主复制拓扑"><a href="#多主复制拓扑" class="headerlink" title="多主复制拓扑"></a>多主复制拓扑</h3><p><strong>复制拓扑</strong>（replication topology）描述写入从一个节点传播到另一个节点的通信路径。</p>
+<p>只有两个领导者时，只有一个合理的拓扑：互相写入。</p>
+<p>当有两个以上的领导，拓扑很多样：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634524795875-25e044c1-fc7d-47dc-a871-1af2fb3f5edd.png" alt="img"></p>
+<ol>
+<li>环形拓扑。实现简单，但问题也多，例如容错性不高，会出现重复复制问题。防止无限复制循环的办法是：每个节点都有唯一的标识符，在复制日志中，每个写入都标记了所有已经过的节点的标识符。</li>
+<li>星形拓扑。实现相对简单，不会出现重复复制问题，但容错性也不高。</li>
+<li>全部到全部拓扑。实现复杂，容错性高，但消息可能会混乱。例如，网络问题导致消息顺序错乱：</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634525242078-5d57538c-fd13-4851-8962-c1934768e7fb.png" alt="img"></p>
+<p>在这里写入时添加时间戳是不够的的。</p>
+<p>解决办法是下文将提到的<strong>版本向量技术</strong>。</p>
+<h2 id="无主复制"><a href="#无主复制" class="headerlink" title="无主复制"></a>无主复制</h2><ul>
+<li><p>一些数据库放弃主库的概念，允许任何副本直接接收来自客户端的写入。</p>
+</li>
+<li><p>一些无主配置中，客户端直接写入到几个副本中；</p>
+</li>
+<li><p>另一些情况下，一个协调者节点代表客户端进行写入。</p>
+</li>
+</ul>
+<h3 id="当节点故障时写入数据库"><a href="#当节点故障时写入数据库" class="headerlink" title="当节点故障时写入数据库"></a>当节点故障时写入数据库</h3><p>无主复制中，故障切换不存在。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634525826378-4b5748b1-8aeb-432b-87c4-df37043b3093.png" alt="img"></p>
+<p>这里存在一个问题：如果一个副本故障或下线，重启后提供的数据是落后的。</p>
+<p>解决办法是：客户端同时请求多个副本，根据版本号确定最新值。</p>
+<h4 id="读修复和反熵"><a href="#读修复和反熵" class="headerlink" title="读修复和反熵"></a>读修复和反熵</h4><p>这里的问题是：故障节点重新上线，怎么追上错过的写入？</p>
+<p><strong>读修复（Read repair）</strong></p>
+<ul>
+<li>客户端检测到陈旧的值，客户端将新值写回到该副本。</li>
+<li>适合读频繁的值。</li>
+</ul>
+<p><strong>反熵过程（Anti-entropy process）</strong></p>
+<ul>
+<li>数据库的后台进程，不断查找副本之间的数据差异，把缺少的数据进行复制。</li>
+<li>反熵过程不会以任何特定的顺序复制写入，复制数据之前可能有显著的延迟。</li>
+</ul>
+<h4 id="读写的法定人数"><a href="#读写的法定人数" class="headerlink" title="读写的法定人数"></a>读写的法定人数</h4><p>在上面讲到，为使用户读取到的数据为最新版本，用户必须读取多个副本以确定最新值，问题是，读取多少个比较合适呢？同样的，客户写入数据时，写入多少个副本合适呢？</p>
+<p>我们将读取的副本数设为 r，写入的副本数设为 w，那么如果有 n 个副本，每个写入必须由 w 节点确认才能被认为是成功的，并且我们必须至少为每个读取查询 r 个节点。 </p>
+<p>计算公式：<br>$$<br>w+r&gt;n<br>$$<br>w 与 r 必须满足此公式，为验证此公式的正确性，假设客户像 w 个副本写入最新值，那么目前有 w 个副本是最新值，n - w 个副本是陈旧值。</p>
+<p>现在客户请求数据，客户必须请求至少 r 个副本的数据，根据公式，$ r &gt; n - w $，而所有副本中只有 n - w 个陈旧副本，也就是说用户必定能获取到最新的数据。当用户获取最新数据后，可以采取读修复更新陈旧的副本。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634526392535-4dbeee65-03f3-4e68-b773-a16de3ee6a6f.png" alt="img"></p>
+<h3 id="法定人数一致性的局限性"><a href="#法定人数一致性的局限性" class="headerlink" title="法定人数一致性的局限性"></a>法定人数一致性的局限性</h3><p>但是，即使在 $w + r&gt; n$ 的情况下，也可能存在返回陈旧值的边缘情况。</p>
+<ul>
+<li>两个写入同时发生，不清楚哪一个先发生，此时副本可能会误选陈旧值。</li>
+</ul>
+<p>不要把 w 和 r 当做绝对的保证，应该看做是概率，强有力的保证需要事务和共识。</p>
+<p>另外，w 与 r 的选取也必须要慎重考虑，如果 w 过大，那么客户的写入必须要等待大量副本的成功响应；r 过大，客户的读取必须同时读取大量的副本，如果此时某个副本发送故障。而如果 $w + r &#x3D; n + 1$，如果任意一个副本故障都可能无法保证最终一致性。</p>
+<h3 id="检测并发写入"><a href="#检测并发写入" class="headerlink" title="检测并发写入"></a>检测并发写入</h3><p>无主复制，允许多个客户端同时写入相同的 key，会发生写冲突，这与多主复制中的写冲突不同，多主复制中的写冲突检测是有延迟的，这里说的并发写入通常可以立即检测出冲突，虽然冲突的类型不同，但解决的思想却是类似的。</p>
+<p>如果两个客户在某一时刻(不一定非要是同时发生的)对一个 key 写入不同的值，由于网络，写入副本的值是不确定的，如下图所示：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634527751198-153aefb3-fe42-4de1-904a-97e272306e17.png" alt="img"></p>
+<h4 id="最后写入胜利（丢弃并发写入）"><a href="#最后写入胜利（丢弃并发写入）" class="headerlink" title="最后写入胜利（丢弃并发写入）"></a>最后写入胜利（丢弃并发写入）</h4><p>只需要存储最 <strong>“最近”</strong> 的值，允许 <strong>“更旧”</strong> 的值被覆盖和抛弃。</p>
+<p>需要有一种明确的方式来确定哪个写是“最近的”，并且每个写入最终都被复制到每个副本，那么复制最终会收敛到相同的值。</p>
+<p>例如，可以为每个写入附加一个时间戳，挑选最 <strong>“最近”</strong> 的最大时间戳，并丢弃具有较早时间戳的任何写入。</p>
+<p>这种方式其实是我们上文所讲的最终收敛一致性。</p>
+<p>其缺点是：以<strong>持久性</strong>为代价：如果同一个Key有多个并发写入，即使它们报告给客户端的都是成功（因为它们被写入 w 个副本），也只有一个写入将存活，而其他写入将被静默丢弃。</p>
+<p>如果丢失数据不可接受，那么最后写入胜利是个很烂的选择。</p>
+<h4 id="“此前发生”的关系和并发"><a href="#“此前发生”的关系和并发" class="headerlink" title="“此前发生”的关系和并发"></a>“此前发生”的关系和并发</h4><ul>
+<li><p>只要有两个操作A和B，就有三种可能性：A在B之前发生，或者B在A之前发生，或者A和B并发。</p>
+</li>
+<li><p>我们需要的是一个算法来告诉我们两个操作是否是并发的。</p>
+</li>
+<li><p>如果一个操作发生在另一个操作之前，则后面的操作应该覆盖较早的操作，但是如果这些操作是并发的，则存在需要解决的冲突。</p>
+</li>
+</ul>
+<h4 id="捕获”此前发生”关系"><a href="#捕获”此前发生”关系" class="headerlink" title="捕获”此前发生”关系"></a>捕获”此前发生”关系</h4><p>我们需要一个算法，可以确定两个操作是否是并发的，还是先后关系，</p>
+<p>例如两个客户端同时向一个购物车添加项目，注意服务端版本号和客户端版本号：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634529153036-dc1f314e-86a1-4686-8278-ffe21eeb0e8f.png" alt="img"></p>
+<p>操作依赖关系：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634529187023-f51ea218-f1b9-42a9-b432-ca95663bb44a.png" alt="img"></p>
+<p>客户端永远不会完全掌握服务器上的数据，因为总是有另一个操作同时进行，但是，旧版本的值最终会被覆盖，并且不会丢失任何写入。</p>
+<p>服务器可以通过查看版本号来确定两个操作是否是并发的，算法的原理：</p>
+<ul>
+<li><p>服务器为每个键保留一个版本号，每次写入键时都增加版本号，并将<strong>新版本号与写入的值一起存储</strong>。</p>
+</li>
+<li><p>当客户端读取键时，服务器将返回所有未覆盖的值以及最新的版本号。</p>
+</li>
+<li><p>客户端写入键时，必须包含之前读取的版本号，并且必须将之前读取的所有值合并在一起。 </p>
+</li>
+<li><p>当服务器接收到具有特定版本号的写入时，它可以覆盖该版本号或更低版本的所有值（因为它知道它们已经被合并到新的值中），<strong>但是它必须用更高的版本号来保存所有值</strong>（因为这些值与随后的写入是并发的）。</p>
+</li>
+</ul>
+<p>当一个写入包含前一次读取的版本号时，它会告诉我们的写入是基于之前的哪一种状态。</p>
+<p>理论上检测到”此前发生”关系，后发生的请求可以覆盖前面的请求，但本例中记录了同时写入的值，由于最终只有一个结果，这就需要合并同时写入的值。</p>
+<h4 id="合并同时写入的值"><a href="#合并同时写入的值" class="headerlink" title="合并同时写入的值"></a>合并同时写入的值</h4><p>优点：没有数据被无声地丢弃</p>
+<p>缺点：客户端需要额外工作：客户端必须通过合并并发写入的值来擦屁股。</p>
+<p>Riak 称这些并发值为兄弟。</p>
+<p>合并兄弟值：</p>
+<ul>
+<li><p>与多领导者复制的冲突解决相同的问题。</p>
+</li>
+<li><p>最简单的是根据版本号或者时间戳最后写入胜利，但会丢失数据。</p>
+</li>
+<li><p>对于购物车来说，合理的合并方法是集合求并集。</p>
+</li>
+<li><p>但是如果从购物车中删除东西，那么求并集会出错：一个购物车删除，求并集后，会重新出现在并集终值中。</p>
+</li>
+<li><p>所以删除操作不能简单删除，需要留下有合适版本号的标记，被称为墓碑。</p>
+</li>
+</ul>
+<h4 id="版本向量"><a href="#版本向量" class="headerlink" title="版本向量"></a>版本向量</h4><p>多个副本，但是没有领导者，该怎么办？</p>
+<ul>
+<li><p>每个副本、每个主键都定义一个版本号。</p>
+</li>
+<li><p>每个副本在处理写入时增加自己的版本号，并且跟踪从其他副本中看到的版本号。</p>
+</li>
+<li><p>这个信息指出了要覆盖哪些值，以及保留哪些值作为兄弟。</p>
+</li>
+</ul>
+<p><strong>什么是版本向量</strong></p>
+<ul>
+<li>所有副本的版本号集合称为<strong>版本向量（version vector）。</strong></li>
+<li>版本向量允许数据库区分覆盖写入和并发写入。</li>
+</ul>
+<p>使用版本向量可以轻易的检测出冲突，但如何收敛至一致的状态仍然是不确定的。</p>
+
+        </div>
+
+
+
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent">
+        </div>
+        <!-- 评分 -->
+        <div class="single-reward">
+          
+          <!-- 五星评分 -->
+<div id="wpac-rating"></div>
+<script type="text/javascript">
+wpac_init = window.wpac_init || [];
+wpac_init.push({widget: 'Rating', id: 23889});
+(function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = 'https://embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+})();
+</script>
+<!-- <a target="_blank" rel="noopener" href="https://widgetpack.com" class="wpac-cr">Star Rating WIDGET PACK</a> -->
+          
+        </div>
+        <!-- 自定义署名方式 -->
+        <footer class="post-footer">
+          <div class="post-lincenses" style="color: #ff9966;">
+            欢迎转载，转载时请注明来源哦！
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" style="color: #ff9966;" target="_blank"
+              rel="nofollow">
+              <i class="fa fa-creative-commons" aria-hidden="true"></i>ncsa4.0</a>
+          </div>
+          
+          <div class="post-tags" style="color: #a39391">
+            <span><i class="fa fa-tags"></i>
+              
+              <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="color: #716e77;">暂无标签<em>·</em></a>
+              
+            </span>
+            <span>
+              <i class="iconfont icon-file"></i>
+              
+              <a href="/blog/categories/%E6%9A%82%E6%97%A0%E5%88%86%E7%B1%BB/" style="color: #716e77;">暂无分类</a>
+              
+            </span>
+          </div>
+          
+          <div class="post-share" >
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+        <!-- <div class="tag-cloud">
+          <div class="tag-cloud-title">
+          </div>
+          <div class="tag-cloud-tags">
+            <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="font-size: 10px; color: #f06966">暂无标签</a>
+          </div>
+        </div> -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+        <div class="post-nepre half previous">
+          
+            <a href="/blog/post/336a.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                  style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)"
+                  src="">
+              </div>
+              <span class="label">Previous Post</span>
+              <div class="info">
+                <h3>分布式系统中的分区问题</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+          
+          
+          
+          <div class="post-nepre half next">
+            
+              <a href="/blog/post/a748.html" rel="next">
+                <div class="background">
+                  <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                    style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"
+                    onerror="imgError(this,3)" src="">
+                </div>
+                <span class="label">Next Post</span>
+                <div class="info">
+                  <h3>数据库锁知识</h3>
+                  <hr>
+                </div>
+              </a>
+            </div>
+            
+      </section>
+      <!-- 加密文章隐藏评论 -->
+      <section class="comment" >
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container" class="comment"></div> 
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<script type="text/javascript">
+	var gitalk = new Gitalk({
+  	clientID: '',
+  	clientSecret: '',
+  	repo: 'cungudafa.github.io',
+  	owner: 'cungudafa',
+	admin: ['cungudafa'],
+	distractionFreeMode: 'true',
+    id: md5(location.pathname)
+})
+gitalk.render('gitalk-container') 
+</script>
+
+      </section>
+      <!-- 加密文章隐藏作者信息 -->
+      
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+<!--评论配置-->
+
+
+
+      <!-- body.end -->
+    </div>
+    <!-- search -->    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/blog/',
+        CONTENT_URL: '/blog/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- footer-->    
+    
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <div class="footertext">
+          <div class="img-preload">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+          </div>
+        </div>
+        <!-- 网站数据统计 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #ff9999;padding-left: 20px;">
+                <!-- 网站运行时间统计 -->
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span id="time" align="center">载入时间中...</span>
+                <script>
+                var now = new Date(); 
+                function createtime() { 
+                      var grt= new Date("Wed Feb 12 2020 01:20:00 GMT+0800 (中国标准时间)");//在此处修改你的建站时间
+                      now.setTime(now.getTime()+250); 
+                      days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+                      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+                      if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+                      mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+                      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+                      snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+                      document.getElementById("time").innerHTML = "小破站在各种灾难中苟活了 "+ dnum +" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";      
+                  } 
+                  setInterval("createtime()",250);
+                </script>
+            </span> 
+          </p>
+        </div>
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #b9b9b9;padding-left: 20px;">
+              <!-- 全网站字数统计wordcount -->
+              
+              <!-- 不蒜子网页计数器 -->
+              
+              <span style="padding-left: 20px;"><i class="fa fa-fire" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_pv">总访问量： <span id="busuanzi_value_site_pv" style="color:#ff9999;"></span>次</span>
+              </span>
+              
+              
+              <span style="padding-left: 20px;"><i class="fa fa-user" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_uv">总访问人数： <span id="busuanzi_value_site_uv" style="color:#ff9999;"></span>人</span>
+              </span>
+              
+            </span>
+          </p>
+        </div>
+        <!-- 作者注明 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #b9b9b9;">
+                Copyright &copy; 2023
+                &nbsp;<a style="color: #ff9999;display:inline-block"> Happysnaker </a>
+                &nbsp;<i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> 
+                &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank" style="color: #ff9999;display:inline-block">Hexo</a>
+                |&nbsp;Theme&nbsp;<a href="https://gitee.com/cungudafa/hexo-theme-sakuraplus" target="_blank" style="color: #ff9999;display:inline-block">SakuraPlus</a>
+              </span>
+          </p>
+        </div>
+         <!-- 网站作者版权注明 -->
+         
+          <div id="footer-info" class="inner">
+            <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #ff9999;">
+                
+              </span>
+            </p>
+          </div>
+        
+    </div><!-- .site-info -->
+</footer>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/InsightSearch.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/sakura-app.js"></script>
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- fancybox大图查看 需jq -->
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/jquery.fancybox.min.js"></script>
+  <script>
+    $('[data-fancybox="images"]').fancybox({
+      thumbs : {
+        autoStart : true //缩略图
+      }
+    });
+    $('[data-fancybox]').fancybox({
+      protect: true,//图片右键不能下载
+      youtube : {
+          controls : 0,
+          showinfo : 0
+      },
+      vimeo : {
+          color : 'f00'
+      }
+    });
+  </script>
+
+
+<!-- 自适应浏览器 -->
+<script type="text/javascript">
+  /* <![CDATA[ */
+  if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  } else {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  }
+  /* ]]> */
+  
+  </script>
+  <script>
+  $(document).ready(function() {
+    if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+      if ($(".pattern-center").length > 0) { //有图的情况
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -400,
+            scrollSmoothOffset: -85
+        });
+      } else {
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -85,
+            scrollSmoothOffset: -85
+        });
+      }
+      var offsetTop = $('.toc').offset().top - 95;
+      window.onscroll = function() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop >= offsetTop) {
+          $('.toc').addClass('toc-fixed');
+        } else {
+          $('.toc').removeClass('toc-fixed');
+        }
+      }
+    }
+  });
+  </script>
+    <!-- Side menu -->
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- Floating window -->
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">happysnaker开心</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="http://github.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="http://gitee.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/archives/">
+                  <i class="fa fa-line-chart" aria-hidden="true"></i>
+                  统计
+                </a>
+              </li>
+            
+              <li>
+                <a href="/blog/tags">
+                  <i class="fa fa-tags" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2020 hexo-sakuraplus</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  
+   <!-- pages壁纸切换 -->
+ 
+    <div class="skin-menu no-select" id="mainskin"  style="position: fixed">
+        <div class="theme-controls row-container">
+            <ul class="menu-list">
+                <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+                <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+                <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+                <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+                <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+                <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+                <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+                <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+            </ul>
+        </div>
+        <div class="font-family-controls row-container">
+            <button type="button" class="control-btn-serif selected" data-mode="serif" onclick="mashiro_global.font_control.change_font()">Serif</button>
+            <button type="button" class="control-btn-sans-serif" data-mode="sans-serif" onclick="mashiro_global.font_control.change_font()">Sans Serif</button>
+        </div>
+    </div>   
+    <canvas id="night-mode-cover"></canvas> 
+        <div class="changeSkin-gear no-select">
+        <div class="keys" id="setbtn"> <span id="open-skinMenu"> 切换壁纸 | SCHEME TOOL 
+            &nbsp;<i class="iconfont icon-gear inline-block rotating"></i> </span></div>
+    </div><!-- skin.end -->
+
+  <!-- left side bar -->
+
+ </body>
+</html>

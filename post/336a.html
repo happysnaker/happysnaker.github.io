@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <!-- cungudafa百度收录验证编号 -->
+  <!-- <meta name="baidu-site-verification" content="LukfTcyXmC" /> -->
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">分布式系统中的分区问题 | Hexo</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/style.css" type="text/css" media="all" id="saukra_css-css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/jquery.fancybox.min.css" media="all">  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/tags.css" media="all">
+  
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/logo.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/fonts/LOGO/logo.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+  <!-- 分析 -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+  <!-- Baidu Analytics -->
+
+  
+  <!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+  " type="text/css" media="all"> -->
+  <script>
+    /*Initial Variables*/
+    var mashiro_option = new Object();
+    var mashiro_global = new Object();
+    mashiro_option.NProgressON = true;
+    /* 
+    * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+    * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+    */
+    mashiro_option.email_domain = "";
+    mashiro_option.email_name = "";
+    mashiro_option.cookie_version_control = "";
+    mashiro_option.qzone_autocomplete = false;
+    mashiro_option.site_name = "happysnaker开心";
+    mashiro_option.author_name = "开心";
+    mashiro_option.site_url = "http://happysnaker.gitee.io/blog";
+    mashiro_option.v_appId = "";//
+    mashiro_option.v_appKey = "";//
+    mashiro_option.mathjax = "1";
+    mashiro_option.copyright_enable = "false" ;
+    mashiro_option.copyright_minCharNumber = parseInt("120") ;
+    mashiro_option.copyright_description = "本文章著作权归作者所有，任何形式的转载都请注明出处。" ;
+    mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+    mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+    // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+    // mashiro_option.float_player_on = true;
+
+    /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+    var bg = "https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(0).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(1).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(2).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(3).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(4).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(5).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(6).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(7).jpg.webp".split(",");
+    var bgindex = Math.floor(Math.random()*bg.length);
+    if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+      alert('朋友，IE浏览器未适配哦~');
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"><link rel="stylesheet" href="/blog/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/blog/css/prism-line-numbers.css" type="text/css"></head> 
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <!-- Dynamic sliders -->
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <!-- Main content -->
+  <section id="main-container">
+    <!-- Top menu -->
+    <div class="headertop filter-dot">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="http://happysnaker.gitee.io/blog">
+          <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>且停且忘且随风，且行且看且从容</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="http://github.com/happysnaker" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://gitee.com/happysnaker" target="_blank" class="social-github" title="gitee">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/gitee.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  
+  <div id="video-container">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <!-- banner -->
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+        <span class="site-title">
+            <span class="logolink logo">
+                <a href="/">
+                    <ruby>
+                    <span class="sakuraso">Happysnaker</span>
+                    <span class="no">の</span>
+                    <span class="shironeko">小屋</span>
+                    <rp></rp>
+                    <rt class="logo">happysnaker</rt>
+                    <rp></rp>
+                    </ruby>
+                  </a>
+            </span>
+          </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/archives/">
+                          <i class="fa fa-line-chart" aria-hidden="true"></i>
+                          统计
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/blog/tags">
+                          <i class="fa fa-tags" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      
+      <!-- body -->
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1"
+        class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content">  -->
+        <!--套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="分布式系统中的分区"><a href="#分布式系统中的分区" class="headerlink" title="分布式系统中的分区"></a>分布式系统中的分区</h1><p>什么是分区？</p>
+<p>对于非常大的数据集，或非常高的吞吐量，仅仅进行复制是不够的：我们需要将数据进行<strong>分区</strong>，也称为<strong>分片</strong>。</p>
+<p>简单而言，<strong>将一个大的数据集分为多个小的数据集，将这些小的数据集散布在更多的节点上，每一个小的数据集都作为一个独立的数据库进行处理，使得系统压力均匀的散布在多个节点上。</strong></p>
+<p>例如将数据库中的一张表按照主键范围或其他方式分割成多张表，这就是分区。</p>
+<p>分区的问题？</p>
+<ol>
+<li>如何将请求导向正确的分区？</li>
+<li>如何避免偏斜，即避免将大量数据集中导向同一个分区。</li>
+<li>当节点增加或减少时，如何优雅的调整分区在节点上的分布。</li>
+</ol>
+<p>分区的优点？</p>
+<ol>
+<li><p>分区主要是为了<strong>可伸缩性</strong>，大数据集可以分布在多个磁盘上，并且查询负载可以分布在多个处理器上，因此减少了单个节点的压力，增加了整个系统的吞吐量。</p>
+</li>
+<li><p>大型、复杂的查询可能会跨越多个节点并行处理，加快速度。</p>
+</li>
+</ol>
+<h2 id="分区与复制"><a href="#分区与复制" class="headerlink" title="分区与复制"></a>分区与复制</h2><p>分区通常与复制结合使用，使得每个分区的副本存储在多个节点上，即使每条记录属于同一个分区，但是这个分区仍有可以分布在不同的节点上，提高容错。</p>
+<p>节点通常被认为是一台主机，<strong>一个节点可以有多个分区</strong>，如果使用主从复制模型，每个分区领导者被分配给一个节点，追随者被分配个其他节点，每个节点可能是某些分区的领导者，同时是其他分区的追随者。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634613965833-5b147f85-6260-4483-ab61-76916fdc7369.png" alt="img"></p>
+<h2 id="键值数据的分区"><a href="#键值数据的分区" class="headerlink" title="键值数据的分区"></a>键值数据的分区</h2><p><strong>分区目标是将数据和查询负载均匀分布在各个节点上。</strong></p>
+<p>如果分区不公平，例如大量数据集中导向同一个分区，这被称为<strong>偏斜（skew）</strong>，数据偏斜的存在使分区效率下降很多。</p>
+<p>在极端的情况下，所有的负载可能压在一个分区上，其余所有节点都是空闲的，瓶颈落在这一个繁忙的节点上。</p>
+<p><strong>不均衡导致的高负载的分区被称为热点（hot spot）</strong>。</p>
+<p>怎么避免热点？避免热点最简单的方法是将记录随机分配给节点，但这缺点是读特定的值时，不知道在哪个节点上，必须并行查所有的节点。</p>
+<p>以下我们来探讨一下常见的分区方式。</p>
+<h3 id="根据键的范围分区"><a href="#根据键的范围分区" class="headerlink" title="根据键的范围分区"></a>根据键的范围分区</h3><p>一种分区的方法是为每个分区指定一块连续的键范围（从最小值到最大值），类似纸质的百科全书、类似于数据库主键切分。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634614402944-1042d5f2-e693-4726-b552-50defb88f7e7.png" alt="img"></p>
+<p><strong>根据键的范围分区优点是查询稳定高效</strong>，由于所有分区按照键排序，无论是定值查询或者是范围查询，都可以在$log(N)$的时间内定位，无须遍历整个分区（前提是查询请求必须是主键）。</p>
+<p>缺点也是很明显的，由于不是随机分布的，分区可能无法很好的均匀分布在各个节点中，这就<strong>可能造成偏斜与热点问题</strong>。例如某种数据库是按照时间为主键(以天为单位)分区的，那么当天产生的请求可能会全部路由到同一个分区中。</p>
+<h3 id="根据键的散列分区"><a href="#根据键的散列分区" class="headerlink" title="根据键的散列分区"></a>根据键的散列分区</h3><p>另一种分区方式是根据键的散列分区，目前很多分布式数据存储使用散列函数来分区。</p>
+<p><strong>一个好的散列函数可以将偏斜的数据均匀分布。</strong></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634614700780-7fd3aad6-801a-4d09-8606-ef6e14fd76bb.png" alt="img"></p>
+<p><strong>根据键的散列分区优点是擅长在分区之间公平地分配键，并且定值查询非常高效</strong>。但是要注意，散列分区可以有效的消除数据偏斜与热点问题，但无法完全避免，相同的键仍然会产生相同的哈希，在极端情况下，所有的读写操作都是针对同一个键的，所有的请求都会被路由到同一个分区。</p>
+<blockquote>
+<p>针对这种极端情况的解决办法是在主键后面添加一位随机数。</p>
+</blockquote>
+<p><strong>缺点是失去了高效执行范围查询的能力</strong>，范围查询要么不支持，要么需要查询所有分区。</p>
+<h2 id="分区与次级索引"><a href="#分区与次级索引" class="headerlink" title="分区与次级索引"></a>分区与次级索引</h2><p>上述分区都是主键的分区，如何在分区引入二级索引？</p>
+<h3 id="基于文档的二级索引进行分区"><a href="#基于文档的二级索引进行分区" class="headerlink" title="基于文档的二级索引进行分区"></a>基于文档的二级索引进行分区</h3><p>在这种方式下，每个分区自己内部维护自己的二级索引，例如下图中 color 为次级索引：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634615692301-0b189f32-fdb3-445f-bbb5-328206df105f.png?x-oss-process=image/resize,w_1118,limit_0" alt="image.png"></p>
+<p><strong>这样做的优点是应对次级索引变化简单</strong>，每个分区各自维护自己的二级索引，在本地维护速度会相当快。</p>
+<p><strong>缺点是查询时必须查询所有的分区，并且要进行去重合并，这会浪费大量的时间。</strong></p>
+<p>事实上由于二级索引很少用到，为维持高效性，目前大多数解决方案都是基于文档的方式。</p>
+<h3 id="基于关键词的二级索引进行分区"><a href="#基于关键词的二级索引进行分区" class="headerlink" title="基于关键词的二级索引进行分区"></a>基于关键词的二级索引进行分区</h3><p>在这种情况下，我们<strong>维护一个全局的二级索引表</strong>，这张全局的表也应该采用分区的方式存储，这种分区叫做<strong>关键词分区</strong>，查询或修改二级索引都需要额外导向全局二级索引表，</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634617232975-a8b10ef9-e255-487b-b364-425664c97be1.png" alt="img"></p>
+<p><strong>这样做的优点是查询只需查一次全局的二级索引表，无须查询所有分区。</strong></p>
+<p>缺点是维护代价较高，每次维护都需要一次额外的对二级索引表的网络 IO，在网络拥挤时代价显得更为严重。</p>
+<h2 id="分区再平衡"><a href="#分区再平衡" class="headerlink" title="分区再平衡"></a>分区再平衡</h2><p>随着时间的推移，数据库会有各种变化：</p>
+<ul>
+<li><p>查询吞吐量增加，所以您想要添加更多的 CPU 来处理负载。</p>
+</li>
+<li><p>数据集大小增加，所以您想添加更多的磁盘和  RAM 来存储它。</p>
+</li>
+<li><p>机器出现故障，其他机器需要接管故障机器的责任。</p>
+</li>
+</ul>
+<p>所有这些更改增加或移除一个或多个节点，而<strong>节点变化会导致分区拓扑发生变化</strong>，数据和请求可能会从一个节点移动到另一个节点。 </p>
+<p>将分区（负载）从集群中的一个节点向另一个节点移动的过程称为 <strong>再平衡（rebalancing）</strong>。</p>
+<p>同样的，将一个请求从一个节点导向另一个节点的过程也成为 <strong>再平衡（rebalancing）</strong>。</p>
+<p>无论使用哪种分区方案，再平衡通常都要满足一些最低要求：</p>
+<ul>
+<li>再平衡之后，负载（数据存储，读取和写入请求）应该在集群中的节点之间公平地共享。</li>
+<li>再平衡发生时，数据库应该继续接受读取和写入。</li>
+<li>节点之间只移动必须的数据，以便快速再平衡，并减少网络和磁盘I&#x2F;O负载。</li>
+</ul>
+<h3 id="反面教材：hash-mod-N"><a href="#反面教材：hash-mod-N" class="headerlink" title="反面教材：hash mod N"></a>反面教材：hash mod N</h3><p>如果使用基于散列的分区方法，并且分区与节点的映射关系为 $hash \ mod \ N, N&#x3D;节点总数$，那么一旦 N 发生变化，绝大多数分区可能都会发生变化。</p>
+<p>考虑以下例子：</p>
+<p>3个机器节点，10个数据 的哈希值分别为1,2,3,4,…,10。使用的哈希函数为：$m&#x3D;hash(o) \ mod  \ 3$</p>
+<pre><code>机器0 上保存的数据有：3，6，9
+机器1 上保存的数据有：1，4，7，10
+机器2 上保存的数据有：2，5，8
+</code></pre>
+<p>当增加一台机器后，此时n &#x3D; 4，使用的哈希函数为：$m&#x3D;hash(o) \ mod  \ 4$，各个机器上存储的数据分别为：</p>
+<pre class="line-numbers language-text"><code class="language-text">机器0 上保存的数据有：4，8
+机器1 上保存的数据有：1，5，9
+机器2 上保存的数据有：2，6，10
+机器3 上保存的数据有：3，7
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>只有数据1和数据2没有移动，所以<strong>当集群中数据量很大时，采用这种哈希函数，在节点数量动态变化的情况下会造成大量的数据迁移</strong>，导致网络通信压力的剧增，严重情况，还可能导致数据库宕机。</p>
+<h3 id="一致性哈希算法"><a href="#一致性哈希算法" class="headerlink" title="一致性哈希算法"></a>一致性哈希算法</h3><p>所以我们需要一种哈希算法使得再平衡发生时，不会产生大量的数据迁移，一致性哈希算法是一种解决方案，一致性哈希算法并不是一个具体的哈希算法，而是一种抽象的描述。</p>
+<p>在上述简单哈希中，我们仅仅只对数据进行哈希，然后模 N 得到节点编号。在一致性哈希算法中，我们不仅对数据进行哈希，还会对节点进行哈希，并且会将哈希值抽象看作在一个环上。</p>
+<p>首先对数据对象进行哈希，假设哈希的结果 $0&lt;&#x3D;hash&lt;&#x3D;Integer.MAX_VALUE$，将结果抽象的看成一个环。</p>
+<p>这里采用哈希算法，o1 映射到 m1，o2 映射到 m2，以此类推。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-ae2d4482fe02c5a631797e264e3ada24_1440w.jpg" alt="img"></p>
+<p>现在，我们可以为节点也分配一个唯一的主键，通过该键同样进行哈希映射，假设现在节点 c1 映射到 t1 上，节点 c2 映射到 t2 上，以此类推。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-ed7855175a3ebadb70f00988ac158e98_1440w.jpg" alt="img"></p>
+<p>现在我们如何判定数据对象属于哪一个节点呢？在一致性哈希算法中，<strong>数据对象属于该对象在环中所遇到的下一个节点（通常为顺时针）</strong>，例如上述 o1 属于 c3，o4 与 o3 属于 c2，o2 属于 m2。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-50d10655c9faa9dca36fb4fd32ca15bf_1440w.jpg" alt="img"></p>
+<p>现在如果新增或删除一个节点，只会影响最多环上两个节点之间的数据，例如删除节点 c1 时，只会影响 c1 和 c2 之间的节点，现在 o2 被重定位至 c3 中。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-46554f23bb092ea980b6444d720daecb_1440w.jpg" alt="img"></p>
+<p>但即使是采用一致性哈希算法，也无法避免数据偏斜问题，极端情况下，所有数据对象都被哈希聚集到环上的一端，所有的对象都被导向同一个分区。</p>
+<p>简单的解决方案是采用更好的哈希算法，让数据均匀分布。</p>
+<p>但这可能无法满足，另一种解决的方案是<strong>加入更多的节点，让节点在环上均匀分布</strong>，如果没有足够多的节点，我们可以让一个节点在环上存在多个哈希值，这种方案被称为<strong>虚拟节点</strong>。</p>
+<p>但是要注意，虚拟节点并不是越多越好的，当虚拟节点较多时，新增一个物理节点相当于新增了多个节点，可能仍然会导致大量数据进行迁移，得不偿失。</p>
+<p>某些时候，人为规定节点对应哈希，使节点在环上均匀分布可能是更好的选择。</p>
+<p>对于请求而言，简单的方法是在环上进行二分查找，找到第一个 hash 比当前数据 hash 大的节点，然后导向它，这非常高效。</p>
+<p>另一种办法是利用路由表或是服务注册功能，以 O1 的时间进行查找。</p>
+<h3 id="多一层抽象：分区-节点-多对一"><a href="#多一层抽象：分区-节点-多对一" class="headerlink" title="多一层抽象：分区 - 节点 多对一"></a>多一层抽象：分区 - 节点 多对一</h3><p>一致性哈希算法是一种很优秀的解决方案，但实现较为复杂，这里还有一种简单高效的解决方案：<strong>创建比节点更多的分区，并为每个节点分配多个分区，即额外加一层抽象。</strong></p>
+<blockquote>
+<p>注意：在之前的分析中，为了简便，我们认为分区 - 节点 是 1 对 1 的，所以我们之前淡化了分区与节点的关系（但绝不是必须的，分区 - 节点 仍然可以多对一，不过是多加层抽象罢了）。</p>
+<p>在这里，分区 - 节点是多对一的，因此这里的哈希是指 分区 - 节点 之间的哈希，而不是 数据 - 分区 之间的哈希，请务必不要混淆。</p>
+</blockquote>
+<p>哈希算法仍然是取模，例如假设本来具有 4 个节点，$m &#x3D; hash \ mod \ 4$，现在新增一个节点 Node4，哈希算法变为 $m &#x3D; hash \ mod \ 5$，那么只需要将 $hash \ mod \ 5 &#x3D; 4$ 的分区分给 Node4 即可。这样只有 4 个数据分区需要移动。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634706796816-6e251058-c8a4-451f-9e80-e3c32330f50c.png" alt="img"></p>
+<p><strong>这种方法的优点是简单高效，只有部分分区在节点中移动，键所在的分区也不会改变，唯一改变的是分区所在的节点。</strong></p>
+<p>Riak ，Elasticsearch ，Couchbase 和 Voldemort 中使用了这种再平衡的方法。</p>
+<p>缺点是，<strong>必须要遍历所有的分区</strong>，计算散列，并将其分配给新节点。</p>
+<h2 id="请求路由"><a href="#请求路由" class="headerlink" title="请求路由"></a>请求路由</h2><p><strong>服务发现(service discovery)</strong></p>
+<ul>
+<li>确定客户发出请求时，知道要连接哪个节点进行读取。</li>
+</ul>
+<p>概括来说，这个问题有几种不同的方案（如图6-7所示）:</p>
+<ol>
+<li><p>允许客户联系任何节点（例如，通过<strong>循环策略的负载均衡（Round-Robin Load Balancer）</strong>）。如果该节点恰巧拥有请求的分区，则它可以直接处理该请求；否则，它将请求转发到适当的节点，接收回复并传递给客户端。</p>
+</li>
+<li><p>首先将所有来自客户端的请求发送到路由层，它决定了应该处理请求的节点，并相应地转发。此路由层本身不处理任何请求；它仅负责分区的负载均衡。</p>
+</li>
+<li><p>要求客户端知道分区和节点的分配。在这种情况下，客户端可以直接连接到适当的节点，而不需要任何中介。</p>
+</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634784240515-b46b26c7-5561-4681-8ca9-8dc4a004cc50.png" alt="img"></p>
+<p>关键问题：</p>
+<ul>
+<li>如何了解分区-节点之间的分配关系变化？</li>
+<li>解决方法：所有参与者达成共识。</li>
+<li>分布式系统中有达成共识的协议，但很难被正确实现。</li>
+</ul>
+<p>常见实现 ZooKeeper：</p>
+<ul>
+<li><p>依赖于一个独立的协调服务，比如ZooKeeper来跟踪集群元数据</p>
+</li>
+<li><p>每个节点在ZooKeeper中注册自己，ZooKeeper维护分区到节点的可靠映射。</p>
+</li>
+<li><p>其他参与者（如路由层或分区感知客户端）可以在ZooKeeper中订阅此信息。 </p>
+</li>
+<li><p>只要分区分配发生了改变，或者集群中添加或删除了一个节点，ZooKeeper就会通知路由层使路由信息保持最新状态。</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1265500/1634784395663-b048214c-4bb4-471d-bf58-5ff54015ae53.png" alt="img"></p>
+
+        </div>
+
+
+
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent">
+        </div>
+        <!-- 评分 -->
+        <div class="single-reward">
+          
+          <!-- 五星评分 -->
+<div id="wpac-rating"></div>
+<script type="text/javascript">
+wpac_init = window.wpac_init || [];
+wpac_init.push({widget: 'Rating', id: 23889});
+(function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = 'https://embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+})();
+</script>
+<!-- <a target="_blank" rel="noopener" href="https://widgetpack.com" class="wpac-cr">Star Rating WIDGET PACK</a> -->
+          
+        </div>
+        <!-- 自定义署名方式 -->
+        <footer class="post-footer">
+          <div class="post-lincenses" style="color: #ff9966;">
+            欢迎转载，转载时请注明来源哦！
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" style="color: #ff9966;" target="_blank"
+              rel="nofollow">
+              <i class="fa fa-creative-commons" aria-hidden="true"></i>ncsa4.0</a>
+          </div>
+          
+          <div class="post-tags" style="color: #a39391">
+            <span><i class="fa fa-tags"></i>
+              
+              <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="color: #716e77;">暂无标签<em>·</em></a>
+              
+            </span>
+            <span>
+              <i class="iconfont icon-file"></i>
+              
+              <a href="/blog/categories/%E6%9A%82%E6%97%A0%E5%88%86%E7%B1%BB/" style="color: #716e77;">暂无分类</a>
+              
+            </span>
+          </div>
+          
+          <div class="post-share" >
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+        <!-- <div class="tag-cloud">
+          <div class="tag-cloud-title">
+          </div>
+          <div class="tag-cloud-tags">
+            <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="font-size: 10px; color: #f06966">暂无标签</a>
+          </div>
+        </div> -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+        <div class="post-nepre half previous">
+          
+            <a href="/blog/post/3e53.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                  style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)"
+                  src="">
+              </div>
+              <span class="label">Previous Post</span>
+              <div class="info">
+                <h3>事务底层原理</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+          
+          
+          
+          <div class="post-nepre half next">
+            
+              <a href="/blog/post/b542.html" rel="next">
+                <div class="background">
+                  <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                    style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"
+                    onerror="imgError(this,3)" src="">
+                </div>
+                <span class="label">Next Post</span>
+                <div class="info">
+                  <h3>分布式系统中的复制问题</h3>
+                  <hr>
+                </div>
+              </a>
+            </div>
+            
+      </section>
+      <!-- 加密文章隐藏评论 -->
+      <section class="comment" >
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container" class="comment"></div> 
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<script type="text/javascript">
+	var gitalk = new Gitalk({
+  	clientID: '',
+  	clientSecret: '',
+  	repo: 'cungudafa.github.io',
+  	owner: 'cungudafa',
+	admin: ['cungudafa'],
+	distractionFreeMode: 'true',
+    id: md5(location.pathname)
+})
+gitalk.render('gitalk-container') 
+</script>
+
+      </section>
+      <!-- 加密文章隐藏作者信息 -->
+      
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+<!--评论配置-->
+
+
+
+      <!-- body.end -->
+    </div>
+    <!-- search -->    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/blog/',
+        CONTENT_URL: '/blog/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- footer-->    
+    
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <div class="footertext">
+          <div class="img-preload">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+          </div>
+        </div>
+        <!-- 网站数据统计 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #ff9999;padding-left: 20px;">
+                <!-- 网站运行时间统计 -->
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span id="time" align="center">载入时间中...</span>
+                <script>
+                var now = new Date(); 
+                function createtime() { 
+                      var grt= new Date("Wed Feb 12 2020 01:20:00 GMT+0800 (中国标准时间)");//在此处修改你的建站时间
+                      now.setTime(now.getTime()+250); 
+                      days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+                      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+                      if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+                      mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+                      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+                      snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+                      document.getElementById("time").innerHTML = "小破站在各种灾难中苟活了 "+ dnum +" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";      
+                  } 
+                  setInterval("createtime()",250);
+                </script>
+            </span> 
+          </p>
+        </div>
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #b9b9b9;padding-left: 20px;">
+              <!-- 全网站字数统计wordcount -->
+              
+              <!-- 不蒜子网页计数器 -->
+              
+              <span style="padding-left: 20px;"><i class="fa fa-fire" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_pv">总访问量： <span id="busuanzi_value_site_pv" style="color:#ff9999;"></span>次</span>
+              </span>
+              
+              
+              <span style="padding-left: 20px;"><i class="fa fa-user" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_uv">总访问人数： <span id="busuanzi_value_site_uv" style="color:#ff9999;"></span>人</span>
+              </span>
+              
+            </span>
+          </p>
+        </div>
+        <!-- 作者注明 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #b9b9b9;">
+                Copyright &copy; 2023
+                &nbsp;<a style="color: #ff9999;display:inline-block"> Happysnaker </a>
+                &nbsp;<i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> 
+                &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank" style="color: #ff9999;display:inline-block">Hexo</a>
+                |&nbsp;Theme&nbsp;<a href="https://gitee.com/cungudafa/hexo-theme-sakuraplus" target="_blank" style="color: #ff9999;display:inline-block">SakuraPlus</a>
+              </span>
+          </p>
+        </div>
+         <!-- 网站作者版权注明 -->
+         
+          <div id="footer-info" class="inner">
+            <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #ff9999;">
+                
+              </span>
+            </p>
+          </div>
+        
+    </div><!-- .site-info -->
+</footer>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/InsightSearch.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/sakura-app.js"></script>
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- fancybox大图查看 需jq -->
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/jquery.fancybox.min.js"></script>
+  <script>
+    $('[data-fancybox="images"]').fancybox({
+      thumbs : {
+        autoStart : true //缩略图
+      }
+    });
+    $('[data-fancybox]').fancybox({
+      protect: true,//图片右键不能下载
+      youtube : {
+          controls : 0,
+          showinfo : 0
+      },
+      vimeo : {
+          color : 'f00'
+      }
+    });
+  </script>
+
+
+<!-- 自适应浏览器 -->
+<script type="text/javascript">
+  /* <![CDATA[ */
+  if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  } else {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  }
+  /* ]]> */
+  
+  </script>
+  <script>
+  $(document).ready(function() {
+    if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+      if ($(".pattern-center").length > 0) { //有图的情况
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -400,
+            scrollSmoothOffset: -85
+        });
+      } else {
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -85,
+            scrollSmoothOffset: -85
+        });
+      }
+      var offsetTop = $('.toc').offset().top - 95;
+      window.onscroll = function() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop >= offsetTop) {
+          $('.toc').addClass('toc-fixed');
+        } else {
+          $('.toc').removeClass('toc-fixed');
+        }
+      }
+    }
+  });
+  </script>
+    <!-- Side menu -->
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- Floating window -->
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">happysnaker开心</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="http://github.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="http://gitee.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/archives/">
+                  <i class="fa fa-line-chart" aria-hidden="true"></i>
+                  统计
+                </a>
+              </li>
+            
+              <li>
+                <a href="/blog/tags">
+                  <i class="fa fa-tags" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2020 hexo-sakuraplus</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  
+   <!-- pages壁纸切换 -->
+ 
+    <div class="skin-menu no-select" id="mainskin"  style="position: fixed">
+        <div class="theme-controls row-container">
+            <ul class="menu-list">
+                <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+                <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+                <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+                <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+                <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+                <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+                <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+                <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+            </ul>
+        </div>
+        <div class="font-family-controls row-container">
+            <button type="button" class="control-btn-serif selected" data-mode="serif" onclick="mashiro_global.font_control.change_font()">Serif</button>
+            <button type="button" class="control-btn-sans-serif" data-mode="sans-serif" onclick="mashiro_global.font_control.change_font()">Sans Serif</button>
+        </div>
+    </div>   
+    <canvas id="night-mode-cover"></canvas> 
+        <div class="changeSkin-gear no-select">
+        <div class="keys" id="setbtn"> <span id="open-skinMenu"> 切换壁纸 | SCHEME TOOL 
+            &nbsp;<i class="iconfont icon-gear inline-block rotating"></i> </span></div>
+    </div><!-- skin.end -->
+
+  <!-- left side bar -->
+
+ </body>
+</html>

@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <!-- cungudafa百度收录验证编号 -->
+  <!-- <meta name="baidu-site-verification" content="LukfTcyXmC" /> -->
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">MQ 知识点总结 | Hexo</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/style.css" type="text/css" media="all" id="saukra_css-css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/jquery.fancybox.min.css" media="all">  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/tags.css" media="all">
+  
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/logo.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/fonts/LOGO/logo.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+  <!-- 分析 -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+  <!-- Baidu Analytics -->
+
+  
+  <!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+  " type="text/css" media="all"> -->
+  <script>
+    /*Initial Variables*/
+    var mashiro_option = new Object();
+    var mashiro_global = new Object();
+    mashiro_option.NProgressON = true;
+    /* 
+    * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+    * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+    */
+    mashiro_option.email_domain = "";
+    mashiro_option.email_name = "";
+    mashiro_option.cookie_version_control = "";
+    mashiro_option.qzone_autocomplete = false;
+    mashiro_option.site_name = "happysnaker开心";
+    mashiro_option.author_name = "开心";
+    mashiro_option.site_url = "http://happysnaker.gitee.io/blog";
+    mashiro_option.v_appId = "";//
+    mashiro_option.v_appKey = "";//
+    mashiro_option.mathjax = "1";
+    mashiro_option.copyright_enable = "false" ;
+    mashiro_option.copyright_minCharNumber = parseInt("120") ;
+    mashiro_option.copyright_description = "本文章著作权归作者所有，任何形式的转载都请注明出处。" ;
+    mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+    mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+    // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+    // mashiro_option.float_player_on = true;
+
+    /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+    var bg = "https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(0).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(1).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(2).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(3).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(4).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(5).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(6).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(7).jpg.webp".split(",");
+    var bgindex = Math.floor(Math.random()*bg.length);
+    if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+      alert('朋友，IE浏览器未适配哦~');
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"><link rel="stylesheet" href="/blog/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/blog/css/prism-line-numbers.css" type="text/css"></head> 
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <!-- Dynamic sliders -->
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <!-- Main content -->
+  <section id="main-container">
+    <!-- Top menu -->
+    <div class="headertop filter-dot">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="http://happysnaker.gitee.io/blog">
+          <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>且停且忘且随风，且行且看且从容</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="http://github.com/happysnaker" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://gitee.com/happysnaker" target="_blank" class="social-github" title="gitee">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/gitee.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  
+  <div id="video-container">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <!-- banner -->
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+        <span class="site-title">
+            <span class="logolink logo">
+                <a href="/">
+                    <ruby>
+                    <span class="sakuraso">Happysnaker</span>
+                    <span class="no">の</span>
+                    <span class="shironeko">小屋</span>
+                    <rp></rp>
+                    <rt class="logo">happysnaker</rt>
+                    <rp></rp>
+                    </ruby>
+                  </a>
+            </span>
+          </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/archives/">
+                          <i class="fa fa-line-chart" aria-hidden="true"></i>
+                          统计
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/blog/tags">
+                          <i class="fa fa-tags" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      
+      <!-- body -->
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1"
+        class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content">  -->
+        <!--套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h2 id="AMQP-0-9-1-协议模型"><a href="#AMQP-0-9-1-协议模型" class="headerlink" title="AMQP 0.9.1 协议模型"></a>AMQP 0.9.1 协议模型</h2><h3 id="AMQP-协议是什么"><a href="#AMQP-协议是什么" class="headerlink" title="AMQP 协议是什么"></a>AMQP 协议是什么</h3><p>AMQP（高级消息队列协议）是一个网络协议。它支持符合要求的客户端应用（application）和消息中间件代理（messaging middleware broker）之间进行通信。</p>
+<p>消息代理（message brokers）从发布者（publishers）亦称生产者（producers）那儿接收消息，并根据既定的路由规则把接收到的消息发送给处理消息的消费者（consumers）。</p>
+<p>由于AMQP是一个网络协议，所以这个过程中的发布者，消费者，消息代理 可以存在于不同的设备上。</p>
+<p>AMQP 0.9.1 的工作过程如下图：消息（message）被发布者（publisher）发送给交换机（exchange），交换机常常被比喻成邮局或者邮箱。然后交换机将收到的消息根据路由规则分发给绑定的队列（queue）。最后AMQP代理会将消息投递给订阅了此队列的消费者，或者消费者按照需求自行获取。</p>
+<p><img src="https://www.rabbitmq.com/img/tutorials/intro/hello-world-example-routing.png" alt="enter image description here"></p>
+<p>发布者（publisher）发布消息时可以给消息指定各种消息属性（message meta-data）。有些属性有可能会被消息代理（brokers）使用，然而其他的属性则是完全不透明的，例如消息数据，消息代理完全不关系消息数据是什么。</p>
+<p>从安全角度考虑，网络是不可靠的，接收消息的应用也有可能在处理消息的时候失败。基于此原因，AMQP模块包含了一个<strong>消息确认</strong>（message acknowledgements）的概念：当一个消息从队列中投递给消费者后（consumer），消费者会通知一下消息代理（broker），这个可以是自动的也可以由处理消息的应用的开发者执行。当“<strong>消息确认</strong>”被启用的时候，消息代理不会完全将消息从队列中删除，直到它收到来自消费者的确认回执（acknowledgement）。</p>
+<p>在某些情况下，例如<strong>当一个消息无法被成功路由时，消息或许会被返回给发布者并被丢弃。或者，如果消息代理执行了延期操作，消息会被放入一个所谓的死信队列中。</strong>此时，消息发布者可以选择某些参数来处理这些特殊情况。</p>
+<p>队列，交换机和绑定统称为AMQP实体（AMQP entities）。</p>
+<h3 id="交换机和交换机类型"><a href="#交换机和交换机类型" class="headerlink" title="交换机和交换机类型"></a>交换机和交换机类型</h3><p>交换机是用来发送消息的AMQP实体。交换机拿到一个消息之后将它路由给一个或零个队列。它使用哪种路由算法是由交换机类型和被称作绑定（bindings）的规则所决定的。AMQP 0.9.1 的代理提供了四种交换机</p>
+<table>
+<thead>
+<tr>
+<th>Name（交换机类型）</th>
+<th>Default pre-declared names（预声明的默认名称）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Direct exchange（直连交换机）</td>
+<td>(Empty string) and amq.direct</td>
+</tr>
+<tr>
+<td>Fanout exchange（扇型交换机）</td>
+<td>amq.fanout</td>
+</tr>
+<tr>
+<td>Topic exchange（主题交换机）</td>
+<td>amq.topic</td>
+</tr>
+<tr>
+<td>Headers exchange（头交换机）</td>
+<td>amq.match (and amq.headers in RabbitMQ)</td>
+</tr>
+</tbody></table>
+<p>交换机可以有两个状态：持久（durable）、暂存（transient）。持久化的交换机会在消息代理（broker）重启后依旧存在，而暂存的交换机则不会（它们需要在代理再次上线后重新被声明）。</p>
+<h4 id="默认交换机"><a href="#默认交换机" class="headerlink" title="默认交换机"></a>默认交换机</h4><p>默认交换机（default exchange）实际上是一个由消息代理预先声明好的没有名字（名字为空字符串）的直连交换机（direct exchange）。它有一个特殊的属性使得它对于简单应用特别有用处：<strong>那就是每个新建队列（queue）如果没有指定交换机，将会自动绑定到默认交换机上，绑定的路由键（routing key）名称与队列名称相同。</strong></p>
+<blockquote>
+<p>举个栗子：当你声明了一个名为”search-indexing-online”的队列，AMQP代理会自动将其绑定到默认交换机上，绑定（binding）的路由键名称也是为”search-indexing-online”。因此，当携带着名为”search-indexing-online”的路由键的消息被发送到默认交换机的时候，此消息会被默认交换机路由至名为”search-indexing-online”的队列中。</p>
+</blockquote>
+<h4 id="直连交换机"><a href="#直连交换机" class="headerlink" title="直连交换机"></a>直连交换机</h4><p>直连型交换机（direct exchange）是根据消息携带的路由键（routing key）将消息投递给对应队列的。直连交换机用来处理消息的单播路由（unicast routing）（尽管它也可以处理多播路由）。下边介绍它是如何工作的：</p>
+<ul>
+<li>将一个队列绑定到某个交换机上，同时赋予该绑定一个路由键（routing key）</li>
+<li>当一个携带着路由键为<code>R</code>的消息被发送给直连交换机时，交换机会把它路由给绑定值同样为<code>R</code>的队列。</li>
+</ul>
+<p>直连交换机经常用来循环分发任务给多个工作者（workers）。当这样做的时候，我们需要明白一点，在AMQP 0.9.1中，如果有多个消费者绑定在某个路由键上，<strong>消息代理将在多个消费者之间选择一个投递。</strong></p>
+<p>直连型交换机图例：<br><img src="https://www.rabbitmq.com/img/tutorials/intro/exchange-direct.png" alt="enter image description here"></p>
+<h4 id="扇型交换机"><a href="#扇型交换机" class="headerlink" title="扇型交换机"></a>扇型交换机</h4><p>扇型交换机（funout exchange）将消息路由给绑定到它身上的所有队列，而不理会绑定的路由键。如果N个队列绑定到某个扇型交换机上，当有消息发送给此扇型交换机时，交换机会将消息的拷贝分别发送给这所有的N个队列。<strong>扇型用来交换机处理消息的广播路由（broadcast routing）。</strong></p>
+<p>因为扇型交换机投递消息的拷贝到所有绑定到它的队列，所以他的应用案例都极其相似：</p>
+<ul>
+<li>大规模多用户在线（MMO）游戏可以使用它来处理排行榜更新等全局事件</li>
+<li>体育新闻网站可以用它来近乎实时地将比分更新分发给移动客户端</li>
+<li>分发系统使用它来广播各种状态和配置更新</li>
+<li>在群聊的时候，它被用来分发消息给参与群聊的用户。（AMQP没有内置presence的概念，因此XMPP可能会是个更好的选择）</li>
+</ul>
+<p>扇型交换机图例：<br><img src="https://www.rabbitmq.com/img/tutorials/intro/exchange-fanout.png" alt="enter image description here"></p>
+<h4 id="主题交换机"><a href="#主题交换机" class="headerlink" title="主题交换机"></a>主题交换机</h4><p>主题交换机（topic exchanges）通过对消息的路由键和队列到交换机的<strong>绑定模式</strong>之间的匹配，将消息路由给一个或多个队列。<strong>这很像直连交换机，唯一的区别是主题交换机的路由键是个模式匹配字符串，可以匹配多个队列。</strong></p>
+<p>主题交换机经常用来实现各种分发&#x2F;订阅模式及其变种。主题交换机通常用来实现消息的多播路由（multicast routing）。</p>
+<p>主题交换机拥有非常广泛的用户案例。无论何时，当一个问题涉及到那些想要有针对性的选择需要接收消息的 多消费者&#x2F;多应用（multiple consumers&#x2F;applications） 的时候，主题交换机都可以被列入考虑范围。</p>
+<h4 id="头交换机"><a href="#头交换机" class="headerlink" title="头交换机"></a>头交换机</h4><p>有时消息的路由操作会涉及到多个属性，此时使用消息头就比用路由键更容易表达，头交换机（headers exchange）就是为此而生的。头交换机使用多个消息属性来代替路由键建立路由规则。通过判断消息头的值能否与指定的绑定相匹配来确立路由规则。</p>
+<p>我们可以绑定一个队列到头交换机上，并给他们之间的绑定使用多个用于匹配的头（header）。这个案例中，消息代理得从应用开发者那儿取到更多一段信息，换句话说，它需要考虑某条消息（message）是需要部分匹配还是全部匹配。上边说的“更多一段消息”就是”x-match”参数。当”x-match”设置为“any”时，消息头的任意一个值被匹配就可以满足条件，而当”x-match”设置为“all”的时候，就需要消息头的所有值都匹配成功。</p>
+<p>头交换机可以视为直连交换机的另一种表现形式。头交换机能够像直连交换机一样工作，不同之处在于头交换机的路由规则是建立在头属性值之上，而不是路由键。路由键必须是一个字符串，而头属性值则没有这个约束，它们甚至可以是整数或者哈希值（字典）等。</p>
+<h3 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h3><h4 id="队列属性"><a href="#队列属性" class="headerlink" title="队列属性"></a>队列属性</h4><p>AMQP中的队列（queue）跟其他消息队列或任务队列中的队列是很相似的：它们存储着即将被应用消费掉的消息。队列跟交换机共享某些属性，但是队列也有一些另外的属性。</p>
+<ul>
+<li>Name</li>
+<li>Durable（消息代理重启后，队列依旧存在）</li>
+<li>Exclusive（只被一个连接（connection）使用，而且当连接关闭后队列即被删除）</li>
+<li>Auto-delete（当最后一个消费者退订后即被删除）</li>
+<li>Arguments（一些消息代理用他来完成类似与TTL的某些额外功能）</li>
+</ul>
+<p>队列在声明（declare）后才能被使用。如果一个队列尚不存在，声明一个队列会创建它。如果声明的队列已经存在，并且属性完全相同，那么此次声明不会对原有队列产生任何影响。如果声明中的属性与已存在队列的属性有差异，那么一个错误代码为406的通道级异常就会被抛出。</p>
+<p>持久化队列（Durable queues）会被存储在磁盘上，当消息代理（broker）重启的时候，它依旧存在。没有被持久化的队列称作暂存队列（Transient queues）。</p>
+<p><strong>持久化的队列并不会使得路由到它的消息也具有持久性</strong>。倘若消息代理挂掉了，重新启动，那么在重启的过程中持久化队列会被重新声明。</p>
+<p><strong>无论怎样，如果要保证未被消费的消息持久化，必须进行单独设置，只有经过持久化的消息才能被重新恢复。</strong></p>
+<p>Rabbit Mq 中需要在发送消息时，设置消息的属性以开启消息持久化。</p>
+<pre class="line-numbers language-java"><code class="language-java">channel<span class="token punctuation">.</span><span class="token function">basicPublish</span><span class="token punctuation">(</span>EXCHANGE_NAME<span class="token punctuation">,</span> ROUTING_KEY<span class="token punctuation">,</span> MessageProperties<span class="token punctuation">.</span>PERSISTENT_TEXT_PLAIN<span class="token punctuation">,</span> message<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="绑定交换机"><a href="#绑定交换机" class="headerlink" title="绑定交换机"></a>绑定交换机</h4><p>绑定（Binding）是交换机（exchange）将消息（message）路由给队列（queue）所需遵循的规则。如果要指示交换机“E”将消息路由给队列“Q”，那么“Q”就需要与“E”进行绑定。绑定操作需要定义一个可选的路由键（routing key）属性给某些类型的交换机。路由键的意义在于从发送给交换机的众多消息中选择出某些消息，将其路由给绑定的队列。</p>
+<p>拥有了交换机这个中间层，很多由发布者直接到队列难以实现的路由方案能够得以实现，并且避免了应用开发者的许多重复劳动，<strong>达到了解耦的效果。</strong></p>
+<p>如果AMQP的消息无法路由到队列（例如，发送到的交换机没有绑定队列），<strong>消息会被就地销毁或者返还给发布者，如果应用没能编写处理程序接受退还消息，那么消息将被无情的抛弃。</strong></p>
+<h4 id="死信队列"><a href="#死信队列" class="headerlink" title="死信队列"></a>死信队列</h4><p>死信队列也是一个普通的队列，也需要绑定在交换机中。</p>
+<p>对于一个队列而言，每个队列可以设置一些限制，例如 消息最多重投次数、队列最大长度、消息对大存活时间 等，当消息达到限制时，消息代理可以简单的丢弃他们，或者将他们投递到预先设置的<strong>死信队列</strong>中。</p>
+<p>在 Java 中，可以这样配置队列，并声明一些限制条件以及死信队列：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Bean</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"queue"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> Queue <span class="token function">getOrderAddQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span class="token operator">></span> args <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 绑定死信交换机和路由</span>
+    args<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"x-dead-letter-exchange"</span><span class="token punctuation">,</span>DEAD_EXCHANGE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    args<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"x-dead-letter-routing-key"</span><span class="token punctuation">,</span>ODEAD_ROUTEING_KEY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//队列的长度为 100</span>
+    args<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"x-max-length"</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//队列中的消息超过 3s 后过期</span>
+    args<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"x-message-ttl"</span><span class="token punctuation">,</span> 3000L<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Queue</span><span class="token punctuation">(</span>ORDER_ADD_QUEUE<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>死信队列通常用于实现一些兜底方案，如系统负载过高，队列已满，通知客户未能完成某项工作等；也可用于定时事件，例如订单超时未支付则自动取消，消费者可以根据订单是否以支付来决定是否要拒绝或确认消息（或者干脆不设置消费者），当消息在队列中超时时，他被投递至死信队列中处理。</p>
+<h3 id="消费者"><a href="#消费者" class="headerlink" title="消费者"></a>消费者</h3><p>消息如果只是存储在队列里是没有任何用处的。被应用消费掉，消息的价值才能够体现。在AMQP 0-9-1 模型中，有两种途径可以达到此目的：</p>
+<ul>
+<li>将消息投递给应用 (“push API”)</li>
+<li>应用根据需要主动获取消息 (“pull API”)</li>
+</ul>
+<p>使用 push API，应用（application）需要明确表示出它在某个特定队列里所感兴趣的，想要消费的消息。即消费者要指定一个队列的名字，表示订阅了这个队列。</p>
+<p><strong>随后，消息代理会与消费者打开一条 TCP 长连接，用以推送消息，消息代理会不断对消费者探活以确保消费者存活。大多数 AMQP 的实现都是采用 push 模型，但同时消息代理保留了 pull api 供外部调用。</strong></p>
+<p>每个消费者（订阅者）都有一个叫做消费者标签的标识符。它可以被用来退订消息。消费者标签实际上是一个字符串。</p>
+<h4 id="消息确认"><a href="#消息确认" class="headerlink" title="消息确认"></a>消息确认</h4><p>消费者应用（Consumer applications） - 用来接受和处理消息的应用 - 在处理消息的时候偶尔会失败或者有时会直接崩溃掉。而且网络原因也有可能引起各种问题。这就给我们出了个难题，AMQP代理在什么时候删除消息才是正确的？AMQP 0.9.1 规范给我们两种建议：</p>
+<ul>
+<li>当消息代理（broker）将消息发送给应用后立即删除。（使用AMQP方法：basic.deliver或basic.get-ok）</li>
+<li>待应用（application）发送一个确认回执（acknowledgement）后再删除消息。（使用AMQP方法：basic.ack）</li>
+</ul>
+<p>前者被称作自动确认模式（automatic acknowledgement model），后者被称作显式确认模式（explicit acknowledgement model）。</p>
+<p>在显式模式下，由消费者应用来选择什么时候发送确认回执（acknowledgement）。<strong>在此期间，消息代理不会重复投递消息，但是如果消息代理检测到与消费者的连接断开，那么消息代理会将消息重新投递给另一个消费者。</strong></p>
+<h4 id="拒绝消息"><a href="#拒绝消息" class="headerlink" title="拒绝消息"></a>拒绝消息</h4><p>当一个消费者接收到某条消息后，处理过程有可能成功，有可能失败。应用可以向消息代理表明，本条消息由于“拒绝消息（Rejecting Messages）”的原因处理失败了。</p>
+<p>当拒绝某条消息时，应用可以<strong>通过拒绝参数</strong>告诉消息代理如何处理这条消息——销毁它或者重新放入队列。当此队列只有一个消费者时，<strong>如果处理不当，可能会出现无限次投递、确认、重新投递的死循环。</strong></p>
+<p>在AMQP中，basic.reject 方法用来执行拒绝消息的操作。</p>
+<p>但 basic.reject 有个限制：一次只能拒绝一个消息，无法做到批量拒绝，在 RabbitMq 中，一条消息可能会因为网络问题被多次投递到同一个消费者中，可以使用 <code>basic.nack</code> 方式来批量拒绝。</p>
+<h4 id="预取消息"><a href="#预取消息" class="headerlink" title="预取消息"></a>预取消息</h4><p>在多个消费者共享一个队列的案例中，<strong>明确指定在收到下一个确认回执前每个消费者一次可以接受多少条消息是非常有用的。</strong>这可以在试图批量发布消息的时候起到简单的负载均衡和提高消息吞吐量的作用。</p>
+<p>注意，RabbitMQ只支持通道级的预取计数，而不是连接级的或者基于大小的预取。</p>
+<p>通过 <code>basic.qos</code> 告知消息代理自己可以接受多少条消息。</p>
+<h4 id="消息属性和有效载荷（消息主体）"><a href="#消息属性和有效载荷（消息主体）" class="headerlink" title="消息属性和有效载荷（消息主体）"></a>消息属性和有效载荷（消息主体）</h4><p>AMQP模型中的消息（Message）对象是带有属性（Attributes）的。有些属性及其常见，以至于AMQP 0-9-1 明确的定义了它们，并且应用开发者们无需费心思思考这些属性名字所代表的具体含义。例如：</p>
+<ul>
+<li>Content type（内容类型）</li>
+<li>Content encoding（内容编码）</li>
+<li>Routing key（路由键）</li>
+<li>Delivery mode (persistent or not)<br>投递模式（持久化 或 非持久化）</li>
+<li>Message priority（消息优先权）</li>
+<li>Message publishing timestamp（消息发布的时间戳）</li>
+<li>Expiration period（消息有效期）</li>
+<li>Publisher application id（发布应用的ID）</li>
+</ul>
+<p>有些属性是被AMQP代理所使用的，但是大多数是开放给接收它们的应用解释器用的，有些属性是可选的也被称作消息头（headers），他们跟HTTP协议的X-Headers很相似，消息属性需要在消息被发布的时候定义。</p>
+<p>AMQP的消息除属性外，也含有一个有效载荷 - Payload（消息实际携带的数据），它被AMQP代理当作不透明的字节数组来对待。</p>
+<p>消息代理不会检查或者修改有效载荷，消息可以只包含属性而不携带有效载荷。</p>
+<p>消息能够以持久化的方式发布，AMQP代理会将此消息存储在磁盘上，如果服务器重启<strong>，消息代理会保证收到的持久化消息不会丢失。</strong></p>
+<p>简单地将消息发送给一个持久化的交换机或者路由给一个持久化的队列，并不会使得此消息具有持久化性质：它完全取决与消息本身的持久模式（persistence mode）。将消息以持久化方式发布时，会对性能造成一定的影响（就像数据库操作一样，健壮性的存在必定造成一些性能牺牲）。</p>
+<h3 id="连接与通道"><a href="#连接与通道" class="headerlink" title="连接与通道"></a>连接与通道</h3><p>有些应用需要与AMQP代理建立多个 TCP 连接，例如主机上存在多个消费者。无论怎样，同时开启多个TCP连接都是不合适的，因为这样做会消耗掉过多的系统资源并且使得防火墙的配置更加困难。</p>
+<p>AMQP 0.9.1提供了通道（channels）来处理多连接，多个通道可以共享一个 TCP 连接，类似于 HTTP2.0 多路复用原理。</p>
+<p>在 RabbitMq Java 客户端中，当收到消息代理的推送时，客户端会从线程池中获取一个线程，调用消费者逻辑，客户端会为每个线程分配不同的通道。</p>
+<p>一个特定通道上的通讯与其他通道上的通讯是完全隔离的，因此每个 AMQP 方法都需要携带一个通道号，这样客户端就可以指定此方法是为哪个通道准备的。</p>
+<p>在 RabbitMq 中，总是基于通道去进行操作。</p>
+<h2 id="同步发送"><a href="#同步发送" class="headerlink" title="同步发送"></a>同步发送</h2><p>AMQP 中并没有规定发送者如何同步发送，这在某些时候很有用处，例如对于一些事务而言，发送者必须要确认消息成功的被投递到消息代理中并被持久化。</p>
+<p>Rabbit Mq 中支持两种同步发送模型。</p>
+<h3 id="Confirm-确认机制"><a href="#Confirm-确认机制" class="headerlink" title="Confirm 确认机制"></a>Confirm 确认机制</h3><p>Confirm 确认机制是一种异步确认模型，一旦发送者将信道设置为 Confirm 模型，任何在此信道上发送的消息都会被指派一个唯一的 ID，一旦消息到达消息代理，如果消息属性包含了 Confirm ID，则消息代理会回送一个确认（包含消息 ID 和 Confirm ID）给发送者。</p>
+<p>一旦发送者得到消息代理回送的结果，或是成功、或是失败、或是超时，Rabbitmq 客户端就会异步调用用户编写的 Confirm 处理程序。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomConfirmAndReturnCallback</span> <span class="token keyword">implements</span> <span class="token class-name">RabbitTemplate<span class="token punctuation">.</span>ConfirmCallback</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+ 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">confirm</span><span class="token punctuation">(</span>CorrelationData correlationData<span class="token punctuation">,</span> <span class="token keyword">boolean</span> isSendSuccess<span class="token punctuation">,</span> String error<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通常，如果消息未能发送成功，处理程序会将消息重复发送，以确保消息最终能够持久化。如果达到一定阈值后仍未发送成功，这应该要引起运维人员的注意（监控、告警）。</p>
+<h3 id="事务模式"><a href="#事务模式" class="headerlink" title="事务模式"></a>事务模式</h3><p>RabbitMq 提供了一种同步模型，被称为事务模式，在发送消息前，可以通过 <code>select</code> 方式在通道上开启事务，此时发送者会将 <code>select</code> 信息发送给消息代理告知此通道开启了事务模式，消息代理同意后方可继续事务。</p>
+<p>当发送者提交时，消息代理检查消息是否到达或是否被持久化，如果一切正常，则同意提交，否则将会拒绝提交。</p>
+<p>一旦任何异常发生，发送者可以调用回滚方法撤回消息，消息代理在提交前不会消费消息，而一旦消息代理收到回滚消息后，它会丢弃此条消息。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">try</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    channel<span class="token punctuation">.</span><span class="token function">txSelect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    channel<span class="token punctuation">.</span><span class="token function">basicPublish</span><span class="token punctuation">(</span>exchange<span class="token punctuation">,</span> routingKey<span class="token punctuation">,</span> MessageProperties<span class="token punctuation">.</span>PERSISTENT_TEXT_PLAIN<span class="token punctuation">,</span> msg<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    channel<span class="token punctuation">.</span><span class="token function">txCommit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    channel<span class="token punctuation">.</span><span class="token function">txRollback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>相较于 Confirm 而言，事务模式是完全同步的模型，<code>txCommit()</code> 方法会堵塞直至消息成功投递或发生异常，这能确保消息被成功投递了再去执行后面的逻辑；而 Confirm 模式则无法确保，因为其仍然是一种异步模型。但事务模型缺点是性能损失，通常而言，Confirm 模式是一种折衷的选择。</p>
+<h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><p>MQ 可以用来处理一些分布式事务问题，核心思想是：<strong>开弓没有回头箭。</strong></p>
+<p>RocketMQ 实现了一些事务的功能，在 RocketMQ 中，存在两个概念：</p>
+<ul>
+<li>Half Message，半消息</li>
+</ul>
+<p>暂时不能被 <code>Consumer</code>消费的消息。<code>Producer</code>已经把消息发送到 <code>Broker</code>端，但是此消息的状态被标记为不能投递，处于这种状态下的消息称为半消息。事实上，该状态下的消息会被放在一个叫做 <code>RMQ_SYS_TRANS_HALF_TOPIC</code>的主题下。</p>
+<p>当 <code>Producer</code>端对它二次确认后，也就是 <code>Commit</code>之后，<code>Consumer</code>端才可以消费到；那么如果是<code>Rollback</code>，该消息则会被删除，永远不会被消费到。</p>
+<ul>
+<li>事务状态回查</li>
+</ul>
+<p>我们想，可能会因为网络原因、应用问题等，导致<code>Producer</code>端一直没有对这个半消息进行确认，那么这时候 <code>Broker</code>服务器会定时扫描这些半消息，主动找<code>Producer</code>端查询该消息的状态，这个也是半消息存在的意义。</p>
+<p><strong>例如如果上游服务提交了，但是未能来得及发送消息，就会存在不一致的问题。</strong>有了半消息之后，就相当于有了一个记录，<strong>当然通常上游服务自身也需要维护一个本地事务表，用以回答消息代理自身是否提交或未提交某个事务。</strong></p>
+<p>例如，一个经典的创建订单、增加积分分布式事务问题便可以通过消息队列实现，下图是整体的流程：<img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/3/20/170f810a5c320a69~tplv-t2oaga2asx-zoom-in-crop-mark:4536:0:0:0.awebp" alt="img"></p>
+<p>如果上游服务失败，则会发送回滚半消息到消息代理中，则消息代理会丢弃消息；如果上游服务成功，则发送提交消息，消息代理会投递事务消息到下游服务中；如果上游服务异常崩溃了，消息代理会回查事务状态；如果下游服务异常崩溃，消息队列能保证消息的持久化，并保证消息被消费者处理。</p>
+<p>如果存在多个下游服务，则可以使用 topic 方式将事务消息投递到多个队列中，这可能需要消息队列本身的支持。</p>
+<p>如果下游服务处理失败呢？例如扣减库存失败（库存为零），无论重试多少次都无法成功，在这个例子中可以让扣减库存成为上游服务，但在某些情况下，MQ 事务可能无能为力，毕竟：<strong>开弓没有回头🗡</strong>。</p>
+<p>这种情况可能需要更强的 2PC 保证，在 2PC 事务中，事务协调器会发送 Prepare 消息给各个处理者，只有各个事务站点答复 OK 事务才能够被提交，例如如果库存为 0 了，这个事务处理者就会答复失败，从而导致整个事务回滚，如果事务站点答复 OK，则其可能需要锁或者预减库存来保证自己有能力扣减库存。</p>
+<p>在 RabbitMQ 中没有对分布式事务的支持，但可以通过其本身提供的同步发送机制来保障事务消息发送到消息代理，对于发送者本地事务提交但未发送消息而崩溃的情况，仍然需要一个本地事务表来查询状态，但这可能需要由发送者自身主动检查（例如后台线程）。</p>
+<h2 id="分区日志"><a href="#分区日志" class="headerlink" title="分区日志"></a>分区日志</h2><h3 id="使用日志进行消息存储"><a href="#使用日志进行消息存储" class="headerlink" title="使用日志进行消息存储"></a>使用日志进行消息存储</h3><p>在 AMQP 模型中，消息被赋予一个唯一的 ID，由消息代理投递并保障消息能正确消费，这会导致一些问题：重复消费、顺序消费、消息丢失……也许还有其他的方法！</p>
+<p>日志只是磁盘上简单的仅追加记录序列，在 Raft 算法中，我们研究过基于日志来实现主从复制、Leader 选举。</p>
+<p>事实上，同样的结构可以⽤于实现消息代理：生产者通过将消息追加到日志末尾来发送消息，⽽消费者通过依次取日志来接收消息。如果消费者读到日志末尾，则会等待新消息追加的通知。 </p>
+<p>为了扩展到比单个磁盘所能提供的更⾼吞吐量，可以对日志进⾏分区。<strong>不同种类或是完全独立的日志可以分成不同的分区</strong>，不同的分区可以托管在不同的机器上。</p>
+<p>在每个分区内，代理为每个消息分配⼀个单调递增的序列号或偏移量（offset）。这种序列号是有意义的，因为分区是仅追加写⼊的，所以分区内的消息是完全有序的，没有跨不同分区的顺序保证。 </p>
+<p><img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/202211011626580.png" alt="image-20221101162620417"></p>
+<p>Kafak 便是使用了这种分区日志式的消息。为了实现负载均衡，可以将某个分区完全交由一组消费组节点处理，消费组节点内部使用负载均衡处理。</p>
+<h3 id="与-AMQP-模型的对比"><a href="#与-AMQP-模型的对比" class="headerlink" title="与 AMQP 模型的对比"></a>与 AMQP 模型的对比</h3><ul>
+<li>AMQP 模型的中心在于消息代理；而分区日志的中心在于消费群组，分区日志模型总是主要是由消费组顺序的读取分区中的日志，如果读到末尾，则会等待新消息的追加通知，优点是吞吐量较高，但可能实时性较差。</li>
+<li>AMQP 模型中，对于同一个队列中的消息，往往需要等待上一条消息确认后再次发送；对于分区日志而言，由于消息在分区内是顺序的，消费组可以一次性读取所有消息，并在本地顺序解析，对于海量数据场景下，吞吐量大幅度提升。</li>
+<li>AMQP 模型中，需要跟踪每条消息的确认信息来判断消息是否被消费；对于分区日志而言，消息代理只需要得知消费组的读取偏移，那么这个偏移之前的日志肯定都被读取了，减少了额外的开销。</li>
+<li>AMQP 模型中消息是否持久化取决于一系列配置，如果消息被消费了，那么消息就会被删除；而在分区日志而言，日志总是被持久化到磁盘，多个消费组可以重复读取，天然支持消息扇出、消息回溯，但缺点是会占用较大的磁盘空间。</li>
+<li>AMQP 模型中，可以开启自动确认来实现完全异步的消息投递；而在分区日志中，消息总是要被顺序处理的。</li>
+<li>AMQP 模型中可以支持一些事务机制来保障消息被顺利投递；而在分区日志中，并没有这种保障，消息代理不会去确认消息是否被投递，给用户的保障往往是一个很弱的 <strong>最终一致性</strong>。</li>
+</ul>
+<h2 id="AMQP-常见问题总结"><a href="#AMQP-常见问题总结" class="headerlink" title="AMQP 常见问题总结"></a>AMQP 常见问题总结</h2><h3 id="消息队列优点"><a href="#消息队列优点" class="headerlink" title="消息队列优点"></a>消息队列优点</h3><ol>
+<li><p>解耦。发送者与消费者解耦，升级方便，伸缩性、扩展性都比较强。</p>
+</li>
+<li><p>可靠性保证。消息代理能够保证消息的持久化。</p>
+</li>
+<li><p>异步处理。可以立即返回，提高响应速度。</p>
+</li>
+<li><p>削峰。利用最大队列长度结合死信队列削峰，避免流量过多。</p>
+</li>
+<li><p>定时调度。利用私信队列结合消息存活时间，实现一个不太精确的定时调度，例如超时订单自动取消。</p>
+</li>
+</ol>
+<h3 id="如何保障顺序消费"><a href="#如何保障顺序消费" class="headerlink" title="如何保障顺序消费"></a>如何保障顺序消费</h3><p>如果有三种消息 A、B、C，他们之间需要保障顺序消费，如果将他们绑定在不同的队列上，由于队列分发消息速率、网络延时、消费者处理速率等情况，将无法保证顺序消费。</p>
+<p>最好的办法是将三种消息绑定在一个队列中，并开启手动确认，消费者根据消息类型进行处理，在同一个队列中，只有当上一条消息被确认后，下一条消息才能够发送。但这缺点是耦合度变高了，可能会使系统吞吐量下降。</p>
+<h3 id="如何解决重复消费问题"><a href="#如何解决重复消费问题" class="headerlink" title="如何解决重复消费问题"></a>如何解决重复消费问题</h3><p>重复消费产生原因有两点：</p>
+<ol>
+<li>消费者多次投递。例如因为网络超时，在 Confirm 回调中重复投递。</li>
+<li>消息代理多次投递。例如如果开启了手动确认，并且消费者与消息代理的连接断开，则消息代理则会将消息投递到其他消费者。</li>
+<li>消费者拒绝处理时选择重新入队。这是人为问题，不在我们的考虑之中。</li>
+</ol>
+<p>MQ 本身并未提供一种解决办法，通常的解决办法是利用 Redis 中心化存储，在消费前，可以原子地的将消息 ID 存储起来，例如可以通过位图等方式。由于 Redis 是单线程处理的，如果消息存储失败或已存在消息（<code>putIfAbsent</code>），则可以响应 <code>ack</code> 告知消息代理不要再继续投递了。</p>
+<h3 id="分布式事务-1"><a href="#分布式事务-1" class="headerlink" title="分布式事务"></a>分布式事务</h3><p>参考上述分布式事务即可。</p>
+
+        </div>
+
+
+
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent">
+        </div>
+        <!-- 评分 -->
+        <div class="single-reward">
+          
+          <!-- 五星评分 -->
+<div id="wpac-rating"></div>
+<script type="text/javascript">
+wpac_init = window.wpac_init || [];
+wpac_init.push({widget: 'Rating', id: 23889});
+(function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = 'https://embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+})();
+</script>
+<!-- <a target="_blank" rel="noopener" href="https://widgetpack.com" class="wpac-cr">Star Rating WIDGET PACK</a> -->
+          
+        </div>
+        <!-- 自定义署名方式 -->
+        <footer class="post-footer">
+          <div class="post-lincenses" style="color: #ff9966;">
+            欢迎转载，转载时请注明来源哦！
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" style="color: #ff9966;" target="_blank"
+              rel="nofollow">
+              <i class="fa fa-creative-commons" aria-hidden="true"></i>ncsa4.0</a>
+          </div>
+          
+          <div class="post-tags" style="color: #a39391">
+            <span><i class="fa fa-tags"></i>
+              
+              <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="color: #716e77;">暂无标签<em>·</em></a>
+              
+            </span>
+            <span>
+              <i class="iconfont icon-file"></i>
+              
+              <a href="/blog/categories/%E6%9A%82%E6%97%A0%E5%88%86%E7%B1%BB/" style="color: #716e77;">暂无分类</a>
+              
+            </span>
+          </div>
+          
+          <div class="post-share" >
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+        <!-- <div class="tag-cloud">
+          <div class="tag-cloud-title">
+          </div>
+          <div class="tag-cloud-tags">
+            <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="font-size: 10px; color: #f06966">暂无标签</a>
+          </div>
+        </div> -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+        <div class="post-nepre half previous">
+          
+            <a href="/blog/post/82fa.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                  style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)"
+                  src="">
+              </div>
+              <span class="label">Previous Post</span>
+              <div class="info">
+                <h3>Java垃圾回收机制与垃圾收集器</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+          
+          
+          
+          <div class="post-nepre half next">
+            
+              <a href="/blog/post/fa86.html" rel="next">
+                <div class="background">
+                  <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                    style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"
+                    onerror="imgError(this,3)" src="">
+                </div>
+                <span class="label">Next Post</span>
+                <div class="info">
+                  <h3>Mybatis 原理</h3>
+                  <hr>
+                </div>
+              </a>
+            </div>
+            
+      </section>
+      <!-- 加密文章隐藏评论 -->
+      <section class="comment" >
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container" class="comment"></div> 
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<script type="text/javascript">
+	var gitalk = new Gitalk({
+  	clientID: '',
+  	clientSecret: '',
+  	repo: 'cungudafa.github.io',
+  	owner: 'cungudafa',
+	admin: ['cungudafa'],
+	distractionFreeMode: 'true',
+    id: md5(location.pathname)
+})
+gitalk.render('gitalk-container') 
+</script>
+
+      </section>
+      <!-- 加密文章隐藏作者信息 -->
+      
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+<!--评论配置-->
+
+
+
+      <!-- body.end -->
+    </div>
+    <!-- search -->    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/blog/',
+        CONTENT_URL: '/blog/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- footer-->    
+    
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <div class="footertext">
+          <div class="img-preload">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+          </div>
+        </div>
+        <!-- 网站数据统计 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #ff9999;padding-left: 20px;">
+                <!-- 网站运行时间统计 -->
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span id="time" align="center">载入时间中...</span>
+                <script>
+                var now = new Date(); 
+                function createtime() { 
+                      var grt= new Date("Wed Feb 12 2020 01:20:00 GMT+0800 (中国标准时间)");//在此处修改你的建站时间
+                      now.setTime(now.getTime()+250); 
+                      days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+                      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+                      if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+                      mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+                      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+                      snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+                      document.getElementById("time").innerHTML = "小破站在各种灾难中苟活了 "+ dnum +" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";      
+                  } 
+                  setInterval("createtime()",250);
+                </script>
+            </span> 
+          </p>
+        </div>
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #b9b9b9;padding-left: 20px;">
+              <!-- 全网站字数统计wordcount -->
+              
+              <!-- 不蒜子网页计数器 -->
+              
+              <span style="padding-left: 20px;"><i class="fa fa-fire" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_pv">总访问量： <span id="busuanzi_value_site_pv" style="color:#ff9999;"></span>次</span>
+              </span>
+              
+              
+              <span style="padding-left: 20px;"><i class="fa fa-user" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_uv">总访问人数： <span id="busuanzi_value_site_uv" style="color:#ff9999;"></span>人</span>
+              </span>
+              
+            </span>
+          </p>
+        </div>
+        <!-- 作者注明 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #b9b9b9;">
+                Copyright &copy; 2023
+                &nbsp;<a style="color: #ff9999;display:inline-block"> Happysnaker </a>
+                &nbsp;<i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> 
+                &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank" style="color: #ff9999;display:inline-block">Hexo</a>
+                |&nbsp;Theme&nbsp;<a href="https://gitee.com/cungudafa/hexo-theme-sakuraplus" target="_blank" style="color: #ff9999;display:inline-block">SakuraPlus</a>
+              </span>
+          </p>
+        </div>
+         <!-- 网站作者版权注明 -->
+         
+          <div id="footer-info" class="inner">
+            <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #ff9999;">
+                
+              </span>
+            </p>
+          </div>
+        
+    </div><!-- .site-info -->
+</footer>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/InsightSearch.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/sakura-app.js"></script>
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- fancybox大图查看 需jq -->
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/jquery.fancybox.min.js"></script>
+  <script>
+    $('[data-fancybox="images"]').fancybox({
+      thumbs : {
+        autoStart : true //缩略图
+      }
+    });
+    $('[data-fancybox]').fancybox({
+      protect: true,//图片右键不能下载
+      youtube : {
+          controls : 0,
+          showinfo : 0
+      },
+      vimeo : {
+          color : 'f00'
+      }
+    });
+  </script>
+
+
+<!-- 自适应浏览器 -->
+<script type="text/javascript">
+  /* <![CDATA[ */
+  if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  } else {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  }
+  /* ]]> */
+  
+  </script>
+  <script>
+  $(document).ready(function() {
+    if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+      if ($(".pattern-center").length > 0) { //有图的情况
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -400,
+            scrollSmoothOffset: -85
+        });
+      } else {
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -85,
+            scrollSmoothOffset: -85
+        });
+      }
+      var offsetTop = $('.toc').offset().top - 95;
+      window.onscroll = function() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop >= offsetTop) {
+          $('.toc').addClass('toc-fixed');
+        } else {
+          $('.toc').removeClass('toc-fixed');
+        }
+      }
+    }
+  });
+  </script>
+    <!-- Side menu -->
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- Floating window -->
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">happysnaker开心</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="http://github.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="http://gitee.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/archives/">
+                  <i class="fa fa-line-chart" aria-hidden="true"></i>
+                  统计
+                </a>
+              </li>
+            
+              <li>
+                <a href="/blog/tags">
+                  <i class="fa fa-tags" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2020 hexo-sakuraplus</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  
+   <!-- pages壁纸切换 -->
+ 
+    <div class="skin-menu no-select" id="mainskin"  style="position: fixed">
+        <div class="theme-controls row-container">
+            <ul class="menu-list">
+                <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+                <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+                <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+                <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+                <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+                <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+                <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+                <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+            </ul>
+        </div>
+        <div class="font-family-controls row-container">
+            <button type="button" class="control-btn-serif selected" data-mode="serif" onclick="mashiro_global.font_control.change_font()">Serif</button>
+            <button type="button" class="control-btn-sans-serif" data-mode="sans-serif" onclick="mashiro_global.font_control.change_font()">Sans Serif</button>
+        </div>
+    </div>   
+    <canvas id="night-mode-cover"></canvas> 
+        <div class="changeSkin-gear no-select">
+        <div class="keys" id="setbtn"> <span id="open-skinMenu"> 切换壁纸 | SCHEME TOOL 
+            &nbsp;<i class="iconfont icon-gear inline-block rotating"></i> </span></div>
+    </div><!-- skin.end -->
+
+  <!-- left side bar -->
+
+ </body>
+</html>

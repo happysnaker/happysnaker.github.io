@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <!-- cungudafa百度收录验证编号 -->
+  <!-- <meta name="baidu-site-verification" content="LukfTcyXmC" /> -->
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">Git 原理与实践 | Hexo</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/style.css" type="text/css" media="all" id="saukra_css-css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/jquery.fancybox.min.css" media="all">  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/tags.css" media="all">
+  
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/logo.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/fonts/LOGO/logo.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+  <!-- 分析 -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+  <!-- Baidu Analytics -->
+
+  
+  <!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+  " type="text/css" media="all"> -->
+  <script>
+    /*Initial Variables*/
+    var mashiro_option = new Object();
+    var mashiro_global = new Object();
+    mashiro_option.NProgressON = true;
+    /* 
+    * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+    * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+    */
+    mashiro_option.email_domain = "";
+    mashiro_option.email_name = "";
+    mashiro_option.cookie_version_control = "";
+    mashiro_option.qzone_autocomplete = false;
+    mashiro_option.site_name = "happysnaker开心";
+    mashiro_option.author_name = "开心";
+    mashiro_option.site_url = "http://happysnaker.gitee.io/blog";
+    mashiro_option.v_appId = "";//
+    mashiro_option.v_appKey = "";//
+    mashiro_option.mathjax = "1";
+    mashiro_option.copyright_enable = "false" ;
+    mashiro_option.copyright_minCharNumber = parseInt("120") ;
+    mashiro_option.copyright_description = "本文章著作权归作者所有，任何形式的转载都请注明出处。" ;
+    mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+    mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+    // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+    // mashiro_option.float_player_on = true;
+
+    /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+    var bg = "https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(0).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(1).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(2).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(3).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(4).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(5).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(6).jpg.webp,https://cdn.jsdelivr.net/gh/cungudafa/cdn@2.0.9/img/cover/(7).jpg.webp".split(",");
+    var bgindex = Math.floor(Math.random()*bg.length);
+    if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+      alert('朋友，IE浏览器未适配哦~');
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"><link rel="stylesheet" href="/blog/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/blog/css/prism-line-numbers.css" type="text/css"></head> 
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <!-- Dynamic sliders -->
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <!-- Main content -->
+  <section id="main-container">
+    <!-- Top menu -->
+    <div class="headertop filter-dot">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="http://happysnaker.gitee.io/blog">
+          <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>且停且忘且随风，且行且看且从容</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="http://github.com/happysnaker" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://gitee.com/happysnaker" target="_blank" class="social-github" title="gitee">
+                    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/social/gitee.png">
+                  </a>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  
+  <div id="video-container">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <!-- banner -->
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+        <span class="site-title">
+            <span class="logolink logo">
+                <a href="/">
+                    <ruby>
+                    <span class="sakuraso">Happysnaker</span>
+                    <span class="no">の</span>
+                    <span class="shironeko">小屋</span>
+                    <rp></rp>
+                    <rt class="logo">happysnaker</rt>
+                    <rp></rp>
+                    </ruby>
+                  </a>
+            </span>
+          </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/archives/">
+                          <i class="fa fa-line-chart" aria-hidden="true"></i>
+                          统计
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/blog/tags">
+                          <i class="fa fa-tags" aria-hidden="true"></i>
+                          标签
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/blog/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/blog/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      
+      <!-- body -->
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cungudafa/cdn/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1"
+        class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content">  -->
+        <!--套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Git-原理与实践"><a href="#Git-原理与实践" class="headerlink" title="Git 原理与实践"></a>Git 原理与实践</h1><h2 id="演变历史"><a href="#演变历史" class="headerlink" title="演变历史"></a>演变历史</h2><p><img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220521150042408.png" alt="image-20220521150042408"></p>
+<h3 id="本地版本控制"><a href="#本地版本控制" class="headerlink" title="本地版本控制"></a>本地版本控制</h3><p>在早期的时候，项目版本控制都是在本地通过<strong>复制文件以及文件命名</strong>进行控制的，例如将不同版本的项目命名为 v1.0、v2.0 等。</p>
+<p>早期较为成熟的版本控制工具如 RCS 就是利用这种方式，当然 RCS 并不是保存整个文件，<strong>而是增量更新</strong>，只有初代版本会保存所有内容，后续版本将以增加更新的形式保存，例如 “某文件某偏移增加或删除了XXX内容”。</p>
+<p>当然，本地版本控制的弊端非常明显，<strong>协同合作非常困难</strong>，因此演变出了集中式的版本控制。</p>
+<h3 id="集中式版本控制"><a href="#集中式版本控制" class="headerlink" title="集中式版本控制"></a>集中式版本控制</h3><p>SVN 是集中式版本控制的代言人，曾经流行过一段时间，SVN 将所有的版本变更以<strong>增量更新（补丁）</strong>的方式保存在远程服务器，允许开发人员从服务器拉去或提交。</p>
+<p>但是集中式版本控制是中心化的，可靠性依赖于远程服务器，并且不支持复杂的分支操作， 于是 Git 孕育而生。</p>
+<h3 id="分布式版本控制"><a href="#分布式版本控制" class="headerlink" title="分布式版本控制"></a>分布式版本控制</h3><p>Git 允许本地暂存变更，所以说 Git 的每个仓库都能记录版本历史，开发人员无须联网也能进行版本控制，解决了 SVN 只有一个服务器保存版本的问题，是当下主流的版本控制工具。</p>
+<p>Git 不同于之前的工具，<strong>Git 每次更新都是会保存全部的文件而非增量更新，因此 Git 通常不支持 Commit 大文件。</strong></p>
+<h2 id="Git-原理"><a href="#Git-原理" class="headerlink" title="Git 原理"></a>Git 原理</h2><h3 id="版本控制原理"><a href="#版本控制原理" class="headerlink" title="版本控制原理"></a>版本控制原理</h3><p>Git 版本管理主要是通过 .git&#x2F;Objects&#x2F; 路径下的文件进行管理，假设这里只简单的考虑 Commit，该路径下主要会存储三大重要信息：</p>
+<ul>
+<li>commit 信息：保存用户的 commit 记录，包括 commit message、author、committer、parent 以及最重要的 tree ID，<strong>tree ID 是指向 tree 的文件。</strong></li>
+<li>tree 信息：用户 commit 可能涉及到多个文件的修改，一个 tree 文件中将保存多个 blog ID，blog 是指具体发生修改的文件。</li>
+<li>blog 信息：blog 即是指具体发生改动的内容文件，Git 会全量保存文件内容。</li>
+</ul>
+<p>接着我们在本地进行实践，首先初始化 Git 仓库，然后创建 Readme 文件，在 Readme 文件中随便写点内容，提交到本地仓库中：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">git</span> init
+vim Readme.md  <span class="token comment" spellcheck="true"># 然后自己写点内容 </span>
+<span class="token function">git</span> add <span class="token keyword">.</span> 	   <span class="token comment" spellcheck="true"># 添加当前目录变更</span>
+<span class="token function">git</span> commit -m <span class="token string">"create readme"</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>执行完上述步骤后，我们打印 .git 目录下文件：</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220521152811994.png" alt="image-20220521152811994" style="zoom:50%;" />
+
+<p>这里可以发现 objects 目录下多出了三个文件，先通过 git log 命令查看下更新的日志：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git log</span>
+commit 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
+Author: happysnaker <span class="token operator">&lt;</span>xxx@qq.com<span class="token operator">></span>
+Date:   Sat May 21 15:26:44 2022 +0800
+
+create readme
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>发现 commit 信息文件 ID 是 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643，通过 git cat-file 命令查看文件：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git cat-file -p 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643</span>
+tree 58c31878a99ff474aba5a0ad3cc751285003acc7
+author happysnaker <span class="token operator">&lt;</span>xxx@qq.com<span class="token operator">></span> 1653118004 +0800
+committer happysnaker <span class="token operator">&lt;</span>xxx@qq.com<span class="token operator">></span> 1653118004 +0800
+
+create readme
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这包含了我们了我们的提交信息，其中还包含了 tree 信息文件，同样查看一下 tree 文件：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git cat-file -p 58c31878a99ff474aba5a0ad3cc751285003acc7</span>
+100644 blob 557db03de997c86a4a028e1ebd3a1ceb225be238    Readme.md
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>tree 信息包含了 blog 文件信息，这就是我们修改的文件，<strong>当然 tree 文件内可以包含多个修改的文件</strong>，查看 blog 文件：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git cat-file -p 557db03de997c86a4a028e1ebd3a1ceb225be238</span>
+Hello World
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>他就是我们文件的全量内容，这就是 git 的版本控制原理，现在我们尝试对 readme 文件进行更改并且提交：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># vim Readme.md</span>
+<span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git add .</span>
+<span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git commit -m "update readme"</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>继续查看一些文件树：</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220521154109303.png" alt="image-20220521154109303" style="zoom:50%;" />
+
+<p>发现这里又多了三个文件，这反应出<strong>Git 每次提交都会新建 commit、tree 和 blog 文件</strong>，通过 git log 查看 commit 文件信息：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git log</span>
+commit 3c8de40439f7917b188e7c3271409794ec635ef3
+Author: happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span>
+Date:   Sat May 21 15:40:09 2022 +0800
+
+    update readme
+
+commit 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
+Author: happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span>
+Date:   Sat May 21 15:26:44 2022 +0800
+
+    create readme
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里最新的 commit 文件是 3c8de40439f7917b188e7c3271409794ec635ef3，查看这个文件内容：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git cat-file -p 3c8de40439f7917b188e7c3271409794ec635ef3</span>
+tree ce81273cc3c46c1e7543355e01010685aab9412d
+parent 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
+author happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653118809 +0800
+committer happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653118809 +0800
+
+update readme
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这与我们之前所说的是一模一样的，唯一的不同是这里多了个 parent 字段，它刚好指向我们上一个 commit 版本。</p>
+<p><strong>所以说，Git 其实就是通过 commit、tree 和 blog 文件来进行版本控制，Git 将进行全量保存而非增量更新，Git 只需只需记录下每次 commit 所产生的 commit 文件，进行版本切换的时候，直接找到 commit 文件，并找到对应的 blog 文件，将工作区文件替换成 blog 文件便可完成版本控制。</strong></p>
+<h3 id="分支控制原理"><a href="#分支控制原理" class="headerlink" title="分支控制原理"></a>分支控制原理</h3><p>那 Git 的分支切换呢？Git 是如何进行分支控制的？一个分支是如何不对另一个分支产生影响的呢？</p>
+<p>其实这很简单，在上面我们已经讲了 commit 相关原理，每一次 commit 都会产生一个 commit 文件，那这样我们可以将每个 commit 看作是一个节点，<strong>分支的移动变更其实就是在节点中不停的切换</strong>，那对应到 Git 的实现中呢，其实就是在分支文件中保存不同的 commit 文件 ID。</p>
+<p>这里可以去 Git 可视化网站体验一下：<a target="_blank" rel="noopener" href="https://learngitbranching.js.org/?NODEMO=&locale=zh_CN">Learn Git Branching</a></p>
+<p>如果仔细观察 .git 目录，你就会发现目录下 HEAD 是指向当前工作区的版本，而分支则在 refs&#x2F;heads 路径下。</p>
+<p>我们通过实践来感受，在上面的基础上，建立 dev 分支，并且更改 Readme 内容后并提交：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git checkout -b dev</span>
+Switched to a new branch <span class="token string">'dev'</span>
+<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># vim Readme.md</span>
+<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git add .</span>
+<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git commit -m "dev update"</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>先查看一下 log：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git log</span>
+commit 2f4e8231544311974d9ddd5db47ec3cc6dcc462f
+Author: happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span>
+Date:   Sat May 21 15:59:32 2022 +0800
+
+    dev update
+
+commit 3c8de40439f7917b188e7c3271409794ec635ef3
+Author: happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span>
+Date:   Sat May 21 15:40:09 2022 +0800
+
+    update readme
+
+commit 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
+Author: happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span>
+Date:   Sat May 21 15:26:44 2022 +0800
+
+    create readme
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这次在 dev 分支的提交 ID 是 2f4e8231544311974d9ddd5db47ec3cc6dcc462f，现在我们打印 .git 路径树：</p>
+<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220521160156516.png" alt="image-20220521160156516" style="zoom:50%;" />
+
+<p>首先来看看这次最新提交的 commit 文件内容：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git cat-file -p 2f4e8231544311974d9ddd5db47ec3cc6dcc462f</span>
+tree 1f16b25244adda7d4590841975baabda6a41c328
+parent 3c8de40439f7917b188e7c3271409794ec635ef3
+author happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653119972 +0800
+committer happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653119972 +0800
+
+dev update
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后我们打印一下 HEAD 文件、refs&#x2F;heads&#x2F;dev 和 refs&#x2F;heads&#x2F;master 文件看看里面的内容到底是什么：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git cat-file -p HEAD</span>
+tree 1f16b25244adda7d4590841975baabda6a41c328
+parent 3c8de40439f7917b188e7c3271409794ec635ef3
+author happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653119972 +0800
+committer happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653119972 +0800
+
+dev update
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>发现 HEAD 文件和本次 commit 文件是一致的，这很正常，HEAD 是你当前的工作版本，因此 HEAD 与当前提交是一致的，来看看分支文件：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git cat-file -p master</span>
+tree ce81273cc3c46c1e7543355e01010685aab9412d
+parent 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
+author happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653118809 +0800
+committer happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653118809 +0800
+
+update readme
+<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git cat-file -p dev</span>
+tree 1f16b25244adda7d4590841975baabda6a41c328
+parent 3c8de40439f7917b188e7c3271409794ec635ef3
+author happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653119972 +0800
+committer happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653119972 +0800
+
+dev update
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>你发现了吗？master 分支仍然是指向上一次的版本更改，这其实就是 Git 版本管理的原理，<strong>Git 维护当前所处的分支，并且会实时更新 HEAD 文件和 ref&#x2F;heads 目录下当前分支的内容，而其他分支文件内容不会更改，所以其他分支是察觉不到本次更改的，当分支切换时，HEAD 也将切换到对应分支，实现了隔离管理。</strong></p>
+<p>试着切回 master 分支，并查看 HEAD：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git checkout master</span>
+Switched to branch <span class="token string">'master'</span>
+<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git cat-file -p HEAD</span>
+tree ce81273cc3c46c1e7543355e01010685aab9412d
+parent 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
+author happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653118809 +0800
+committer happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653118809 +0800
+
+update readme
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>发现 HEAD 也切换到了之前 master 的版本，在这种状态下，我们当然是感知不到 dev 分支所做的更改，因为当前 commit 指向的 blog 文件还是之前的版本。</p>
+<p>那合并分支呢？合并分支的原理其实也很简单，例如在 master 分支下执行<code>git merge dev</code>命令，这将选取两者分支中最新的一次提交，<strong>并将当前所处的分支快速推进到最新的提交版本。</strong></p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git merge dev</span>
+Updating 3c8de40<span class="token punctuation">..</span>2f4e823
+Fast-forward
+ Readme.md <span class="token operator">|</span> 2 +-
+ 1 <span class="token function">file</span> changed, 1 insertion<span class="token punctuation">(</span>+<span class="token punctuation">)</span>, 1 deletion<span class="token punctuation">(</span>-<span class="token punctuation">)</span>
+<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># git cat-file -p master</span>
+tree 1f16b25244adda7d4590841975baabda6a41c328
+parent 3c8de40439f7917b188e7c3271409794ec635ef3
+author happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653119972 +0800
+committer happysnaker <span class="token operator">&lt;</span>1637318597@qq.com<span class="token operator">></span> 1653119972 +0800
+
+dev update
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>看，合并后，master 分支被推进到最新的版本了！本地提交是不会产生冲突的，但 push 到远程时，<strong>发现远程分支版本已经不是上一次 clone 时的版本了</strong>，那么便会产生冲突，因此在 push 之前我们通常需要 git pull 拉取最新的更改并合并之后再做提交，在这一步时，如果远程分支与你恰好修改了同一个文件，这会产生冲突，Git 会提示你并将冲突文件展现出来，这包含双方的修改，你可以自行选择删除或修改一些内容。解决冲突后，分支已经合并，现在可以正常 push 了。</p>
+<h3 id="标签管理"><a href="#标签管理" class="headerlink" title="标签管理"></a>标签管理</h3><p>标签管理原理非常简单，每个标签文件(refs&#x2F;tag 目录下)其实就是保存着一个稳定版本的 commit 文件，标签通常不会被修改。</p>
+<h2 id="常用语句"><a href="#常用语句" class="headerlink" title="常用语句"></a>常用语句</h2><ol>
+<li>git remote add orgin <a href="mailto:&#103;&#105;&#116;&#64;&#103;&#x69;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;">&#103;&#105;&#116;&#64;&#103;&#x69;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#109;</a>:username&#x2F;repo.git，通过 ssh 建立远程仓库。</li>
+<li>git push -u origin master，提交到远程仓库的 master 分支。</li>
+<li>git merge xxx，将当前分支与 xxx 分支合并，并将当前分支推进到最新的分支。</li>
+<li>git pull，等价于 git fetch + git merge，可以通过 –rebase 参数使分支树更加整洁。</li>
+<li>git rebase xxx，同 merge，rebase 将会使分支树更加整洁，通过 -i 参数可交互式的调整分支版本。</li>
+<li>git commit –amend，修改 commit 的信息。</li>
+<li>git reset，将 HEAD 推进到对应版本，例如 git reset HEAD^，这将推进到 HEAD 的上一个版本，注意，一旦 HEAD 和你当前分支的 commit 分离，此时 Git 不允许你提交。</li>
+<li>git cat-file -p filename，查看 git 目录下文件内容。</li>
+<li>git log，打印 commit 日志。</li>
+</ol>
+
+        </div>
+
+
+
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent">
+        </div>
+        <!-- 评分 -->
+        <div class="single-reward">
+          
+          <!-- 五星评分 -->
+<div id="wpac-rating"></div>
+<script type="text/javascript">
+wpac_init = window.wpac_init || [];
+wpac_init.push({widget: 'Rating', id: 23889});
+(function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = 'https://embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+})();
+</script>
+<!-- <a target="_blank" rel="noopener" href="https://widgetpack.com" class="wpac-cr">Star Rating WIDGET PACK</a> -->
+          
+        </div>
+        <!-- 自定义署名方式 -->
+        <footer class="post-footer">
+          <div class="post-lincenses" style="color: #ff9966;">
+            欢迎转载，转载时请注明来源哦！
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" style="color: #ff9966;" target="_blank"
+              rel="nofollow">
+              <i class="fa fa-creative-commons" aria-hidden="true"></i>ncsa4.0</a>
+          </div>
+          
+          <div class="post-tags" style="color: #a39391">
+            <span><i class="fa fa-tags"></i>
+              
+              <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="color: #716e77;">暂无标签<em>·</em></a>
+              
+            </span>
+            <span>
+              <i class="iconfont icon-file"></i>
+              
+              <a href="/blog/categories/%E6%9A%82%E6%97%A0%E5%88%86%E7%B1%BB/" style="color: #716e77;">暂无分类</a>
+              
+            </span>
+          </div>
+          
+          <div class="post-share" >
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+        <!-- <div class="tag-cloud">
+          <div class="tag-cloud-title">
+          </div>
+          <div class="tag-cloud-tags">
+            <a href="/blog/tags/%E6%9A%82%E6%97%A0%E6%A0%87%E7%AD%BE/" style="font-size: 10px; color: #f06966">暂无标签</a>
+          </div>
+        </div> -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+        <div class="post-nepre half previous">
+          
+            <a href="/blog/post/93f4.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                  style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)"
+                  src="">
+              </div>
+              <span class="label">Previous Post</span>
+              <div class="info">
+                <h3>Docker网络模型原理</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+          
+          
+          
+          <div class="post-nepre half next">
+            
+              <a href="/blog/post/d3cd.html" rel="next">
+                <div class="background">
+                  <img class="lazyload" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/loader/orange.progress-bar-stripe-loader.svg" data-src=""
+                    style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"
+                    onerror="imgError(this,3)" src="">
+                </div>
+                <span class="label">Next Post</span>
+                <div class="info">
+                  <h3>HTTPS</h3>
+                  <hr>
+                </div>
+              </a>
+            </div>
+            
+      </section>
+      <!-- 加密文章隐藏评论 -->
+      <section class="comment" >
+        <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container" class="comment"></div> 
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script src="/js/md5.min.js"></script>
+<script type="text/javascript">
+	var gitalk = new Gitalk({
+  	clientID: '',
+  	clientSecret: '',
+  	repo: 'cungudafa.github.io',
+  	owner: 'cungudafa',
+	admin: ['cungudafa'],
+	distractionFreeMode: 'true',
+    id: md5(location.pathname)
+})
+gitalk.render('gitalk-container') 
+</script>
+
+      </section>
+      <!-- 加密文章隐藏作者信息 -->
+      
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+<!--评论配置-->
+
+
+
+      <!-- body.end -->
+    </div>
+    <!-- search -->    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            // PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+        },
+        ROOT_URL: '/blog/',
+        CONTENT_URL: '/blog/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- footer-->    
+    
+    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <div class="footertext">
+          <div class="img-preload">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+              <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+          </div>
+        </div>
+        <!-- 网站数据统计 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #ff9999;padding-left: 20px;">
+                <!-- 网站运行时间统计 -->
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span id="time" align="center">载入时间中...</span>
+                <script>
+                var now = new Date(); 
+                function createtime() { 
+                      var grt= new Date("Wed Feb 12 2020 01:20:00 GMT+0800 (中国标准时间)");//在此处修改你的建站时间
+                      now.setTime(now.getTime()+250); 
+                      days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+                      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+                      if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+                      mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+                      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+                      snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+                      document.getElementById("time").innerHTML = "小破站在各种灾难中苟活了 "+ dnum +" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";      
+                  } 
+                  setInterval("createtime()",250);
+                </script>
+            </span> 
+          </p>
+        </div>
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+            <span style="color: #b9b9b9;padding-left: 20px;">
+              <!-- 全网站字数统计wordcount -->
+              
+              <!-- 不蒜子网页计数器 -->
+              
+              <span style="padding-left: 20px;"><i class="fa fa-fire" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_pv">总访问量： <span id="busuanzi_value_site_pv" style="color:#ff9999;"></span>次</span>
+              </span>
+              
+              
+              <span style="padding-left: 20px;"><i class="fa fa-user" aria-hidden="true" style="color: #ff9999;display:inline-block"></i><span id="busuanzi_container_site_uv">总访问人数： <span id="busuanzi_value_site_uv" style="color:#ff9999;"></span>人</span>
+              </span>
+              
+            </span>
+          </p>
+        </div>
+        <!-- 作者注明 -->
+        <div class="footer-device">
+          <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #b9b9b9;">
+                Copyright &copy; 2023
+                &nbsp;<a style="color: #ff9999;display:inline-block"> Happysnaker </a>
+                &nbsp;<i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> 
+                &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank" style="color: #ff9999;display:inline-block">Hexo</a>
+                |&nbsp;Theme&nbsp;<a href="https://gitee.com/cungudafa/hexo-theme-sakuraplus" target="_blank" style="color: #ff9999;display:inline-block">SakuraPlus</a>
+              </span>
+          </p>
+        </div>
+         <!-- 网站作者版权注明 -->
+         
+          <div id="footer-info" class="inner">
+            <p style="font-family: 'Ubuntu', sans-serif;">
+              <span style="color: #ff9999;">
+                
+              </span>
+            </p>
+          </div>
+        
+    </div><!-- .site-info -->
+</footer>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/InsightSearch.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/sakura-app.js"></script>
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- fancybox大图查看 需jq -->
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/js/jquery.fancybox.min.js"></script>
+  <script>
+    $('[data-fancybox="images"]').fancybox({
+      thumbs : {
+        autoStart : true //缩略图
+      }
+    });
+    $('[data-fancybox]').fancybox({
+      protect: true,//图片右键不能下载
+      youtube : {
+          controls : 0,
+          showinfo : 0
+      },
+      vimeo : {
+          color : 'f00'
+      }
+    });
+  </script>
+
+
+<!-- 自适应浏览器 -->
+<script type="text/javascript">
+  /* <![CDATA[ */
+  if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  } else {
+    var Poi = {"pjax":"0","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/hojun@1.2","name":"Unbroken.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+  }
+  /* ]]> */
+  
+  </script>
+  <script>
+  $(document).ready(function() {
+    if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+      if ($(".pattern-center").length > 0) { //有图的情况
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -400,
+            scrollSmoothOffset: -85
+        });
+      } else {
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.toc', // 放置目录的容器
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.entry-content', // 正文内容所在
+            // Which headings to grab inside of the contentSelector element.
+            scrollSmooth: true,
+            headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+            headingsOffset: -85,
+            scrollSmoothOffset: -85
+        });
+      }
+      var offsetTop = $('.toc').offset().top - 95;
+      window.onscroll = function() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop >= offsetTop) {
+          $('.toc').addClass('toc-fixed');
+        } else {
+          $('.toc').removeClass('toc-fixed');
+        }
+      }
+    }
+  });
+  </script>
+    <!-- Side menu -->
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- Floating window -->
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/custom/cungudafa.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">happysnaker开心</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="http://github.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="https://www.zhihu.com/people/tian-xia-you-dao-81" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+        <a href="http://gitee.com/happysnaker" class="fa " target="_blank" style="color: #; margin-left: 20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/archives/">
+                  <i class="fa fa-line-chart" aria-hidden="true"></i>
+                  统计
+                </a>
+              </li>
+            
+              <li>
+                <a href="/blog/tags">
+                  <i class="fa fa-tags" aria-hidden="true"></i>
+                  标签
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/blog/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/blog/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2020 hexo-sakuraplus</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  
+   <!-- pages壁纸切换 -->
+ 
+    <div class="skin-menu no-select" id="mainskin"  style="position: fixed">
+        <div class="theme-controls row-container">
+            <ul class="menu-list">
+                <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+                <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+                <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+                <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+                <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+                <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+                <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+                <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+            </ul>
+        </div>
+        <div class="font-family-controls row-container">
+            <button type="button" class="control-btn-serif selected" data-mode="serif" onclick="mashiro_global.font_control.change_font()">Serif</button>
+            <button type="button" class="control-btn-sans-serif" data-mode="sans-serif" onclick="mashiro_global.font_control.change_font()">Sans Serif</button>
+        </div>
+    </div>   
+    <canvas id="night-mode-cover"></canvas> 
+        <div class="changeSkin-gear no-select">
+        <div class="keys" id="setbtn"> <span id="open-skinMenu"> 切换壁纸 | SCHEME TOOL 
+            &nbsp;<i class="iconfont icon-gear inline-block rotating"></i> </span></div>
+    </div><!-- skin.end -->
+
+  <!-- left side bar -->
+
+ </body>
+</html>
