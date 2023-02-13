@@ -4,10 +4,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Git 原理与实践, Hexo">
-    <meta name="description" content="Git 原理与实践演变历史
-本地版本控制在早期的时候，项目版本控制都是在本地通过复制文件以及文件命名进行控制的，例如将不同版本的项目命名为 v1.0、v2.0 等。
-早期较为成熟的版本控制工具如 RCS 就是利用这种方式，当然 RCS 并不">
+    <meta name="keywords" content="K8s 小结, Hexo">
+    <meta name="description" content="K8S
+官方文档：https://kubernetes.io/zh-cn/docs
+
+对 K8S 的理解Kubernetes（K8S）是一个开源容器编排系统，它可以帮助用户快速部署、管理和扩展应用程序。K8S有助于将多个容器打包成一个应用，">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +20,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Git 原理与实践 | Hexo</title>
+    <title>K8s 小结 | Hexo</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -292,12 +293,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Git 原理与实践</h1>
+                    <h1 class="description center-align post-title">K8s 小结</h1>
                 </div>
             </div>
         </div>
@@ -346,7 +347,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-02-10
+                    2023-02-13
                 </div>
                 
 
@@ -370,194 +371,180 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Git-原理与实践"><a href="#Git-原理与实践" class="headerlink" title="Git 原理与实践"></a>Git 原理与实践</h1><h2 id="演变历史"><a href="#演变历史" class="headerlink" title="演变历史"></a>演变历史</h2><p><img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220521150042408.png" alt="image-20220521150042408"></p>
-<h3 id="本地版本控制"><a href="#本地版本控制" class="headerlink" title="本地版本控制"></a>本地版本控制</h3><p>在早期的时候，项目版本控制都是在本地通过<strong>复制文件以及文件命名</strong>进行控制的，例如将不同版本的项目命名为 v1.0、v2.0 等。</p>
-<p>早期较为成熟的版本控制工具如 RCS 就是利用这种方式，当然 RCS 并不是保存整个文件，<strong>而是增量更新</strong>，只有初代版本会保存所有内容，后续版本将以增加更新的形式保存，例如 “某文件某偏移增加或删除了XXX内容”。</p>
-<p>当然，本地版本控制的弊端非常明显，<strong>协同合作非常困难</strong>，因此演变出了集中式的版本控制。</p>
-<h3 id="集中式版本控制"><a href="#集中式版本控制" class="headerlink" title="集中式版本控制"></a>集中式版本控制</h3><p>SVN 是集中式版本控制的代言人，曾经流行过一段时间，SVN 将所有的版本变更以<strong>增量更新（补丁）</strong>的方式保存在远程服务器，允许开发人员从服务器拉去或提交。</p>
-<p>但是集中式版本控制是中心化的，可靠性依赖于远程服务器，并且不支持复杂的分支操作， 于是 Git 孕育而生。</p>
-<h3 id="分布式版本控制"><a href="#分布式版本控制" class="headerlink" title="分布式版本控制"></a>分布式版本控制</h3><p>Git 允许本地暂存变更，所以说 Git 的每个仓库都能记录版本历史，开发人员无须联网也能进行版本控制，解决了 SVN 只有一个服务器保存版本的问题，是当下主流的版本控制工具。</p>
-<p>Git 不同于之前的工具，<strong>Git 每次更新都是会保存全部的文件而非增量更新，因此 Git 通常不支持 Commit 大文件。</strong></p>
-<h2 id="Git-原理"><a href="#Git-原理" class="headerlink" title="Git 原理"></a>Git 原理</h2><h3 id="版本控制原理"><a href="#版本控制原理" class="headerlink" title="版本控制原理"></a>版本控制原理</h3><p>Git 版本管理主要是通过 .git&#x2F;Objects&#x2F; 路径下的文件进行管理，假设这里只简单的考虑 Commit，该路径下主要会存储三大重要信息：</p>
+                <h1 id="K8S"><a href="#K8S" class="headerlink" title="K8S"></a>K8S</h1><blockquote>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs">https://kubernetes.io/zh-cn/docs</a></p>
+</blockquote>
+<h2 id="对-K8S-的理解"><a href="#对-K8S-的理解" class="headerlink" title="对 K8S 的理解"></a>对 K8S 的理解</h2><p>Kubernetes（K8S）是一个开源容器编排系统，它可以帮助用户<strong>快速部署、管理和扩展应用程序。</strong>K8S有助于将多个容器打包成一个应用，它为容器提供<strong>自动化运维、故障恢复、负载均衡、存储集成</strong>和许多其他功能。</p>
+<p>K8S的常见使用场景有：</p>
 <ul>
-<li>commit 信息：保存用户的 commit 记录，包括 commit message、author、committer、parent 以及最重要的 tree ID，<strong>tree ID 是指向 tree 的文件。</strong></li>
-<li>tree 信息：用户 commit 可能涉及到多个文件的修改，一个 tree 文件中将保存多个 blog ID，blog 是指具体发生修改的文件。</li>
-<li>blog 信息：blog 即是指具体发生改动的内容文件，Git 会全量保存文件内容。</li>
+<li>容器编排：K8S可以自动部署和<strong>扩缩容</strong>多个容器集群，使用者可以控制容器的部署和管理，非常适用于开发和运行分布式应用。</li>
+<li>扩展应用：K8S可以帮助用户快速扩展应用，它可以自动添加新的容器来响应用户的需求，可以快速响应扩展应用的需求。</li>
+<li>故障恢复：K8S可以帮助用户快速恢复容器，当某个容器出现故障时，K8S可以自动<strong>重启容器</strong>使之恢复正常。</li>
+<li>网络管理：K8S可以帮助用户快速管理网络，它可以自动配置网络，确保容器之间的网络通信正常。</li>
 </ul>
-<p>接着我们在本地进行实践，首先初始化 Git 仓库，然后创建 Readme 文件，在 Readme 文件中随便写点内容，提交到本地仓库中：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> init
-<span class="token function">vim</span> Readme.md  <span class="token comment"># 然后自己写点内容 </span>
-<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span> 	   <span class="token comment"># 添加当前目录变更</span>
-<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"create readme"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>一些介绍一些开发需要了解的常见 K8S 技术。</p>
+<h2 id="容器编排"><a href="#容器编排" class="headerlink" title="容器编排"></a>容器编排</h2><h3 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h3><p>K8S Deployment 可以帮助用户实现自动化的部署，更新和管理应用程序，从而提高部署的效率和可靠性。</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> nginx<span class="token punctuation">-</span>deployment
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> nginx
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">3</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">app</span><span class="token punctuation">:</span> nginx
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> nginx
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> nginx
+        <span class="token key atrule">image</span><span class="token punctuation">:</span> nginx<span class="token punctuation">:</span>1.14.2
+        <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">80</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>执行完上述步骤后，我们打印 .git 目录下文件：</p>
-<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220521152811994.png" alt="image-20220521152811994" style="zoom:50%;" />
-
-<p>这里可以发现 objects 目录下多出了三个文件，先通过 git log 命令查看下更新的日志：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment"># git log</span>
-commit 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
-Author: happysnaker <span class="token operator">&lt;</span>xxx@qq.com<span class="token operator">></span>
-Date:   Sat May <span class="token number">21</span> <span class="token number">15</span>:26:44 <span class="token number">2022</span> +0800
-
-create readme<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>发现 commit 信息文件 ID 是 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643，通过 git cat-file 命令查看文件：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment"># git cat-file -p 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643</span>
-tree 58c31878a99ff474aba5a0ad3cc751285003acc7
-author happysnaker <span class="token operator">&lt;</span>xxx@qq.com<span class="token operator">></span> <span class="token number">1653118004</span> +0800
-committer happysnaker <span class="token operator">&lt;</span>xxx@qq.com<span class="token operator">></span> <span class="token number">1653118004</span> +0800
-
-create readme<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>这包含了我们了我们的提交信息，其中还包含了 tree 信息文件，同样查看一下 tree 文件：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment"># git cat-file -p 58c31878a99ff474aba5a0ad3cc751285003acc7</span>
-<span class="token number">100644</span> blob 557db03de997c86a4a028e1ebd3a1ceb225be238    Readme.md<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>tree 信息包含了 blog 文件信息，这就是我们修改的文件，<strong>当然 tree 文件内可以包含多个修改的文件</strong>，查看 blog 文件：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment"># git cat-file -p 557db03de997c86a4a028e1ebd3a1ceb225be238</span>
-Hello World<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>他就是我们文件的全量内容，这就是 git 的版本控制原理，现在我们尝试对 readme 文件进行更改并且提交：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment"># vim Readme.md</span>
-<span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment"># git add .</span>
-<span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment"># git commit -m "update readme"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>继续查看一些文件树：</p>
-<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220521154109303.png" alt="image-20220521154109303" style="zoom:50%;" />
-
-<p>发现这里又多了三个文件，这反应出<strong>Git 每次提交都会新建 commit、tree 和 blog 文件</strong>，通过 git log 查看 commit 文件信息：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment"># git log</span>
-commit 3c8de40439f7917b188e7c3271409794ec635ef3
-Author: happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span>
-Date:   Sat May <span class="token number">21</span> <span class="token number">15</span>:40:09 <span class="token number">2022</span> +0800
-
-    update readme
-
-commit 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
-Author: happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span>
-Date:   Sat May <span class="token number">21</span> <span class="token number">15</span>:26:44 <span class="token number">2022</span> +0800
-
-    create readme<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>这里最新的 commit 文件是 3c8de40439f7917b188e7c3271409794ec635ef3，查看这个文件内容：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment"># git cat-file -p 3c8de40439f7917b188e7c3271409794ec635ef3</span>
-tree ce81273cc3c46c1e7543355e01010685aab9412d
-parent 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
-author happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653118809</span> +0800
-committer happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653118809</span> +0800
-
-update readme<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>这与我们之前所说的是一模一样的，唯一的不同是这里多了个 parent 字段，它刚好指向我们上一个 commit 版本。</p>
-<p><strong>所以说，Git 其实就是通过 commit、tree 和 blog 文件来进行版本控制，Git 将进行全量保存而非增量更新，Git 只需只需记录下每次 commit 所产生的 commit 文件，进行版本切换的时候，直接找到 commit 文件，并找到对应的 blog 文件，将工作区文件替换成 blog 文件便可完成版本控制。</strong></p>
-<h3 id="分支控制原理"><a href="#分支控制原理" class="headerlink" title="分支控制原理"></a>分支控制原理</h3><p>那 Git 的分支切换呢？Git 是如何进行分支控制的？一个分支是如何不对另一个分支产生影响的呢？</p>
-<p>其实这很简单，在上面我们已经讲了 commit 相关原理，每一次 commit 都会产生一个 commit 文件，那这样我们可以将每个 commit 看作是一个节点，<strong>分支的移动变更其实就是在节点中不停的切换</strong>，那对应到 Git 的实现中呢，其实就是在分支文件中保存不同的 commit 文件 ID。</p>
-<p>这里可以去 Git 可视化网站体验一下：<a target="_blank" rel="noopener" href="https://learngitbranching.js.org/?NODEMO=&locale=zh_CN">Learn Git Branching</a></p>
-<p>如果仔细观察 .git 目录，你就会发现目录下 HEAD 是指向当前工作区的版本，而分支则在 refs&#x2F;heads 路径下。</p>
-<p>我们通过实践来感受，在上面的基础上，建立 dev 分支，并且更改 Readme 内容后并提交：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git checkout -b dev</span>
-Switched to a new branch <span class="token string">'dev'</span>
-<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># vim Readme.md</span>
-<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git add .</span>
-<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git commit -m "dev update"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>先查看一下 log：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git log</span>
-commit 2f4e8231544311974d9ddd5db47ec3cc6dcc462f
-Author: happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span>
-Date:   Sat May <span class="token number">21</span> <span class="token number">15</span>:59:32 <span class="token number">2022</span> +0800
-
-    dev update
-
-commit 3c8de40439f7917b188e7c3271409794ec635ef3
-Author: happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span>
-Date:   Sat May <span class="token number">21</span> <span class="token number">15</span>:40:09 <span class="token number">2022</span> +0800
-
-    update readme
-
-commit 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
-Author: happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span>
-Date:   Sat May <span class="token number">21</span> <span class="token number">15</span>:26:44 <span class="token number">2022</span> +0800
-
-    create readme<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>这次在 dev 分支的提交 ID 是 2f4e8231544311974d9ddd5db47ec3cc6dcc462f，现在我们打印 .git 路径树：</p>
-<img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20220521160156516.png" alt="image-20220521160156516" style="zoom:50%;" />
-
-<p>首先来看看这次最新提交的 commit 文件内容：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root<span class="token punctuation">]</span><span class="token comment"># git cat-file -p 2f4e8231544311974d9ddd5db47ec3cc6dcc462f</span>
-tree 1f16b25244adda7d4590841975baabda6a41c328
-parent 3c8de40439f7917b188e7c3271409794ec635ef3
-author happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653119972</span> +0800
-committer happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653119972</span> +0800
-
-dev update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>然后我们打印一下 HEAD 文件、refs&#x2F;heads&#x2F;dev 和 refs&#x2F;heads&#x2F;master 文件看看里面的内容到底是什么：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git cat-file -p HEAD</span>
-tree 1f16b25244adda7d4590841975baabda6a41c328
-parent 3c8de40439f7917b188e7c3271409794ec635ef3
-author happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653119972</span> +0800
-committer happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653119972</span> +0800
-
-dev update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>发现 HEAD 文件和本次 commit 文件是一致的，这很正常，HEAD 是你当前的工作版本，因此 HEAD 与当前提交是一致的，来看看分支文件：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git cat-file -p master</span>
-tree ce81273cc3c46c1e7543355e01010685aab9412d
-parent 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
-author happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653118809</span> +0800
-committer happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653118809</span> +0800
-
-update readme
-<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git cat-file -p dev</span>
-tree 1f16b25244adda7d4590841975baabda6a41c328
-parent 3c8de40439f7917b188e7c3271409794ec635ef3
-author happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653119972</span> +0800
-committer happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653119972</span> +0800
-
-dev update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>你发现了吗？master 分支仍然是指向上一次的版本更改，这其实就是 Git 版本管理的原理，<strong>Git 维护当前所处的分支，并且会实时更新 HEAD 文件和 ref&#x2F;heads 目录下当前分支的内容，而其他分支文件内容不会更改，所以其他分支是察觉不到本次更改的，当分支切换时，HEAD 也将切换到对应分支，实现了隔离管理。</strong></p>
-<p>试着切回 master 分支，并查看 HEAD：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git checkout master</span>
-Switched to branch <span class="token string">'master'</span>
-<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git cat-file -p HEAD</span>
-tree ce81273cc3c46c1e7543355e01010685aab9412d
-parent 854ebf0cbe82f7c6b06c35dfb48d5af2149d4643
-author happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653118809</span> +0800
-committer happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653118809</span> +0800
-
-update readme<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>发现 HEAD 也切换到了之前 master 的版本，在这种状态下，我们当然是感知不到 dev 分支所做的更改，因为当前 commit 指向的 blog 文件还是之前的版本。</p>
-<p>那合并分支呢？合并分支的原理其实也很简单，例如在 master 分支下执行<code>git merge dev</code>命令，这将选取两者分支中最新的一次提交，<strong>并将当前所处的分支快速推进到最新的提交版本。</strong></p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git merge dev</span>
-Updating 3c8de40<span class="token punctuation">..</span>2f4e823
-Fast-forward
- Readme.md <span class="token operator">|</span> <span class="token number">2</span> +-
- <span class="token number">1</span> <span class="token function">file</span> changed, <span class="token number">1</span> insertion<span class="token punctuation">(</span>+<span class="token punctuation">)</span>, <span class="token number">1</span> deletion<span class="token punctuation">(</span>-<span class="token punctuation">)</span>
-<span class="token punctuation">[</span>root@VM-16-3-centos GitStudy<span class="token punctuation">]</span><span class="token comment"># git cat-file -p master</span>
-tree 1f16b25244adda7d4590841975baabda6a41c328
-parent 3c8de40439f7917b188e7c3271409794ec635ef3
-author happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653119972</span> +0800
-committer happysnaker <span class="token operator">&lt;</span><span class="token number">1637318597</span>@qq.com<span class="token operator">></span> <span class="token number">1653119972</span> +0800
-
-dev update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>看，合并后，master 分支被推进到最新的版本了！本地提交是不会产生冲突的，但 push 到远程时，<strong>发现远程分支版本已经不是上一次 clone 时的版本了</strong>，那么便会产生冲突，因此在 push 之前我们通常需要 git pull 拉取最新的更改并合并之后再做提交，在这一步时，如果远程分支与你恰好修改了同一个文件，这会产生冲突，Git 会提示你并将冲突文件展现出来，这包含双方的修改，你可以自行选择删除或修改一些内容。解决冲突后，分支已经合并，现在可以正常 push 了。</p>
-<h3 id="标签管理"><a href="#标签管理" class="headerlink" title="标签管理"></a>标签管理</h3><p>标签管理原理非常简单，每个标签文件(refs&#x2F;tag 目录下)其实就是保存着一个稳定版本的 commit 文件，标签通常不会被修改。</p>
-<h2 id="常用语句"><a href="#常用语句" class="headerlink" title="常用语句"></a>常用语句</h2><ol>
-<li>git remote add orgin <a href="mailto:&#103;&#x69;&#x74;&#64;&#103;&#x69;&#116;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#109;">&#103;&#x69;&#x74;&#64;&#103;&#x69;&#116;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#109;</a>:username&#x2F;repo.git，通过 ssh 建立远程仓库。</li>
-<li>git push -u origin master，提交到远程仓库的 master 分支。</li>
-<li>git merge xxx，将当前分支与 xxx 分支合并，并将当前分支推进到最新的分支。</li>
-<li>git pull，等价于 git fetch + git merge，可以通过 –rebase 参数使分支树更加整洁。</li>
-<li>git rebase xxx，同 merge，rebase 将会使分支树更加整洁，通过 -i 参数可交互式的调整分支版本。</li>
-<li>git commit –amend，修改 commit 的信息。</li>
-<li>git reset，将 HEAD 推进到对应版本，例如 git reset HEAD^，这将推进到 HEAD 的上一个版本，注意，一旦 HEAD 和你当前分支的 commit 分离，此时 Git 不允许你提交。</li>
-<li>git cat-file -p filename，查看 git 目录下文件内容。</li>
-<li>git log，打印 commit 日志。</li>
+<p>Deployment 是常见的工作负载，Deployment 资源文件可以指定容器具体的镜像以及它的启动命令，通过 replicas 字段可以指定运行的 pod 数目，Deployment 会自动调度 pod 运行，我们可以很方便的扩缩容 pod 资源，并且 k8s 会自动重启出错的 pod，实现全自动化的运维。</p>
+<h3 id="Statefulset"><a href="#Statefulset" class="headerlink" title="Statefulset"></a>Statefulset</h3><p>Statefulset 可以看作特殊的 Deployment，由 Deployment 创建的 pod 是无状态的，其名称、网络都是随机的，而 Statefulset 则带有状态。</p>
+<p>K8S StatefulSet 和 Deployment 的区别主要有以下几点：</p>
+<ol>
+<li>StatefulSet 是一种特殊的 Deployment，它提供了有状态的 Pod 管理，而 Deployment 只支持无状态的 Pod 管理。</li>
+<li>StatefulSet 会为每个 Pod 分配一个唯一的标识符（0~N），而 Deployment 不会。</li>
+<li>StatefulSet 会保证多副本的 Pod 的按照标识符的顺序启动和停止，而 Deployment 不会。</li>
+<li>StatefulSet 支持持久化存储，相同的 Pod 重新部署后其文件内容（通过 PVC）、网络标识符均不变，而 Deployment 不支持。</li>
 </ol>
+<h3 id="Daemonset"><a href="#Daemonset" class="headerlink" title="Daemonset"></a>Daemonset</h3><p>K8S 集群可能部署在多个节点上，Daemonset 提供这样一种编排方式，如果一个 Pod 以 Daemonset 模式部署，则其会被部署在每一个节点上。</p>
+<p>在我实习的时候就曾用到了 Daemonset，部署一个日志收集服务收集所有节点产生的日志文件，使用 Daemonset 非常合适，使用 subPathExpr 能挂在一个和 pod name 相关联的目录，然后就可以对这个目录进行监听。</p>
+<h3 id="Job-与-CronJob"><a href="#Job-与-CronJob" class="headerlink" title="Job 与 CronJob"></a>Job 与 CronJob</h3><p>Job 是 K8S 中的一个特殊的资源，Job 是只运行一次的程序，通常可以使用 Job 来完成一些初始化或者收集日志等工作，CronJob 支持定时调度，请注意如果 Job 异常退出，K8S 会持续调度 Job 直到它们正常退出。</p>
+<h2 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2><p>这里只介绍三种常见的卷，在 Pod 中引入卷的方式为：通过 volumes 声明卷，在 volumeMounts 将卷挂载到某个目录下。</p>
+<h3 id="emptyDir"><a href="#emptyDir" class="headerlink" title="emptyDir"></a>emptyDir</h3><p>emptyDir 是一个临时卷，卷最初是空的，当 Pod 被创建是，卷也被创建，<strong>多个 Pod 可以共享卷的内容</strong>，这是该卷的主要用途，当 Deployment 或所有 Pod 被移除时，卷会被自动删除。</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> test<span class="token punctuation">-</span>pd
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> registry.k8s.io/test<span class="token punctuation">-</span>webserver
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> test<span class="token punctuation">-</span>container
+    <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /cache
+      <span class="token key atrule">name</span><span class="token punctuation">:</span> cache<span class="token punctuation">-</span>volume
+  <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> cache<span class="token punctuation">-</span>volume
+    <span class="token key atrule">emptyDir</span><span class="token punctuation">:</span>
+      <span class="token key atrule">sizeLimit</span><span class="token punctuation">:</span> 500Mi<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="configMap"><a href="#configMap" class="headerlink" title="configMap"></a>configMap</h3><p>ConfigMap 是一种 API 对象，用来将非机密性的数据保存到键值对中。使用时， <a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/workloads/pods/">Pods</a> 可以将其用作环境变量、命令行参数或者存储卷中的配置文件。</p>
+<p>使用 ConfigMap 的用途是将配置与程序分离开来，以便能随时更新配置数据，例如使用 ConfigMap 保存一段脚本，Job 运行这个脚本，这样我们可以随时更改 ConfigMap 来完成热更新的目的。</p>
+<p>例如一个初始化数据库的 Job，初始化 SQL 可能随时更改，这时候就可以使用 ConfigMap，这个例子配置如下：</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment">#configmap：sql-config.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> ConfigMap
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> mysql<span class="token punctuation">-</span>initdb<span class="token punctuation">-</span>sql<span class="token punctuation">-</span>config
+  <span class="token key atrule">namespace</span><span class="token punctuation">:</span> default
+<span class="token key atrule">data</span><span class="token punctuation">:</span> <span class="token comment"># key - val</span>
+  <span class="token key atrule">initdb.sql</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+     you sql here</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+ <pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment">#Jod:init-sql.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> batch/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Job
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> mysql<span class="token punctuation">-</span>init
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+ <span class="token key atrule">template</span><span class="token punctuation">:</span>
+  <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> myjob
+  <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+   <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+   <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> init<span class="token punctuation">-</span>sql
+     <span class="token key atrule">image</span><span class="token punctuation">:</span> monasca/mysql<span class="token punctuation">-</span>init
+     <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> mysql<span class="token punctuation">-</span>initdb
+        <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> app/config	<span class="token comment"># 挂载</span>
+     <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"sh"</span><span class="token punctuation">,</span><span class="token string">"-c"</span><span class="token punctuation">,</span><span class="token string">"mysql -u root -pxxx -P3306 -h host &lt; app/config/init.sql"</span><span class="token punctuation">]</span>
+   <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+   <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> mysql<span class="token punctuation">-</span>initdb
+     <span class="token key atrule">configMap</span><span class="token punctuation">:</span>
+       <span class="token key atrule">name</span><span class="token punctuation">:</span> mysql<span class="token punctuation">-</span>initdb<span class="token punctuation">-</span>sql<span class="token punctuation">-</span>config
+       <span class="token key atrule">items</span><span class="token punctuation">:</span>
+       <span class="token punctuation">-</span> <span class="token key atrule">key</span><span class="token punctuation">:</span> initdb.sql
+         <span class="token key atrule">path</span><span class="token punctuation">:</span> init.sql 	<span class="token comment"># 意思是 configMap 中 key 为 initdb.sql 的 val 被写入到 init.sql 文件中</span>
+   <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> OnFailure
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>除了作为文件外，ConfigMap 还能作为 ENV 被引入。</p>
+<h3 id="hostPath"><a href="#hostPath" class="headerlink" title="hostPath"></a>hostPath</h3><p>允许将主机目录挂载到容器内，类似于 docker -v，持久化存储。</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> test<span class="token punctuation">-</span>pd
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> registry.k8s.io/test<span class="token punctuation">-</span>webserver
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> test<span class="token punctuation">-</span>container
+    <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /test<span class="token punctuation">-</span>pd
+      <span class="token key atrule">name</span><span class="token punctuation">:</span> test<span class="token punctuation">-</span>volume
+  <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> test<span class="token punctuation">-</span>volume
+    <span class="token key atrule">hostPath</span><span class="token punctuation">:</span>
+      <span class="token comment"># 宿主上目录位置</span>
+      <span class="token key atrule">path</span><span class="token punctuation">:</span> /data
+      <span class="token comment"># 此字段为可选</span>
+      <span class="token key atrule">type</span><span class="token punctuation">:</span> DirectoryOnCreate<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="网络管理"><a href="#网络管理" class="headerlink" title="网络管理"></a>网络管理</h2><h3 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h3><p>Service 将多个 Pod 看作一组服务，服务可以在集群内外暴露，并提供负载均衡服务。Service 是微服务通信的重要组件，一个简单的 Service 资源如下：</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> my<span class="token punctuation">-</span>service
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> MyApp
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">protocol</span><span class="token punctuation">:</span> TCP
+      <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">80</span>			<span class="token comment"># 访问虚拟 IP 端口</span>
+      <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">9376</span>  <span class="token comment"># POD 端口</span>
+      <span class="token key atrule">nodePort</span><span class="token punctuation">:</span> <span class="token number">8080</span>    <span class="token comment"># 可选的，访问任意一个节点使用的 IP</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>Service 通过 selector 绑定 Pod，例如所有 key 为 app，val 为 MyApp 的 Pod 都被绑定在 my-service 之上，这些 Pod 的服务名称均为 my-service。</p>
+<p>Service 会为这一组服务分配一个<strong>内部</strong>的 Cluster IP（虚拟的，只能在内部访问），通过这个 IP:PORT 即可负载均衡到某个 Pod 中</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-4831778/ea897d331dfba0a5e97ceb50479806ed.png?imageView2/2/w/1620" alt="img"></p>
+<p>Service 支持 NodePort 方式访问服务，这样可以将一个 Service 与 Node 的一个端口绑定，访问 NodeIP:PORT 也可以访问服务。</p>
+<p>Service 具体是由 kube-proxy 实现的，这是运行在每一个节点上的网络代理进程，它监听 api-server 的信息，对每一个 Service 创建转发表，并进行负载均衡，默认的方式是轮询。</p>
+<h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><p>DNS 是由 K8S <a target="_blank" rel="noopener" href="http://releases.k8s.io/master/cluster/addons/README.md">插件</a>实现的，它抽象了一个服务注册与服务发现功能，安装了这个插件之后，每一个 Service 都会被注册，同一个命名空间内的服务可以通过 Service 的 name 直接访问，例如 <code>http://my-service:80</code>，不同命名空间的服务需要加上命名空间后缀访问。</p>
+<p>我实习的公司私有化部署就是使用了 DNS，这样不需要改变公有化中服务注册服务发现的代码逻辑，写一个轻量级的注册中心，根据原来的服务名返回一个 DNS 给服务即可。</p>
+<h3 id="Ingress"><a href="#Ingress" class="headerlink" title="Ingress"></a>Ingress</h3><p>Ingress 可以看作是 Service 的 Service，Ingress 是一种路由规则，用于将外部 HTTP&#x2F;HTTPS 请求路由到集群内部的服务。它使用一组规则，根据请求的主机名，路径或其他属性，将请求路由到不同的 Service。</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> networking.k8s.io/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Ingress
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> minimal<span class="token punctuation">-</span>ingress
+  <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/rewrite-target</span><span class="token punctuation">:</span> /
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">ingressClassName</span><span class="token punctuation">:</span> nginx<span class="token punctuation">-</span>example
+  <span class="token key atrule">rules</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">http</span><span class="token punctuation">:</span>
+      <span class="token key atrule">paths</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">path</span><span class="token punctuation">:</span> /testpath
+        <span class="token key atrule">pathType</span><span class="token punctuation">:</span> Prefix
+        <span class="token key atrule">backend</span><span class="token punctuation">:</span>
+          <span class="token key atrule">service</span><span class="token punctuation">:</span>
+            <span class="token key atrule">name</span><span class="token punctuation">:</span> my<span class="token punctuation">-</span>service
+            <span class="token key atrule">port</span><span class="token punctuation">:</span>
+              <span class="token key atrule">number</span><span class="token punctuation">:</span> <span class="token number">80</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">http</span><span class="token punctuation">:</span> <span class="token punctuation">...</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>上诉例子中定义了一个 Ingress 资源，任何以 <code>/testpath</code> 为前缀的路径都将会被路由到 my-service 服务中去。Ingress 之间也支持互相转发，可以通过 ingressClassName 来互相引用。</p>
+<p>Ingress 只是一系列规则，我们需要额外的实现来进行转发，这就是 Ingress Controller。</p>
+<p>ingress-controller 并不是k8s自带的组件，实际上ingress-controller只是一个统称，用户可以选择不同的ingress-controller实现，目前，<strong>由k8s维护的ingress-controller只有google云的GCE与ingress-nginx两个</strong>，具体可以参考<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#additional-controllers">官方文档</a>。但是不管哪一种ingress-controller，实现的机制都大同小异，只是在具体配置上有差异。</p>
+<p>一般来说，ingress-controller 的形式都是一个pod，里面跑着daemon程序和反向代理程序。daemon负责不断监控集群的变化，根据 ingress 对象生成配置并应用新配置到反向代理，比如 nginx-ingress 就是动态生成 nginx 配置，动态更新 upstream，并在需要的时候reload 程序应用新配置。</p>
 
                 
             </div>
@@ -584,7 +571,7 @@ dev update<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/post/a79.html">http://example.com/post/a79.html</a>
+                    <a href="http://example.com/post/92d9.html">http://example.com/post/92d9.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -702,17 +689,18 @@ dev update<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/post/93f4.html">
+                <a href="/post/92d9.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Docker网络模型原理">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="K8s 小结">
                         
-                        <span class="card-title">Docker网络模型原理</span>
+                        <span class="card-title">K8s 小结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -722,9 +710,9 @@ dev update<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-02-10
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-02-13
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -737,6 +725,7 @@ dev update<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -755,13 +744,13 @@ dev update<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/post/eb23.html">
+                <a href="/post/bc53.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="HashMap 学习总结">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="AQS 知识总结">
                         
-                        <span class="card-title">HashMap 学习总结</span>
+                        <span class="card-title">AQS 知识总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
