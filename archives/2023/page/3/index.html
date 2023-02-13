@@ -517,20 +517,21 @@
             <article class="cd-timeline-content" data-aos="fade-up">
                 <div class="article col s12 m6">
                     <div class="card">
-                        <a href="/post/db0.html">
+                        <a href="/post/3e53.html">
                             <div class="card-image">
                                 
                                 
-                                <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="synchronized底层原理">
+                                <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="事务底层原理">
                                 
-                                <span class="card-title">synchronized底层原理</span>
+                                <span class="card-title">事务底层原理</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
                                     文章已收录我的仓库：Java学习笔记与免费书籍分享
-synchronized底层原理前言在JDK1.5之前，synchronized的实现是依赖于操作系统的，采用的是一种悲观的机制，必须严格保证资源的安全性，因此无论是否存在并发问题，都必须
+事务底层原理(INNODB)前言事务必须满足ACID四个特性，即原子性、一致性、隔离性和持久性，隔离性由锁来保证，我们主要研究事务是如何保证原子性、一致性和持久性。
+redo log为什么
                                 
                             </div>
                             <div class="publish-info">
@@ -577,21 +578,20 @@ synchronized底层原理前言在JDK1.5之前，synchronized的实现是依赖�
             <article class="cd-timeline-content" data-aos="fade-up">
                 <div class="article col s12 m6">
                     <div class="card">
-                        <a href="/post/3e53.html">
+                        <a href="/post/db0.html">
                             <div class="card-image">
                                 
                                 
-                                <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="事务底层原理">
+                                <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="synchronized底层原理">
                                 
-                                <span class="card-title">事务底层原理</span>
+                                <span class="card-title">synchronized底层原理</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
                                     文章已收录我的仓库：Java学习笔记与免费书籍分享
-事务底层原理(INNODB)前言事务必须满足ACID四个特性，即原子性、一致性、隔离性和持久性，隔离性由锁来保证，我们主要研究事务是如何保证原子性、一致性和持久性。
-redo log为什么
+synchronized底层原理前言在JDK1.5之前，synchronized的实现是依赖于操作系统的，采用的是一种悲观的机制，必须严格保证资源的安全性，因此无论是否存在并发问题，都必须
                                 
                             </div>
                             <div class="publish-info">
@@ -891,21 +891,21 @@ FTWRL（Flush tables with read lock），将数据库设置为只读状态，当
             <article class="cd-timeline-content" data-aos="fade-up">
                 <div class="article col s12 m6">
                     <div class="card">
-                        <a href="/post/8aae.html">
+                        <a href="/post/f096.html">
                             <div class="card-image">
                                 
                                 
-                                <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="类加载机制">
+                                <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="深入解析分段与分页">
                                 
-                                <span class="card-title">类加载机制</span>
+                                <span class="card-title">深入解析分段与分页</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
                                     文章已收录我的仓库：Java学习笔记与免费书籍分享
-类加载机制前言
-前端编译后，.java文件已经变成了字节码存储在.class文件中，问题是，运行时虚拟机是如何将一个静态文件读入JVM中作为运行时数据的一部分呢？这就是本文章的中心 —— 
+分段、分页引言什么是碎片？碎片分为内部碎片与外部碎片，都是指浪费而不能使用的空间。
+内部碎片是指已分配但未被使用的地址空间。例如在64位空间内，你只使用 7 字节但由于内存对齐不得不为你分
                                 
                             </div>
                             <div class="publish-info">
@@ -952,21 +952,21 @@ FTWRL（Flush tables with read lock），将数据库设置为只读状态，当
             <article class="cd-timeline-content" data-aos="fade-up">
                 <div class="article col s12 m6">
                     <div class="card">
-                        <a href="/post/f096.html">
+                        <a href="/post/8aae.html">
                             <div class="card-image">
                                 
                                 
-                                <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="深入解析分段与分页">
+                                <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="类加载机制">
                                 
-                                <span class="card-title">深入解析分段与分页</span>
+                                <span class="card-title">类加载机制</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
                                     文章已收录我的仓库：Java学习笔记与免费书籍分享
-分段、分页引言什么是碎片？碎片分为内部碎片与外部碎片，都是指浪费而不能使用的空间。
-内部碎片是指已分配但未被使用的地址空间。例如在64位空间内，你只使用 7 字节但由于内存对齐不得不为你分
+类加载机制前言
+前端编译后，.java文件已经变成了字节码存储在.class文件中，问题是，运行时虚拟机是如何将一个静态文件读入JVM中作为运行时数据的一部分呢？这就是本文章的中心 —— 
                                 
                             </div>
                             <div class="publish-info">
