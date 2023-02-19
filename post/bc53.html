@@ -344,7 +344,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-02-10
+                    2023-02-19
                 </div>
                 
 
@@ -680,7 +680,7 @@
             <span class="token keyword">break</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
     
-    <span class="token comment">// 被唤醒，以被添加到等待队列</span>
+    <span class="token comment">// 被唤醒，已经被加入到等待队列中了</span>
     <span class="token comment">// 进入 acquireQueued，与独占模式逻辑相同，不停 争抢锁 或 休眠</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">acquireQueued</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> savedState<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> interruptMode <span class="token operator">!=</span> <span class="token constant">THROW_IE</span><span class="token punctuation">)</span>
         interruptMode <span class="token operator">=</span> <span class="token constant">REINTERRUPT</span><span class="token punctuation">;</span>
@@ -706,11 +706,12 @@
     <span class="token comment">// 将节点加入同步等待队列，这个返回的是前一个节点</span>
     <span class="token class-name">Node</span> p <span class="token operator">=</span> <span class="token function">enq</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">int</span> ws <span class="token operator">=</span> p<span class="token punctuation">.</span>waitStatus<span class="token punctuation">;</span>
-    <span class="token comment">// 将前一个节点设置为 SIGNAL，如果设置成功，自己可以放心休眠</span>
+    <span class="token comment">// 将前一个节点设置为 SIGNAL，如果设置成功，自己继续放心休眠</span>
+    <span class="token comment">// 否则如果失败，直接唤醒</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>ws <span class="token operator">></span> <span class="token number">0</span> <span class="token operator">||</span> <span class="token operator">!</span>p<span class="token punctuation">.</span><span class="token function">compareAndSetWaitStatus</span><span class="token punctuation">(</span>ws<span class="token punctuation">,</span> <span class="token class-name">Node</span><span class="token punctuation">.</span><span class="token constant">SIGNAL</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
         <span class="token class-name">LockSupport</span><span class="token punctuation">.</span><span class="token function">unpark</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>thread<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="实践-——-代码实现"><a href="#实践-——-代码实现" class="headerlink" title="实践 —— 代码实现"></a>实践 —— 代码实现</h2><h3 id="可重入锁实现"><a href="#可重入锁实现" class="headerlink" title="可重入锁实现"></a>可重入锁实现</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyReentrantLock</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">private</span> <span class="token class-name">AbstractQueuedSynchronizer</span> sync<span class="token punctuation">;</span>
@@ -1074,17 +1075,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/post/92d9.html">
+                <a href="/post/bc53.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="K8s 小结">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="AQS 知识总结">
                         
-                        <span class="card-title">K8s 小结</span>
+                        <span class="card-title">AQS 知识总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1094,9 +1096,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-02-13
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-02-19
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1109,6 +1111,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1127,13 +1130,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/post/cea5.html">
+                <a href="/post/fa86.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="ConcurrentHashMap 学习总结">
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Mybatis 原理">
                         
-                        <span class="card-title">ConcurrentHashMap 学习总结</span>
+                        <span class="card-title">Mybatis 原理</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1144,7 +1147,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-02-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-02-19
                             </span>
                         <span class="publish-author">
                             

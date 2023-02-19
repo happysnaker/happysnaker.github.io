@@ -347,7 +347,7 @@ Leader、领导者：负责接受客户端">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-02-10
+                    2023-02-19
                 </div>
                 
 
@@ -421,12 +421,11 @@ Leader、领导者：负责接受客户端">
 <ul>
 <li>index 和 term 都相同的两个日志条目存储的命令一定是相同的。</li>
 </ul>
-<p>这是因为按照一致性检查的要求，Follower 中的日志最终会和 Leader 中的日志保持一致性，而一个 Leader 任意任期内在同一 index 内最多只会产生一条条目。</p>
-<p>通过这种方式 Raft 能够保证 Leader 和 Follower 的日志一致性。</p>
+<p>这是因为按照一致性检查的要求，Follower 中的日志最终会和 Leader 中的日志保持一致性，而一个 Leader 任意任期内在同一 index 内最多只会产生一条条目，通过这种方式 Raft 能够保证 Leader 和 Follower 的日志一致性。</p>
+<p>实际情况中，Follower 可能和 Leader 日志相差过大，有一种优化手段可以加速匹配的过程，Follower 可以记录下冲突日志的 Term 和此 Term 最早的日志 Index，将这些信息告诉 Leader，如果 Leader 中不包含这个冲突 Term，那么 Follower 需要删除所有冲突的日志；如果 Leader 包含，Leader 下一个同步的日志应该是冲突日志的最大 Index 的日志。</p>
 <h2 id="日志压缩"><a href="#日志压缩" class="headerlink" title="日志压缩"></a>日志压缩</h2><p>当新的 Follower 上线或者 Follower 丢失太多日志时，重放日志成本过高，因此 Raft 算法采用 Snapshot（快照）解决这个问题。</p>
 <p>Snapshot 表示的是 Leader 的系统状态，日志是基于命令的，而 Snapshot 是 Leader 的系统状态，可以理解为数据，就好比 RDB 和 AOF 的区别，发送 Snapshot 使用 InstalledSnapshot RPC。</p>
-<p>传输 Snapshot 会比传输日志命令快得多。</p>
-<p><img src="http://www.hawkers.cc/upload/2016/11/snapshot.png" alt="Alt text"></p>
+<p>传输 Snapshot 会比传输日志命令快得多，可以维护一个 <code>lastIncluded</code> 变量表示被压缩的日志索引，一旦需要复制的日志小于此索引，则传输快照。</p>
 <p>Leader 会不定期的对已提交的日志生成快照，快照包含如下内容：</p>
 <ul>
 <li>最后的 log index</li>
@@ -452,6 +451,7 @@ Leader、领导者：负责接受客户端">
 <p>这是基于一个简单的数学道理，设总节点数为 N：</p>
 <p>如果 N 是奇数：<br>$$<br>多数节点数目 &#x3D; \frac{N + 1}2 \<br>新增一个节点后多数节点数目 &#x3D; \frac{N + 2}2<br>$$<br>这意味着如果 B 原本还差一个赞成票的话，即当前赞成票 $ P &#x3D; \frac{N}2$，即使新增一个节点也无法让 B 得到多数赞成 $\frac{N + 2}2$ 。</p>
 <p>偶数同样分析。</p>
+<p>因此，在同一时刻，Raft 集群只能允许一个成员在流程中，一旦成员变更的消息得到了集群内的一致性认可，则完成变更。</p>
 
                 
             </div>
@@ -600,13 +600,13 @@ Leader、领导者：负责接受客户端">
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/post/46b9.html">
+                <a href="/post/fa86.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Netty 源码 — 线程模型的分析">
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Mybatis 原理">
                         
-                        <span class="card-title">Netty 源码 — 线程模型的分析</span>
+                        <span class="card-title">Mybatis 原理</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -617,7 +617,7 @@ Leader、领导者：负责接受客户端">
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-02-10
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-02-19
                         </span>
                         <span class="publish-author">
                             
@@ -649,13 +649,13 @@ Leader、领导者：负责接受客户端">
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/post/b68f.html">
+                <a href="/post/92d9.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Redis 设计与实现重点回顾">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="K8s 小结">
                         
-                        <span class="card-title">Redis 设计与实现重点回顾</span>
+                        <span class="card-title">K8s 小结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -666,7 +666,7 @@ Leader、领导者：负责接受客户端">
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-02-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-02-13
                             </span>
                         <span class="publish-author">
                             
