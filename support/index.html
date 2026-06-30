@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Haoran Li</title>
+  <meta name="description" content="Support Haoran Li's open-source work in backend engineering, Go, Java, distributed systems, and technical writing.">
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #131a2e;
+      --panel-2: #1a2440;
+      --text: #eef2ff;
+      --muted: #9aa4c7;
+      --accent: #7aa2ff;
+      --accent-2: #62d2a2;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+      background: radial-gradient(circle at top, #182447 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 48px 20px 72px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-main {
+      padding: 36px;
+    }
+
+    .kicker {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(122, 162, 255, 0.12);
+      color: #cfe0ff;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .02em;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.08;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 18px;
+      margin: 0 0 22px;
+      max-width: 720px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 22px 0 26px;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: #d6ddfb;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #95b5ff);
+      color: #08101f;
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      color: var(--text);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .hero-side {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .metric {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .metric:last-child { border-bottom: 0; }
+
+    .metric strong {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section {
+      margin-top: 24px;
+      padding: 28px;
+    }
+
+    .section h2 {
+      margin: 0 0 10px;
+      font-size: 24px;
+    }
+
+    .section p {
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .pay-card {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .pay-card img {
+      width: min(100%, 320px);
+      border-radius: 20px;
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 14px;
+    }
+
+    .pay-card h3 {
+      margin: 0 0 6px;
+      font-size: 22px;
+    }
+
+    .pay-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .list li { margin-bottom: 10px; }
+
+    .footer {
+      margin-top: 32px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .hero, .grid, .support-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-main, .hero-side, .section, .pay-card {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="kicker">Support my open-source work</div>
+        <h1>Help me keep building backend and systems engineering projects.</h1>
+        <p class="lead">
+          I'm Haoran Li. I build practical open-source assets around Go, Java, distributed systems, infrastructure-oriented engineering, and technical documentation.
+          If my projects, docs contributions, templates, or engineering notes have saved you time, you can support that work here.
+        </p>
+
+        <div class="pill-row">
+          <span class="pill">Go</span>
+          <span class="pill">Java</span>
+          <span class="pill">Distributed systems</span>
+          <span class="pill">Backend engineering</span>
+          <span class="pill">Open source docs</span>
+          <span class="pill">Developer tooling</span>
+        </div>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="https://github.com/happysnaker">View GitHub profile</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/go-service-starter">See go-service-starter</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/backend-engineer-checklist">See backend-engineer-checklist</a>
+        </div>
+      </div>
+
+      <aside class="card hero-side">
+        <div class="metric">
+          <strong>Real OSS contributions</strong>
+          <span>GitHub Docs, Docker Docs, OpenTelemetry, Prometheus, chi, Vue docs, and more.</span>
+        </div>
+        <div class="metric">
+          <strong>Reusable public assets</strong>
+          <span>Starter templates, learning checklists, portfolio templates, systems notes, and engineering writeups.</span>
+        </div>
+        <div class="metric">
+          <strong>Direct support</strong>
+          <span>GitHub Sponsors is unavailable for me right now, so I accept support through WeChat Pay and Alipay.</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card section">
+      <h2>Ways your support helps</h2>
+      <div class="grid">
+        <div>
+          <p>I want to keep shipping practical public assets rather than half-finished personal experiments. Support helps me spend more time on things that are genuinely useful to other engineers.</p>
+          <ul class="list">
+            <li>improving starter templates and developer tooling</li>
+            <li>publishing more backend / systems learning material</li>
+            <li>writing and merging documentation contributions to major open-source projects</li>
+            <li>turning rough internal ideas into reusable public repositories</li>
+          </ul>
+        </div>
+        <div>
+          <p>If you want to support my work without paying, that still helps a lot:</p>
+          <ul class="list">
+            <li>star and share my repositories</li>
+            <li>link my projects to other backend engineers</li>
+            <li>open issues with concrete suggestions</li>
+            <li>reference the projects in communities, blogs, or newsletters</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="support-grid">
+      <div class="card pay-card">
+        <img src="/medias/support/wechat-pay.jpg" alt="WeChat Pay QR code">
+        <h3>WeChat Pay</h3>
+        <p>Scan to support my open-source work directly.</p>
+      </div>
+
+      <div class="card pay-card">
+        <img src="/medias/support/alipay-pay.jpg" alt="Alipay QR code">
+        <h3>Alipay</h3>
+        <p>Scan to support templates, docs contributions, and engineering notes.</p>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>What you may know me from</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li><a href="https://github.com/happysnaker/go-service-starter">go-service-starter</a> — a minimal production-minded Go HTTP service starter</li>
+            <li><a href="https://github.com/happysnaker/backend-engineer-checklist">backend-engineer-checklist</a> — a practical roadmap for backend engineering fundamentals</li>
+            <li><a href="https://github.com/happysnaker/Resume">Resume</a> — a developer portfolio / résumé template</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li><a href="https://github.com/github/docs/pulls?q=is%3Apr+author%3Ahappysnaker">GitHub Docs contributions</a></li>
+            <li><a href="https://github.com/happysnaker">GitHub profile</a></li>
+            <li><a href="/">Technical blog and engineering notes</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      Thanks for supporting practical open-source work.<br />
+      Haoran Li · happysnaker
+    </div>
+  </div>
+</body>
+</html>
