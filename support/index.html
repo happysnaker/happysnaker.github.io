@@ -177,6 +177,38 @@
       gap: 24px;
     }
 
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .tier-card {
+      padding: 22px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .tier-card strong {
+      display: block;
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .tier-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .tiny-note {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
     .pay-card {
       padding: 24px;
       text-align: center;
@@ -217,7 +249,7 @@
     }
 
     @media (max-width: 860px) {
-      .hero, .grid, .support-grid {
+      .hero, .grid, .support-grid, .tier-grid {
         grid-template-columns: 1fr;
       }
 
@@ -260,8 +292,8 @@
           <span>GitHub Docs, Docker Docs, OpenTelemetry, Prometheus, chi, Vue docs, and more.</span>
         </div>
         <div class="metric">
-          <strong>Reusable public assets</strong>
-          <span>Starter templates, learning checklists, portfolio templates, systems notes, and engineering writeups.</span>
+          <strong>350+ public repo stars</strong>
+          <span>Reusable templates, systems notes, backend checklists, and engineering writeups that people still bookmark and fork.</span>
         </div>
         <div class="metric">
           <strong>Direct support</strong>
@@ -294,6 +326,26 @@
       </div>
     </section>
 
+    <section class="card section">
+      <h2>Small support is enough</h2>
+      <p>If one repository, checklist, template, or doc contribution saved you time, a small direct tip is already meaningful.</p>
+      <div class="tier-grid">
+        <div class="tier-card">
+          <strong>¥9.9</strong>
+          <span>If a README, note, or doc fix saved you one detour.</span>
+        </div>
+        <div class="tier-card">
+          <strong>¥19.9</strong>
+          <span>If a checklist helped your interview prep, onboarding, or design review.</span>
+        </div>
+        <div class="tier-card">
+          <strong>¥49.9</strong>
+          <span>If a starter template or writeup saved you real implementation time.</span>
+        </div>
+      </div>
+      <p class="tiny-note">Any amount is appreciated. If you are supporting because of a specific repo, feel free to mention it in the payment note.</p>
+    </section>
+
     <section class="support-grid">
       <div class="card pay-card">
         <img src="/medias/support/wechat-pay.jpg" alt="WeChat Pay QR code">
@@ -316,11 +368,12 @@
             <li><a href="https://github.com/happysnaker/go-service-starter">go-service-starter</a> — a minimal production-minded Go HTTP service starter</li>
             <li><a href="https://github.com/happysnaker/backend-engineer-checklist">backend-engineer-checklist</a> — a practical roadmap for backend engineering fundamentals</li>
             <li><a href="https://github.com/happysnaker/system-design-checklist">system-design-checklist</a> — a practical framework for interviews, design reviews, and distributed-systems tradeoffs</li>
-            <li><a href="https://github.com/happysnaker/Resume">Resume</a> — a developer portfolio / résumé template</li>
+            <li><a href="https://github.com/happysnaker/Resume">Resume</a> — a developer portfolio / résumé template with 160+ stars</li>
           </ul>
         </div>
         <div>
           <ul class="list">
+            <li><a href="https://github.com/happysnaker/CSAPPLabsAndNotes">CSAPPLabsAndNotes</a> — systems-learning notes and lab writeups with 70+ stars</li>
             <li><a href="https://github.com/github/docs/pulls?q=is%3Apr+author%3Ahappysnaker">GitHub Docs contributions</a></li>
             <li><a href="https://github.com/happysnaker">GitHub profile</a></li>
             <li><a href="/">Technical blog and engineering notes</a></li>
