@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub / README Review</title>
+  <meta name="description" content="GitHub profile packaging, pinned repo cleanup, README polish, and portfolio-page review by Shirong Lu.">
+  <style>
+    :root {
+      --bg: #0b1020; --panel: #131a2e; --text: #eef2ff; --muted: #9aa4c7;
+      --accent: #7aa2ff; --border: rgba(255,255,255,0.08); --shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; background: radial-gradient(circle at top, #182447 0%, var(--bg) 45%); color: var(--text); line-height: 1.6; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 20px 72px; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow); padding: 30px; }
+    .hero { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; }
+    .kicker { display: inline-block; padding: 6px 12px; border-radius: 999px; background: rgba(122, 162, 255, 0.12); color: #cfe0ff; font-size: 13px; font-weight: 600; margin-bottom: 18px; }
+    h1 { margin: 0 0 14px; font-size: clamp(32px, 5vw, 48px); line-height: 1.08; }
+    p, li { color: var(--muted); }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top: 20px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 16px; border-radius:14px; font-weight:600; border:1px solid transparent; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), #95b5ff); color:#08101f; }
+    .btn-secondary { border-color: var(--border); color: var(--text); background: rgba(255,255,255,0.02); }
+    .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:24px; margin-top:24px; }
+    .list { margin:0; padding-left:18px; }
+    .price { font-size: 32px; font-weight: 700; color: var(--text); }
+    .tiny { font-size: 14px; color: var(--muted); }
+    @media (max-width: 860px) { .hero, .grid { grid-template-columns: 1fr; } .card { padding: 22px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="card">
+        <div class="kicker">Async review / packaging</div>
+        <h1>Make your GitHub feel more technical, focused, and hireable.</h1>
+        <p>I offer compact async review for GitHub profile positioning, pinned repo cleanup, README polish, and portfolio-page packaging. This is based on the same cleanup principles behind my public profile, Resume (161★), CSAPPLabsAndNotes (70★), and recent code-focused OSS contributions across pflag, Prometheus, chi, golang-jwt, and HashiCorp libraries.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="/support/#async-review">Go to payment options</a>
+          <a class="btn btn-secondary" href="mailto:happysnaker@foxmail.com?subject=Async%20review%20request">Email to start</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/github-profile-checklist">See checklist</a>
+        </div>
+      </div>
+      <aside class="card">
+        <div class="price">¥99</div>
+        <p>One lightweight async pass for one public profile, repo, or landing page.</p>
+        <ul class="list">
+          <li>GitHub profile / pinned repos</li>
+          <li>One README cleanup</li>
+          <li>One resume-site / portfolio-page pass</li>
+          <li>Concrete edits, not vague advice</li>
+        </ul>
+        <p class="tiny">Bundle: <strong>¥199</strong> for profile + one README + one landing page.</p>
+      </aside>
+    </section>
+
+    <section class="card" style="margin-top:24px;">
+      <h2>What I actually look at</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li>bio / persona clarity</li>
+            <li>pinned repo order and role alignment</li>
+            <li>which weak repos should be hidden, archived, or ignored</li>
+            <li>README structure, scope, and credibility</li>
+            <li>portfolio / resume-site wording and first impression</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>whether your profile looks like coursework-only noise</li>
+            <li>whether your best work feels reusable or abandoned</li>
+            <li>whether your public proof of work matches your target role</li>
+            <li>how to make your GitHub convert into interviews, referrals, or collaboration</li>
+            <li>where to add or remove CTA / support / contact friction</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:24px;">
+      <h2>How it works</h2>
+      <ol class="list">
+        <li>Pay via WeChat Pay or Alipay on the <a href="/support/#async-review">support page</a>.</li>
+        <li>Email the public links, target role, what feels weak, and a payment screenshot to <a href="mailto:happysnaker@foxmail.com">happysnaker@foxmail.com</a>.</li>
+        <li>I reply with compact, prioritized feedback and ready-to-paste edits.</li>
+      </ol>
+      <p class="tiny">Best subject line: <strong>Async review | target role | repo/profile link</strong>.</p>
+    </section>
+  </div>
+</body>
+</html>
