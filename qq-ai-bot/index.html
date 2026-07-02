@@ -144,6 +144,31 @@
       gap: 24px;
     }
 
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 18px;
+    }
+
+    .support-box {
+      padding: 22px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .support-box img {
+      display: block;
+      width: 100%;
+      max-width: 280px;
+      margin: 14px auto 0;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      padding: 10px;
+    }
+
     .section {
       margin-top: 24px;
     }
@@ -176,7 +201,7 @@
     }
 
     @media (max-width: 860px) {
-      .hero, .grid {
+      .hero, .grid, .support-grid {
         grid-template-columns: 1fr;
       }
 
@@ -381,6 +406,30 @@
         If you want broader GitHub / README packaging feedback for your own bot, agent, or infrastructure repo, the
         lightweight async review options are on <a href="/review/">the review page</a>.
       </p>
+    </section>
+
+    <section class="card section">
+      <h2>Tip in 10 seconds</h2>
+      <p>
+        If this repo already saved you an hour of wiring, debugging, or README archaeology, do not overthink it.
+        Scan one of these, leave <code>qq-ai-bot</code> or <code>qq-ai-bot setup</code> as the note, and you're done.
+        If you want something concrete back, use the <a href="/support/#quick-read">¥29.9 quick read</a> or
+        <a href="/support/#async-review">¥99 async review</a> path instead.
+      </p>
+      <div class="support-grid">
+        <div class="support-box">
+          <strong>WeChat Pay</strong>
+          <p class="tiny">Fastest path for a direct <strong>¥9.9 / ¥19.9</strong> thank-you tip if <code>qq-ai-bot</code> saved you setup time.</p>
+          <img src="/medias/support/wechat-pay.jpg" alt="WeChat Pay QR code for qq-ai-bot support">
+        </div>
+        <div class="support-box">
+          <strong>Alipay</strong>
+          <p class="tiny">Same shortest path. Best payment note: <code>qq-ai-bot</code>, <code>qq-ai-bot setup</code>, or <code>bot repo read</code>.</p>
+          <img src="/medias/support/alipay-pay.jpg" alt="Alipay QR code for qq-ai-bot support">
+        </div>
+      </div>
+      <p class="tiny"><strong>Roadmap tie-in:</strong> direct support helps keep work moving on Redis session storage, Prometheus-style metrics, and the next production-grade polish round.</p>
+      <p class="tiny"><strong>July offer:</strong> the first paid request this month gets one extra public page / README in the same async pass.</p>
     </section>
 
     <div class="footer">
