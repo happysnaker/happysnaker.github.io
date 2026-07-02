@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSAPPLabsAndNotes</title>
+  <meta name="description" content="CS:APP lab notes, walkthroughs, and systems-learning material for computer systems study and interview preparation.">
+  <meta property="og:title" content="CSAPPLabsAndNotes" />
+  <meta property="og:description" content="CS:APP lab notes, walkthroughs, and systems-learning material for systems study and interview preparation." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://happysnaker.github.io/csapp-labs-notes/" />
+  <style>
+    :root { --bg:#0b1020; --panel:#131a2e; --text:#eef2ff; --muted:#9aa4c7; --accent:#7aa2ff; --border:rgba(255,255,255,0.08); --shadow:0 20px 60px rgba(0,0,0,0.35); }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif; background:radial-gradient(circle at top,#182447 0%,var(--bg) 45%); color:var(--text); line-height:1.6; }
+    a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
+    .wrap { max-width:1080px; margin:0 auto; padding:48px 20px 72px; }
+    .hero { display:grid; grid-template-columns:1.15fr 0.85fr; gap:24px; }
+    .card { background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01)); border:1px solid var(--border); border-radius:24px; box-shadow:var(--shadow); }
+    .hero-main,.hero-side,.section { padding:30px; }
+    .kicker { display:inline-block; padding:6px 12px; border-radius:999px; background:rgba(122,162,255,0.12); color:#cfe0ff; font-size:13px; font-weight:600; margin-bottom:18px; }
+    h1 { margin:0 0 14px; font-size:clamp(32px,5vw,52px); line-height:1.08; }
+    h2 { margin:0 0 12px; font-size:24px; }
+    p, li, span { color:var(--muted); }
+    .pill-row,.actions { display:flex; flex-wrap:wrap; gap:10px; }
+    .pill-row { margin:20px 0 24px; }
+    .pill { padding:8px 12px; border-radius:999px; border:1px solid var(--border); background:rgba(255,255,255,0.03); color:#d6ddfb; font-size:14px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 16px; border-radius:14px; font-weight:600; border:1px solid transparent; }
+    .btn-primary { background:linear-gradient(135deg,var(--accent),#95b5ff); color:#08101f; }
+    .btn-secondary { border-color:var(--border); color:var(--text); background:rgba(255,255,255,0.02); }
+    .metric { padding:14px 0; border-bottom:1px solid var(--border); }
+    .metric:last-child { border-bottom:0; }
+    .metric strong { display:block; font-size:22px; margin-bottom:4px; color:var(--text); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+    .section { margin-top:24px; }
+    .list { margin:0; padding-left:18px; }
+    .tiny { font-size:14px; color:var(--muted); }
+    .footer { margin-top:32px; text-align:center; font-size:14px; color:var(--muted); }
+    @media (max-width:860px) { .hero,.grid { grid-template-columns:1fr; } .hero-main,.hero-side,.section { padding:22px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="kicker">Systems study archive</div>
+        <h1>CSAPPLabsAndNotes</h1>
+        <p>
+          A practical <strong>CS:APP learning repository</strong> with lab notes, walkthroughs, and systems-study material
+          around binaries, memory, shells, proxy work, and related low-level topics. This is a reference / study repo,
+          not a polished production codebase.
+        </p>
+        <div class="pill-row">
+          <span class="pill">CS:APP</span>
+          <span class="pill">Computer systems</span>
+          <span class="pill">x86-64</span>
+          <span class="pill">Memory / shell / proxy labs</span>
+          <span class="pill">Study notes</span>
+          <span class="pill">Interview prep</span>
+        </div>
+        <p class="tiny"><strong>Best fit:</strong> students, self-learners, and interview-prep readers who want one more practical reference while working through systems fundamentals.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://github.com/happysnaker/CSAPPLabsAndNotes">View repository</a>
+          <a class="btn btn-secondary" href="/support/#donate-codes">Tip if a note saved you time</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/backend-engineer-checklist">What to read next</a>
+          <a class="btn btn-secondary" href="/review/">See review offer</a>
+        </div>
+      </div>
+      <aside class="card hero-side">
+        <div class="metric"><strong>What it helps with</strong><span>Lab debugging detours, systems review, and low-level interview prep where a concise writeup is faster than re-deriving everything from scratch.</span></div>
+        <div class="metric"><strong>What it is not</strong><span>Not a full course replacement and not meant to pretend this repo is a production system.</span></div>
+        <div class="metric"><strong>Best support note</strong><span>If this repo helped, the cleanest payment note is <code>CSAPPLabsAndNotes</code>.</span></div>
+        <div class="metric"><strong>Low-friction thanks</strong><span>For a study-note repo, <strong>¥9.9 / ¥19.9</strong> is the intended thank-you path if one writeup saved time.</span></div>
+      </aside>
+    </section>
+
+    <section class="card section">
+      <h2>What you get</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li>lab notes and walkthroughs for common CS:APP tasks</li>
+            <li>reverse engineering and binary-analysis practice context</li>
+            <li>memory, shell, and proxy study material</li>
+            <li>reference artifacts from hands-on systems learning</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>a study-oriented archive rather than a polished tutorial platform</li>
+            <li>useful as a companion while learning, reviewing, or prepping interviews</li>
+            <li>best when you need a practical explanation fast</li>
+            <li>good follow-on path into backend / systems / database internals repos</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Where to go after this repo</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li><a href="https://github.com/happysnaker/backend-engineer-checklist">backend-engineer-checklist</a> — broader backend / systems roadmap</li>
+            <li><a href="https://github.com/happysnaker/system-design-checklist">system-design-checklist</a> — interview and design-review tradeoffs</li>
+            <li><a href="https://github.com/happysnaker/happydb">happydb</a> — learning-oriented database internals project</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>use this repo for fundamentals, then move to design / backend / infrastructure packaging</li>
+            <li>if you found this because your own GitHub still looks student-heavy, the review offer is the sharper paid path</li>
+            <li>if you just want to say thanks for a useful note, tipping directly is better than overthinking it</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Support</h2>
+      <p>
+        If <code>CSAPPLabsAndNotes</code> saved you a debugging detour or made your systems review faster,
+        the intended shameless path is a direct thank-you tip on the <a href="/support/">support page</a>.
+      </p>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li><strong>Best payment note</strong> — <code>CSAPPLabsAndNotes</code></li>
+            <li><strong>Low-friction tip</strong> — <strong>¥9.9 / ¥19.9</strong></li>
+            <li><strong>Fastest path</strong> — WeChat Pay / Alipay on the support page</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li><strong>¥29.9 quick read</strong> — if you want a blunt read on your own profile / repo / page</li>
+            <li><strong>¥99 async review</strong> — if you want GitHub profile / README / landing-page packaging help</li>
+            <li><strong>Best use</strong> — learners turning old student work into stronger public proof of work</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">CSAPPLabsAndNotes · Shirong Lu / happysnaker</div>
+  </div>
+</body>
+</html>
