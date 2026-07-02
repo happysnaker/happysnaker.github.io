@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HRpc</title>
+  <meta name="description" content="Java 11 / Netty based RPC framework learning project with custom protocol, service registry, dynamic proxy invocation, heartbeats, reconnect, and load balancing.">
+  <meta property="og:title" content="HRpc" />
+  <meta property="og:description" content="Java 11 / Netty based RPC framework learning project with custom protocol, service registry, dynamic proxy invocation, heartbeats, reconnect, and load balancing." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://happysnaker.github.io/hrpc/" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #131a2e;
+      --text: #eef2ff;
+      --muted: #9aa4c7;
+      --accent: #7aa2ff;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+      background: radial-gradient(circle at top, #182447 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 48px 20px 72px; }
+    .hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+    .hero-main, .hero-side, .section { padding: 30px; }
+    .kicker {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(122, 162, 255, 0.12);
+      color: #cfe0ff;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    h1 { margin: 0 0 14px; font-size: clamp(32px, 5vw, 52px); line-height: 1.08; }
+    h2 { margin: 0 0 12px; font-size: 24px; }
+    p, li, span { color: var(--muted); }
+    .pill-row, .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill-row { margin: 20px 0 24px; }
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: #d6ddfb;
+      font-size: 14px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), #95b5ff); color: #08101f; }
+    .btn-secondary { border-color: var(--border); color: var(--text); background: rgba(255,255,255,0.02); }
+    .metric { padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .metric:last-child { border-bottom: 0; }
+    .metric strong { display: block; font-size: 22px; margin-bottom: 4px; color: var(--text); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; }
+    .section { margin-top: 24px; }
+    .list { margin: 0; padding-left: 18px; }
+    .tiny { font-size: 14px; color: var(--muted); }
+    pre {
+      margin: 0;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      overflow-x: auto;
+      color: #dbe4ff;
+      font-size: 14px;
+    }
+    code { color: #dbe4ff; }
+    .footer { margin-top: 32px; text-align: center; font-size: 14px; color: var(--muted); }
+    @media (max-width: 860px) {
+      .hero, .grid { grid-template-columns: 1fr; }
+      .hero-main, .hero-side, .section { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="kicker">Java / Netty RPC framework project</div>
+        <h1>HRpc</h1>
+        <p>
+          A learning-oriented <strong>Java 11 / Netty based RPC framework</strong> that explores custom protocol framing,
+          service registration, dynamic proxy invocation, heartbeats, reconnect, fallback handling, and multiple load-balancing strategies
+          in one compact distributed-systems repository.
+        </p>
+        <div class="pill-row">
+          <span class="pill">Java 11</span>
+          <span class="pill">Netty</span>
+          <span class="pill">RPC</span>
+          <span class="pill">Service registry</span>
+          <span class="pill">Dynamic proxy</span>
+          <span class="pill">Load balancing</span>
+        </div>
+        <p class="tiny">
+          <strong>If this repo saved you RPC / Netty study time:</strong> the intended low-friction path is a direct tip;
+          use the paid review only if you want your own backend / systems repo packaged more sharply.
+        </p>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://github.com/happysnaker/HRpc">View repository</a>
+          <a class="btn btn-secondary" href="/support/#from-hrpc">Tip if this helped your RPC study</a>
+          <a class="btn btn-secondary" href="/support/#quick-read">Buy ¥29.9 quick read</a>
+          <a class="btn btn-secondary" href="/review/">See ¥99 packaging pass</a>
+        </div>
+      </div>
+      <aside class="card hero-side">
+        <div class="metric">
+          <strong>Why this matters</strong>
+          <span>This is much stronger portfolio signal than a toy CRUD app: protocol design, service discovery, proxy invocation, reconnect, and failure handling all show up here.</span>
+        </div>
+        <div class="metric">
+          <strong>Best payment note</strong>
+          <span><code>HRpc</code> or <code>Java RPC framework</code></span>
+        </div>
+        <div class="metric">
+          <strong>Low-friction thanks</strong>
+          <span><strong>¥9.9 / ¥19.9</strong> is already meaningful if one diagram, code path, or implementation idea saved you time.</span>
+        </div>
+        <div class="metric">
+          <strong>Best paid fit</strong>
+          <span>Use the paid path if your own Java / backend / systems repo has substance but still looks under-packaged.</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card section">
+      <h2>What this project covers</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li>custom RPC message protocol and codecs</li>
+            <li>service registration and discovery</li>
+            <li>provider / consumer split</li>
+            <li>annotation-driven service exposure and reference wiring</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>Netty-based transport and long-lived connections</li>
+            <li>retry, reconnect, and heartbeat paths</li>
+            <li>dynamic-proxy invocation flow</li>
+            <li>round-robin, random, least-connection, and consistent-hash load balancing</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Repository shape</h2>
+      <pre>rpc-framework-core/   core protocol, client/server runtime, shared DTOs
+RpcRegisterCenter/    standalone registry center
+Service0/             sample provider
+Service1/             second provider
+Consumer0/            sample consumer
+zookeeper-registry/   experimental registry-related module</pre>
+    </section>
+
+    <section class="card section">
+      <h2>Why a hiring manager might care</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li>shows hands-on interest in backend plumbing, not only business CRUD logic</li>
+            <li>gives concrete code to discuss around protocol boundaries and failure paths</li>
+            <li>demonstrates comfort with Java reflection, transport code, and client/server separation</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>pairs well with <code>happydb</code>, <code>CSAPPLabsAndNotes</code>, and the checklist repos as systems signal</li>
+            <li>works as a credible “older but still technical” project instead of something to hide completely</li>
+            <li>helps your profile feel broader than “only bot / template / docs” work</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Support</h2>
+      <p>
+        If <code>HRpc</code> helped your Java / Netty / RPC learning, the shameless intended path is a direct thank-you tip on the
+        <a href="/support/#from-hrpc">support page</a>.
+      </p>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li><strong>Best payment note</strong> — <code>HRpc</code> or <code>Java RPC framework</code></li>
+            <li><strong>Low-friction tip</strong> — <strong>¥9.9 / ¥19.9</strong></li>
+            <li><strong>Fastest path</strong> — WeChat Pay / Alipay on the support page</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li><strong>¥29.9 quick read</strong> — one blunt first-impression pass on your own repo / README / page</li>
+            <li><strong>¥99 async review</strong> — GitHub profile, pinned repos, README cleanup, or one focused landing page</li>
+            <li><strong>Best use</strong> — making a technically real repo feel less student-like and more credible</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">HRpc · Shirong Lu / happysnaker</div>
+  </div>
+</body>
+</html>
