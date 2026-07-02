@@ -347,6 +347,7 @@
             <li><strong>v0.1.0 released</strong> — public release with OneBot 11 transport, ACP bridge, Docker demo, and observability surfaces</li>
             <li><strong>v0.1.1 released</strong> — patch release that adds lightweight inbound replay dedupe and exposes duplicate-drop metrics</li>
             <li><strong>v0.1.2 released</strong> — adds per-interaction correlation IDs across receive / dedupe / ACP dispatch / progress / reply so one noisy turn is easier to trace end to end</li>
+            <li><strong>v0.1.3 released</strong> — stages richer-media fallback handling so file / audio / video-like attachments are no longer silently ignored before the agent sees any warning</li>
             <li><strong>Deployment matrix published</strong> — public docs now separate stronger reverse-path defaults from forward-mode / platform combinations that are only documented support</li>
             <li><strong>New FAQ + Discussions flow</strong> — common setup mistakes now route through FAQ and Q&amp;A instead of vague issues</li>
             <li><strong>DeepSeek-ready positioning</strong> — public docs now explicitly describe the common DeepSeek-backed local-agent deployment path</li>
@@ -359,7 +360,7 @@
             <li><strong>Active ecosystem outreach</strong> — proposed to DeepSeek, NapCat, LLOneBot, ACP, chatbot, and QQ-bot ecosystem lists</li>
             <li><strong>OneBot ecosystem listed</strong> — already included on the public OneBot ecosystem application cases page</li>
             <li><strong>Best short pitch</strong> — <code>OneBot 11 + ACP + persistent sessions + progress streaming + Docker demo</code></li>
-            <li><strong>Latest engineering signal</strong> — correlation IDs now land in the repo as a real production-minded debugging surface, not only a roadmap note</li>
+            <li><strong>Latest engineering signal</strong> — unsupported richer media is now surfaced explicitly to the agent instead of being silently dropped, which is a small but real runtime hardening step</li>
             <li><strong>Latest operations signal</strong> — deployment paths now have a public confidence matrix instead of one vague “supports NapCat / LLOneBot” claim</li>
             <li><strong>Support path stays simple</strong> — if this repo saved you time, <strong>¥9.9 / ¥19.9</strong> is still the lowest-friction thank-you path</li>
           </ul>
@@ -376,7 +377,9 @@
             <li>released as <strong>v0.1.0</strong> with CI, Docker publishing, and build metadata now exposed in status endpoints</li>
             <li><strong>v0.1.1</strong> adds a replay-dedupe guard and makes duplicate-drop behavior visible in metrics</li>
             <li><strong>v0.1.2</strong> adds per-interaction correlation IDs so operators can grep one user turn across receive, dedupe, progress, and reply logs</li>
+            <li><strong>v0.1.3</strong> makes richer-media limitations honest in runtime behavior by surfacing unsupported file / audio / video segments to the prompt layer</li>
             <li><strong>deployment-matrix.md</strong> now says explicitly which routes are stronger repo-owned paths and which are only documented compatibility paths</li>
+            <li><strong>richer-media stage 1</strong> now makes the repo safer to demo because unsupported attachments no longer create the illusion that the agent already consumed them</li>
             <li><strong>/metrics</strong> now exposes Prometheus-style runtime counters for connection state, traffic, ACP calls, and conversation gauges</li>
             <li>has a public roadmap instead of pretending the current shape is the final shape</li>
             <li>actively invites contributions on session storage, richer media, and stronger runtime visibility</li>
