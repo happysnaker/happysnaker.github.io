@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>qq-ai-bot</title>
+  <meta name="description" content="Production-grade QQ AI bot scaffold using OneBot 11, ACP-compatible agent bridging, persistent sessions, and progress streaming.">
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #131a2e;
+      --text: #eef2ff;
+      --muted: #9aa4c7;
+      --accent: #7aa2ff;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+      background: radial-gradient(circle at top, #182447 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 20px 72px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-main, .hero-side, .section {
+      padding: 30px;
+    }
+
+    .kicker {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(122, 162, 255, 0.12);
+      color: #cfe0ff;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.08;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 24px;
+    }
+
+    p, li {
+      color: var(--muted);
+    }
+
+    .pill-row, .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill-row { margin: 20px 0 24px; }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: #d6ddfb;
+      font-size: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #95b5ff);
+      color: #08101f;
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      color: var(--text);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .metric {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .metric:last-child { border-bottom: 0; }
+
+    .metric strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .section {
+      margin-top: 24px;
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    pre {
+      margin: 0;
+      padding: 18px;
+      border-radius: 18px;
+      overflow: auto;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      color: #dbe4ff;
+    }
+
+    .tiny {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .footer {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 860px) {
+      .hero, .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-main, .hero-side, .section {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="kicker">OneBot 11 × ACP</div>
+        <h1>qq-ai-bot</h1>
+        <p>
+          A production-grade open-source <strong>QQ ↔ AI bot scaffold</strong> built for self-hosted
+          <strong>NapCat / LLOneBot</strong> deployments and <strong>ACP-compatible local agents</strong>.
+          It keeps transport, session orchestration, and agent execution clearly separated so the repo feels more like
+          infrastructure than a one-off chat demo.
+        </p>
+
+        <div class="pill-row">
+          <span class="pill">Node.js 22+</span>
+          <span class="pill">TypeScript</span>
+          <span class="pill">OneBot 11</span>
+          <span class="pill">NapCat / LLOneBot</span>
+          <span class="pill">ACP</span>
+          <span class="pill">Persistent sessions</span>
+          <span class="pill">Progress streaming</span>
+          <span class="pill">Docker</span>
+        </div>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="https://github.com/happysnaker/qq-ai-bot">View repository</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/qq-ai-bot/blob/main/ARCHITECTURE.md">Read architecture</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/qq-ai-bot/issues">Open issues</a>
+          <a class="btn btn-secondary" href="/support/">Support this project</a>
+        </div>
+      </div>
+
+      <aside class="card hero-side">
+        <div class="metric">
+          <strong>Transport / agent split</strong>
+          <span>QQ / OneBot integration stays separate from ACP agent execution and session management.</span>
+        </div>
+        <div class="metric">
+          <strong>Production-minded shape</strong>
+          <span>Reverse / forward WebSocket support, persistent session reuse, admin health endpoints, and CI.</span>
+        </div>
+        <div class="metric">
+          <strong>Designed for extension</strong>
+          <span>Easy next steps include Redis / Postgres session storage, richer media, tracing, and more channels.</span>
+        </div>
+        <div class="metric">
+          <strong>Good support note</strong>
+          <span>If this repo helped, the highest-signal payment note is just <code>qq-ai-bot</code>.</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card section">
+      <h2>Why this repo exists</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li>keep QQ transport logic independent from any specific model vendor</li>
+            <li>reuse an ACP-style local agent bridge instead of hard-wiring one chatbot backend</li>
+            <li>preserve session continuity per private chat or group conversation</li>
+            <li>stream plan / tool / progress events back into QQ without inventing a custom protocol</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>make the repo feel like a real bot infrastructure scaffold, not a fragile demo</li>
+            <li>leave room for Telegram / WeChat / Feishu-style channel adapters later</li>
+            <li>support local self-hosted agent workflows and operationally cleaner deployments</li>
+            <li>give OneBot + ACP users a faster starting point than wiring everything from scratch</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>System shape</h2>
+      <pre>QQ / NapCat / LLOneBot
+        │
+        ▼
+ OneBot 11 transport
+        │
+        ▼
+ Conversation manager
+   ├── persistent session store
+   ├── progress reporter
+   └── image downloader
+        │
+        ▼
+   ACP agent bridge
+        │
+        ▼
+ local ACP-compatible agent</pre>
+    </section>
+
+    <section class="card section">
+      <h2>What you get today</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li>OneBot 11 reverse and forward WebSocket modes</li>
+            <li>private chat + group mention triggers</li>
+            <li>persistent conversation sessions keyed by QQ conversation</li>
+            <li>image download and pass-through into the ACP agent flow</li>
+            <li>progress message streaming from plan / tool events</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>health and readiness endpoints</li>
+            <li>mock ACP agent for local integration work</li>
+            <li>ESLint, typecheck, tests, and GitHub Actions</li>
+            <li>Docker packaging for cleaner deployment</li>
+            <li>clear extension path for richer media and stronger observability</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Quick start</h2>
+      <ol class="list">
+        <li>Clone the repo and install dependencies with <code>npm install</code>.</li>
+        <li>Copy <code>.env.example</code> to <code>.env</code>.</li>
+        <li>Start with the mock ACP agent first to validate the bridge path.</li>
+        <li>Point NapCat / LLOneBot at the reverse WebSocket endpoint and run <code>npm run dev</code>.</li>
+      </ol>
+      <p class="tiny">
+        Full config examples, deployment details, and the session / progress model live in the repository README and
+        architecture doc.
+      </p>
+    </section>
+
+    <section class="card section">
+      <h2>Who this is for</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li>engineers building self-hosted QQ bot infrastructure</li>
+            <li>developers experimenting with ACP-compatible local coding / chat agents</li>
+            <li>people who want a better starting point than mixing transport code and model code together</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>maintainers who want a clearer architecture before adding Redis, tracing, or moderation logic</li>
+            <li>hackers exploring multi-channel bot infrastructure after starting from QQ / OneBot</li>
+            <li>anyone who wants a modern repo that feels more like middleware / orchestration than a toy bot</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Support</h2>
+      <p>
+        If <code>qq-ai-bot</code> saved you OneBot + ACP plumbing time, the cleanest support path is a small direct tip
+        or support via <a href="/support/">the support page</a>. Best payment note: <code>qq-ai-bot</code>.
+      </p>
+      <p class="tiny">
+        If you want broader GitHub / README packaging feedback for your own bot, agent, or infrastructure repo, the
+        lightweight async review options are on <a href="/review/">the review page</a>.
+      </p>
+    </section>
+
+    <div class="footer">
+      qq-ai-bot · Shirong Lu / happysnaker
+    </div>
+  </div>
+</body>
+</html>
