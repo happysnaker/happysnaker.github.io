@@ -255,6 +255,7 @@
           <a class="btn btn-secondary" href="/support/#quick-read">Buy ¥29.9 blunt bot repo read</a>
           <a class="btn btn-secondary" href="/support/#async-review">Book ¥99 packaging pass</a>
           <a class="btn btn-secondary" href="https://github.com/happysnaker/qq-ai-bot/blob/main/ARCHITECTURE.md">Read architecture</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/qq-ai-bot/blob/main/docs/deployment-matrix.md">Read deployment matrix</a>
           <a class="btn btn-secondary" href="https://github.com/happysnaker/qq-ai-bot/blob/main/docs/deployment-patterns.md">Read deployment patterns</a>
           <a class="btn btn-secondary" href="https://github.com/happysnaker/qq-ai-bot/issues">Open issues</a>
         </div>
@@ -291,6 +292,7 @@
           <ul class="list">
             <li><strong>Public OneBot ecosystem placement</strong> — <code>qq-ai-bot</code> now appears in the <a href="https://onebot.dev/ecosystem">OneBot ecosystem application cases</a> list instead of living only on its own README</li>
             <li><strong>Why that matters</strong> — this gives the repo one third-party ecosystem anchor that is native to the QQ / OneBot audience, not just generic AI-awesome lists</li>
+            <li><strong>Operational honesty</strong> — the public deployment matrix now separates “repo-owned stronger paths” from “documented but not overclaimed” paths, which makes the project feel more serious</li>
           </ul>
         </div>
         <div>
@@ -345,6 +347,7 @@
             <li><strong>v0.1.0 released</strong> — public release with OneBot 11 transport, ACP bridge, Docker demo, and observability surfaces</li>
             <li><strong>v0.1.1 released</strong> — patch release that adds lightweight inbound replay dedupe and exposes duplicate-drop metrics</li>
             <li><strong>v0.1.2 released</strong> — adds per-interaction correlation IDs across receive / dedupe / ACP dispatch / progress / reply so one noisy turn is easier to trace end to end</li>
+            <li><strong>Deployment matrix published</strong> — public docs now separate stronger reverse-path defaults from forward-mode / platform combinations that are only documented support</li>
             <li><strong>New FAQ + Discussions flow</strong> — common setup mistakes now route through FAQ and Q&amp;A instead of vague issues</li>
             <li><strong>DeepSeek-ready positioning</strong> — public docs now explicitly describe the common DeepSeek-backed local-agent deployment path</li>
             <li><strong>Show-and-tell thread is live</strong> — community deployments can now collect in one public place instead of being scattered in ad-hoc comments</li>
@@ -357,6 +360,7 @@
             <li><strong>OneBot ecosystem listed</strong> — already included on the public OneBot ecosystem application cases page</li>
             <li><strong>Best short pitch</strong> — <code>OneBot 11 + ACP + persistent sessions + progress streaming + Docker demo</code></li>
             <li><strong>Latest engineering signal</strong> — correlation IDs now land in the repo as a real production-minded debugging surface, not only a roadmap note</li>
+            <li><strong>Latest operations signal</strong> — deployment paths now have a public confidence matrix instead of one vague “supports NapCat / LLOneBot” claim</li>
             <li><strong>Support path stays simple</strong> — if this repo saved you time, <strong>¥9.9 / ¥19.9</strong> is still the lowest-friction thank-you path</li>
           </ul>
         </div>
@@ -372,6 +376,7 @@
             <li>released as <strong>v0.1.0</strong> with CI, Docker publishing, and build metadata now exposed in status endpoints</li>
             <li><strong>v0.1.1</strong> adds a replay-dedupe guard and makes duplicate-drop behavior visible in metrics</li>
             <li><strong>v0.1.2</strong> adds per-interaction correlation IDs so operators can grep one user turn across receive, dedupe, progress, and reply logs</li>
+            <li><strong>deployment-matrix.md</strong> now says explicitly which routes are stronger repo-owned paths and which are only documented compatibility paths</li>
             <li><strong>/metrics</strong> now exposes Prometheus-style runtime counters for connection state, traffic, ACP calls, and conversation gauges</li>
             <li>has a public roadmap instead of pretending the current shape is the final shape</li>
             <li>actively invites contributions on session storage, richer media, and stronger runtime visibility</li>
