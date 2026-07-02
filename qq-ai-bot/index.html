@@ -254,7 +254,7 @@
         </div>
         <div class="metric">
           <strong>Production-minded shape</strong>
-          <span>Reverse / forward WebSocket support, persistent session reuse, admin health endpoints, and CI.</span>
+          <span>Reverse / forward WebSocket support, persistent session reuse, admin health endpoints, `/metrics`, and CI.</span>
         </div>
         <div class="metric">
           <strong>Designed for extension</strong>
@@ -307,14 +307,15 @@
         <div>
           <ul class="list">
             <li>released as <strong>v0.1.0</strong> with CI, Docker publishing, and build metadata now exposed in status endpoints</li>
+            <li><strong>/metrics</strong> now exposes Prometheus-style runtime counters for connection state, traffic, ACP calls, and conversation gauges</li>
             <li>has a public roadmap instead of pretending the current shape is the final shape</li>
-            <li>actively invites contributions on session storage, metrics, and runtime visibility</li>
+            <li>actively invites contributions on session storage, richer media, and stronger runtime visibility</li>
           </ul>
         </div>
         <div>
           <ul class="list">
             <li>better than a throwaway demo: it already has architecture notes, quickstart docs, and health endpoints</li>
-            <li>best next high-signal OSS work here is Redis session store, `/metrics`, and richer media</li>
+            <li>best next high-signal OSS work here is Redis session store, richer media, and tracing / deeper observability</li>
             <li>if you want your own bot repo packaged this clearly, the blunt paid read starts at <strong>¥29.9</strong></li>
           </ul>
         </div>
@@ -428,7 +429,7 @@
           <img src="/medias/support/alipay-pay.jpg" alt="Alipay QR code for qq-ai-bot support">
         </div>
       </div>
-      <p class="tiny"><strong>Roadmap tie-in:</strong> direct support helps keep work moving on Redis session storage, Prometheus-style metrics, and the next production-grade polish round.</p>
+      <p class="tiny"><strong>Roadmap tie-in:</strong> direct support helps keep work moving on Redis session storage, richer media, tracing, and the next production-grade polish round.</p>
       <p class="tiny"><strong>July offer:</strong> the first paid request this month gets one extra public page / README in the same async pass.</p>
     </section>
 
