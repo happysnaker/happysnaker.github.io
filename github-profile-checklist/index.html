@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>github-profile-checklist</title>
+  <meta name="description" content="A practical GitHub profile checklist for engineers who want stronger public proof of work, clearer positioning, and better README / pinned repo signal.">
+  <meta property="og:title" content="github-profile-checklist" />
+  <meta property="og:description" content="A practical GitHub profile checklist for engineers who want stronger public proof of work and clearer positioning." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://happysnaker.github.io/github-profile-checklist/" />
+  <style>
+    :root { --bg:#0b1020; --panel:#131a2e; --text:#eef2ff; --muted:#9aa4c7; --accent:#7aa2ff; --border:rgba(255,255,255,0.08); --shadow:0 20px 60px rgba(0,0,0,0.35); }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif; background:radial-gradient(circle at top,#182447 0%,var(--bg) 45%); color:var(--text); line-height:1.6; }
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .wrap { max-width:1080px; margin:0 auto; padding:48px 20px 72px; }
+    .hero { display:grid; grid-template-columns:1.15fr 0.85fr; gap:24px; }
+    .card { background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01)); border:1px solid var(--border); border-radius:24px; box-shadow:var(--shadow); }
+    .hero-main,.hero-side,.section { padding:30px; }
+    .kicker { display:inline-block; padding:6px 12px; border-radius:999px; background:rgba(122,162,255,0.12); color:#cfe0ff; font-size:13px; font-weight:600; margin-bottom:18px; }
+    h1 { margin:0 0 14px; font-size:clamp(32px,5vw,52px); line-height:1.08; }
+    h2 { margin:0 0 12px; font-size:24px; }
+    p, li, span { color:var(--muted); }
+    .pill-row,.actions { display:flex; flex-wrap:wrap; gap:10px; }
+    .pill-row { margin:20px 0 24px; }
+    .pill { padding:8px 12px; border-radius:999px; border:1px solid var(--border); background:rgba(255,255,255,0.03); color:#d6ddfb; font-size:14px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 16px; border-radius:14px; font-weight:600; border:1px solid transparent; }
+    .btn-primary { background:linear-gradient(135deg,var(--accent),#95b5ff); color:#08101f; }
+    .btn-secondary { border-color:var(--border); color:var(--text); background:rgba(255,255,255,0.02); }
+    .metric { padding:14px 0; border-bottom:1px solid var(--border); }
+    .metric:last-child { border-bottom:0; }
+    .metric strong { display:block; font-size:22px; margin-bottom:4px; color:var(--text); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+    .section { margin-top:24px; }
+    .list { margin:0; padding-left:18px; }
+    .tiny { font-size:14px; color:var(--muted); }
+    .footer { margin-top:32px; text-align:center; font-size:14px; color:var(--muted); }
+    @media (max-width:860px) { .hero,.grid { grid-template-columns:1fr; } .hero-main,.hero-side,.section { padding:22px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="kicker">Portfolio cleanup checklist</div>
+        <h1>github-profile-checklist</h1>
+        <p>
+          A practical checklist for engineers who want a <strong>stronger GitHub profile</strong>, cleaner pinned repos,
+          clearer README signal, and public proof of work that feels more technical and intentional.
+        </p>
+        <div class="pill-row">
+          <span class="pill">GitHub profile</span>
+          <span class="pill">Pinned repos</span>
+          <span class="pill">README signal</span>
+          <span class="pill">Portfolio cleanup</span>
+          <span class="pill">Interview packaging</span>
+          <span class="pill">Public proof of work</span>
+        </div>
+        <p class="tiny"><strong>Best use:</strong> when your GitHub feels random, too student-like, or full of old repos that drag down first impression.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://github.com/happysnaker/github-profile-checklist">View repository</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/github-profile-checklist/blob/main/docs/redacted-audit-sample.md">See sample audit</a>
+          <a class="btn btn-secondary" href="/support/#donate-codes">Tip if the checklist helped</a>
+          <a class="btn btn-secondary" href="/review/">Buy a packaging review</a>
+        </div>
+      </div>
+      <aside class="card hero-side">
+        <div class="metric"><strong>What it helps answer</strong><span>What kind of engineer are you, what should stay pinned, what should be hidden, and whether your public repos feel reusable or noisy.</span></div>
+        <div class="metric"><strong>Best support note</strong><span>If this checklist helped, the cleanest payment note is <code>github-profile-checklist</code>.</span></div>
+        <div class="metric"><strong>Low-friction thanks</strong><span>If one checklist pass saved you time, the intended path is a direct <strong>¥9.9 / ¥19.9</strong> tip.</span></div>
+        <div class="metric"><strong>Paid path</strong><span>If you want the checklist applied to your own profile, the <strong>¥29.9</strong> quick read or <strong>¥99</strong> async review is the real offer.</span></div>
+      </aside>
+    </section>
+
+    <section class="card section">
+      <h2>What the checklist covers</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li>bio / persona clarity</li>
+            <li>pinned repo order and role alignment</li>
+            <li>weak repos to hide, archive, or deprioritize</li>
+            <li>README structure, scope, and credibility</li>
+            <li>public proof of work vs random repo noise</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>open-source contribution signal vs docs-only noise</li>
+            <li>backend / systems role alignment</li>
+            <li>contact / conversion / support paths</li>
+            <li>whether your profile looks intentional in 10 seconds</li>
+            <li>how to turn GitHub into interviews, referrals, or collaboration</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>How to use it</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li>read it as a blunt audit rubric, not a motivational poster</li>
+            <li>use it to decide what to keep pinned vs hide first</li>
+            <li>pair it with the sample audit if you want to see output style</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>tip directly if the checklist alone already saved you time</li>
+            <li>buy the review if you want concrete edits back</li>
+            <li>best fit for old student / lab / game repos that now weaken your profile</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Support</h2>
+      <p>
+        If <code>github-profile-checklist</code> helped you see what to hide, keep, or rewrite first,
+        the shameless intended path is either a direct thank-you tip on the <a href="/support/">support page</a>
+        or a paid review on the <a href="/review/">review page</a>.
+      </p>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li><strong>Best payment note</strong> — <code>github-profile-checklist</code></li>
+            <li><strong>Low-friction tip</strong> — <strong>¥9.9 / ¥19.9 / ¥49.9</strong></li>
+            <li><strong>Fastest path</strong> — WeChat Pay / Alipay on the support page</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li><strong>¥29.9 quick read</strong> — one blunt paragraph + top 3 fixes</li>
+            <li><strong>¥99 async review</strong> — concrete edits for GitHub profile / pinned repos / README</li>
+            <li><strong>Best use</strong> — when your profile already feels embarrassing, noisy, or too student-like</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">github-profile-checklist · Shirong Lu / happysnaker</div>
+  </div>
+</body>
+</html>
