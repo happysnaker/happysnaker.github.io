@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>qq-ai-bot</title>
-  <meta name="description" content="Production-grade QQ AI bot scaffold using OneBot 11, ACP-compatible agent bridging, persistent sessions, and progress streaming.">
+  <meta name="description" content="Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments.">
   <meta property="og:title" content="qq-ai-bot" />
-  <meta property="og:description" content="Production-grade QQ AI bot scaffold using OneBot 11, ACP-compatible agent bridging, persistent sessions, and progress streaming." />
+  <meta property="og:description" content="Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://happysnaker.github.io/qq-ai-bot/" />
   <meta property="og:image" content="https://happysnaker.github.io/medias/qq-ai-bot/progress-demo.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="qq-ai-bot" />
-  <meta name="twitter:description" content="Production-grade QQ AI bot scaffold using OneBot 11, ACP-compatible agent bridging, persistent sessions, and progress streaming." />
+  <meta name="twitter:description" content="Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments." />
   <meta name="twitter:image" content="https://happysnaker.github.io/medias/qq-ai-bot/progress-demo.png" />
   <style>
     :root {
@@ -224,12 +224,19 @@
           infrastructure than a one-off chat demo.
         </p>
 
+        <p class="tiny">
+          A common real-world shape is to put <strong>DeepSeek</strong> or another local / self-hosted model runtime
+          behind an ACP-compatible agent, and let <code>qq-ai-bot</code> handle the QQ / OneBot transport,
+          session reuse, progress streaming, and deployment-facing glue.
+        </p>
+
         <div class="pill-row">
           <span class="pill">Node.js 22+</span>
           <span class="pill">TypeScript</span>
           <span class="pill">OneBot 11</span>
           <span class="pill">NapCat / LLOneBot</span>
           <span class="pill">ACP</span>
+          <span class="pill">DeepSeek-ready</span>
           <span class="pill">Persistent sessions</span>
           <span class="pill">Progress streaming</span>
           <span class="pill">Docker</span>
