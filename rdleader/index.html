@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RDLeader - Local-first AI R&amp;D Worker Control Plane</title>
+  <meta name="description" content="RDLeader is a local-first control plane for supervising AI R&D workers: task ownership, progressive context, runtime dispatch, approval gates, and evidence-first QA.">
+  <link rel="canonical" href="https://happysnaker.github.io/rdleader/" />
+  <meta property="og:title" content="RDLeader - Local-first AI R&amp;D Worker Control Plane" />
+  <meta property="og:description" content="A public-safe proof ladder for supervising multiple AI R&D workers: context routing, runtime evidence, approvals, and QA." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://happysnaker.github.io/rdleader/" />
+  <meta property="og:image" content="https://happysnaker.github.io/medias/cover.jpg" />
+  <meta property="og:image:alt" content="RDLeader public proof ladder" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="RDLeader - Local-first AI R&amp;D Worker Control Plane" />
+  <meta name="twitter:description" content="Task ownership, progressive context, runtime dispatch, approval gates, and QA evidence for AI R&D workers." />
+  <meta name="twitter:image" content="https://happysnaker.github.io/medias/cover.jpg" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "RDLeader",
+      "url": "https://happysnaker.github.io/rdleader/",
+      "codeRepository": "https://github.com/happysnaker/RDLeader",
+      "programmingLanguage": ["TypeScript", "React", "Fastify"],
+      "description": "Local-first control plane for supervising AI R&D workers with task ownership, context routing, runtime evidence, approval gates, and public-safe QA proof."
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #08111f;
+      --panel: #111a2f;
+      --panel-2: #17233e;
+      --text: #eef4ff;
+      --muted: #9aa9cc;
+      --accent: #8ab4ff;
+      --accent-2: #66e0b8;
+      --warn: #ffd38a;
+      --border: rgba(255,255,255,0.09);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+      background: radial-gradient(circle at top left, #1a315d 0%, var(--bg) 42%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 48px 20px 72px; }
+    .hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; align-items: stretch; margin-bottom: 24px; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.012)); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow); backdrop-filter: blur(10px); }
+    .hero-main, .hero-side, .section { padding: 32px; }
+    .kicker { display: inline-block; padding: 6px 12px; border-radius: 999px; background: rgba(138,180,255,0.13); color: #d7e6ff; font-size: 13px; font-weight: 700; letter-spacing: .02em; margin-bottom: 18px; }
+    h1 { margin: 0 0 16px; font-size: clamp(34px, 5vw, 56px); line-height: 1.06; }
+    h2 { margin: 0 0 12px; font-size: 24px; }
+    h3 { margin: 18px 0 8px; font-size: 18px; }
+    p { margin: 0 0 18px; color: var(--muted); }
+    .lead { color: #c5d2f4; font-size: 18px; max-width: 760px; }
+    .tiny { color: var(--muted); font-size: 14px; }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 26px; }
+    .pill { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--border); background: rgba(255,255,255,0.035); color: #dce6ff; font-size: 14px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 16px; border-radius: 14px; font-weight: 700; border: 1px solid transparent; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), #a5c5ff); color: #07111f; }
+    .btn-secondary { border-color: var(--border); color: var(--text); background: rgba(255,255,255,0.025); }
+    .metric { padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .metric:last-child { border-bottom: 0; }
+    .metric strong { display: block; font-size: 22px; margin-bottom: 4px; }
+    .metric span { color: var(--muted); font-size: 14px; }
+    .section { margin-top: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 20px; }
+    .list { margin: 0; padding-left: 20px; color: var(--muted); }
+    .list li { margin: 0 0 10px; }
+    .proof-table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 18px; border: 1px solid var(--border); }
+    .proof-table th, .proof-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; color: var(--muted); }
+    .proof-table th { color: var(--text); background: rgba(255,255,255,0.04); }
+    .proof-table tr:last-child td { border-bottom: 0; }
+    .flow { background: rgba(0,0,0,0.24); border: 1px solid var(--border); border-radius: 18px; padding: 18px; overflow-x: auto; color: #dce6ff; }
+    .notice { border-left: 4px solid var(--warn); padding: 14px 16px; border-radius: 14px; background: rgba(255,211,138,0.08); color: #f5dba8; }
+    footer { color: var(--muted); text-align: center; margin-top: 32px; font-size: 14px; }
+
+    @media (max-width: 860px) {
+      .hero, .grid { grid-template-columns: 1fr; }
+      .hero-main, .hero-side, .section { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="kicker">Agent operations · public-safe proof ladder</div>
+        <h1>RDLeader</h1>
+        <p class="lead">
+          RDLeader is a local-first control plane for supervising multiple AI R&amp;D workers: task ownership,
+          progressive context, runtime dispatch, result collection, approval gates, and evidence-first QA.
+        </p>
+        <p class="tiny">
+          The public repo is intentionally released in safe slices. It shows the architecture, contracts,
+          fake-data demos, walkthroughs, and verification model without publishing private DevPlan paths,
+          app IDs, chat IDs, QR artifacts, internal links, or raw live-integration logs.
+        </p>
+        <div class="pill-row">
+          <span class="pill">TypeScript monorepo</span>
+          <span class="pill">React + Vite manager UI</span>
+          <span class="pill">Fastify control plane</span>
+          <span class="pill">SQLite repositories</span>
+          <span class="pill">ACP-style runtime dispatch</span>
+          <span class="pill">Human approval gates</span>
+          <span class="pill">Demo reset</span>
+          <span class="pill">QA evidence</span>
+        </div>
+        <p class="tiny"><strong>Copy/paste pitch:</strong> <code>local-first control plane for AI R&amp;D workers: task ownership, context routing, runtime evidence, approval gates, and QA.</code></p>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://github.com/happysnaker/RDLeader">View repository</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/RDLeader/releases/tag/v0.1.1-public-proof-ladder">See v0.1.1 proof-ladder release</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/RDLeader/blob/main/docs/public/landing-page.md">Read public proof ladder</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/RDLeader/blob/main/docs/public/narrated-walkthrough-video.md">Watch narrated walkthrough</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/RDLeader/blob/main/docs/public/distribution-kit.md">Use distribution kit</a>
+          <a class="btn btn-secondary" href="/support/#from-rdleader">Support RDLeader packaging</a>
+        </div>
+      </div>
+
+      <aside class="card hero-side">
+        <div class="metric">
+          <strong>Not another chat UI</strong>
+          <span>The focus is the operating layer around agents: ownership, context, dispatch, evidence, blocked states, and approvals.</span>
+        </div>
+        <div class="metric">
+          <strong>Public-safe demos</strong>
+          <span><code>pnpm demo:reset</code> creates deterministic fake worker, runtime, approval, and QA state for reviewers.</span>
+        </div>
+        <div class="metric">
+          <strong>Architecture signal</strong>
+          <span>Manager UI, API, policy, brain/context assembly, ingest, runtime dispatch, and repositories are separated.</span>
+        </div>
+        <div class="metric">
+          <strong>External discovery</strong>
+          <span>Submitted to autonomous-agent and coding-agent awesome lists; follow-up is tracked in public.</span>
+        </div>
+        <div class="metric">
+          <strong>Best support note</strong>
+          <span>Use <code>RDLeader #27</code> for external submission follow-up or <code>RDLeader #1</code> for broader public-release sanitization.</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card section">
+      <h2>What RDLeader proves</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li><strong>Task ownership</strong> — a worker owns a work item instead of every agent living in one undifferentiated chat stream.</li>
+            <li><strong>Progressive context</strong> — task envelopes can assemble identity, seed, working, episodic, knowledge, and reflection layers.</li>
+            <li><strong>Runtime evidence</strong> — dispatch, result collection, stale-task recovery, and archived runtime events are first-class concerns.</li>
+            <li><strong>Approval boundaries</strong> — risky external actions are represented as manager-reviewable approval requests.</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li><strong>Dedicated employee-agent model</strong> — one worker maps to isolated runtime home and communication config in the DevPlan architecture.</li>
+            <li><strong>QA posture</strong> — tests, smoke checks, endurance loops, browser validation, and redaction rules are summarized publicly.</li>
+            <li><strong>Manager UI surface</strong> — overview, execution, collaboration, growth, management, QA, and ops surfaces exist in the public slice.</li>
+            <li><strong>Honest release posture</strong> — MVP / research prototype, not a finished enterprise HR system.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Proof ladder</h2>
+      <p>Open these in order if you only have a few minutes. The point is to make the technical claim verifiable without leaking private operational state.</p>
+      <table class="proof-table">
+        <thead><tr><th>Step</th><th>Public surface</th><th>What it proves</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><a href="https://github.com/happysnaker/RDLeader/blob/main/docs/public/demo-reset.md">Public demo reset</a></td><td>Deterministic fake worker, work item, runtime, approval, and QA state.</td></tr>
+          <tr><td>2</td><td><a href="https://github.com/happysnaker/RDLeader/blob/main/docs/public/browser-walkthrough.md">Browser walkthrough</a></td><td>The fake state can be inspected through the manager UI without private seed workers.</td></tr>
+          <tr><td>3</td><td><a href="https://github.com/happysnaker/RDLeader/blob/main/docs/public/runtime-approval-deep-dive.md">Runtime / approval deep dive</a></td><td>Task envelopes, result events, fail-closed external actions, and recovery modes are explicit.</td></tr>
+          <tr><td>4</td><td><a href="https://github.com/happysnaker/RDLeader/blob/main/docs/public/employee-agent-onboarding.md">Employee-agent onboarding</a></td><td>Worker homes, runtime homes, manager-only communication, and secret references are documented safely.</td></tr>
+          <tr><td>5</td><td><a href="https://github.com/happysnaker/RDLeader/blob/main/docs/public/qa-evidence.md">QA evidence</a></td><td>Tests, smoke checks, endurance loops, and public redaction rules are summarized.</td></tr>
+          <tr><td>6</td><td><a href="https://github.com/happysnaker/RDLeader/blob/main/docs/public/narrated-walkthrough-video.md">Narrated walkthrough</a></td><td>Public-safe visuals show the control-plane shape without DevPlan screenshots.</td></tr>
+          <tr><td>7</td><td><a href="https://github.com/happysnaker/RDLeader/blob/main/docs/public/submission-tracker.md">Submission tracker</a></td><td>Distribution and follow-up are tracked instead of handled as one-off announcements.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card section">
+      <h2>Architecture shape</h2>
+      <pre class="flow">React manager UI
+      │
+      ▼
+Fastify control plane
+      │
+      ├── domain model        employees, performance, emotion, approvals
+      ├── brain package       task-type → context-layer assembly
+      ├── policy package      risk classification and approval gates
+      ├── ingest package      git/doc memory extraction and direction knowledge
+      ├── runtime package     ACP-style dispatch + result collection
+      ├── ops workflows       project groups, review actions, QA reports
+      └── SQLite repositories work items, messages, reflections, runtime events
+      │
+      ▼
+Local worker workspace
+  WORKSPACE_MAP.*        repo and direction map
+  .rdleader/tasks        inbound task envelopes
+  .rdleader/results      runtime result events</pre>
+    </section>
+
+    <section class="card section">
+      <h2>Sponsorware / follow-up surface</h2>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li><a href="https://github.com/happysnaker/RDLeader/issues/27">RDLeader#27</a> tracks external submission review follow-up.</li>
+            <li><a href="https://github.com/happysnaker/RDLeader/issues/3">RDLeader#3</a> tracks license posture; no root license is implied until the owner decides.</li>
+            <li><a href="https://github.com/happysnaker/RDLeader/issues/1">RDLeader#1</a> tracks broader public release and DevPlan bundle sanitization.</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>External PR: <a href="https://github.com/jbesomi/awesome-autonomous-agents/pull/20">awesome-autonomous-agents#20</a>.</li>
+            <li>External PR: <a href="https://github.com/kailiu42/awesome-coding-agents/pull/13">awesome-coding-agents#13</a>.</li>
+            <li>Support route: <a href="/support/#from-rdleader">support RDLeader packaging work</a>.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="notice"><strong>Public-safety rule:</strong> do not publish real employee names, private workspace paths, app IDs, open IDs, chat IDs, message IDs, QR onboarding artifacts, internal document links, or raw terminal output from live integrations.</p>
+    </section>
+
+    <section class="card section">
+      <h2>Copy/paste promo pack</h2>
+      <div class="grid">
+        <div>
+          <h3>Shortest line</h3>
+          <pre class="flow">RDLeader: local-first control plane for AI R&amp;D workers — task ownership, context routing, runtime evidence, approval gates, and QA.</pre>
+          <h3>中文版本</h3>
+          <pre class="flow">RDLeader 是一个面向 AI 研发员工的本地优先控制台：任务归属、渐进式上下文、运行时派发、结果回收、审批闸门和 QA 证据，而不是又一个聊天窗口。</pre>
+        </div>
+        <div>
+          <h3>English version</h3>
+          <pre class="flow">RDLeader is a local-first control plane for supervising AI R&amp;D workers. It focuses on what happens after multiple agents are running: who owns the task, what context was loaded, what runtime ran it, what result came back, what is blocked, and which actions need approval.</pre>
+          <h3>Best 3-link pack</h3>
+          <pre class="flow">Repo: https://github.com/happysnaker/RDLeader
+Project page: https://happysnaker.github.io/rdleader/
+Proof ladder: https://github.com/happysnaker/RDLeader/blob/main/docs/public/landing-page.md</pre>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      RDLeader · Shirong Lu / happysnaker · <a href="https://github.com/happysnaker/RDLeader">GitHub</a> · <a href="/support/#from-rdleader">Support</a>
+    </footer>
+  </div>
+</body>
+</html>
