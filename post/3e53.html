@@ -370,7 +370,7 @@ redo log为什么">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>文章已收录我的仓库：<a target="_blank" rel="noopener" href="https://github.com/happysnaker/JavaLearningNotes">Java学习笔记与免费书籍分享</a></p>
+                <p>这篇旧文已保留在当前站点归档中；更多旧笔记可从 <a href="/archives/">文章归档</a> 继续阅读。</p>
 <h1 id="事务底层原理-INNODB"><a href="#事务底层原理-INNODB" class="headerlink" title="事务底层原理(INNODB)"></a>事务底层原理(INNODB)</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>事务必须满足ACID四个特性，即原子性、一致性、隔离性和持久性，隔离性由锁来保证，我们主要研究事务是如何保证原子性、一致性和持久性。</p>
 <h2 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h2><h3 id="为什么需要-redo-log"><a href="#为什么需要-redo-log" class="headerlink" title="为什么需要 redo log"></a>为什么需要 redo log</h3><p>InnoDB 存储引擎是基于磁盘存储的，并将其中的记录按照<strong>页</strong>的方式进行管理，可将其视为<strong>基于磁盘的数据库系统</strong>（Disk-base Database），修改数据需要先将磁盘中的行记录读至内存，修改后再保存至内存持久化。</p>
 <p><img src="https://happysnaker-1306579962.cos.ap-nanjing.myqcloud.com/img/typora/image-20210924163951947.png" alt="image-20210924163951947"></p>

@@ -369,7 +369,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>文章已收录我的仓库：<a target="_blank" rel="noopener" href="https://github.com/happysnaker/JavaLearningNotes">Java学习笔记</a></p>
+                <p>文章已收录我的仓库：<a href="/archives/">Java学习笔记</a></p>
 <h1 id="线程池原理"><a href="#线程池原理" class="headerlink" title="线程池原理"></a>线程池原理</h1><h2 id="池化技术"><a href="#池化技术" class="headerlink" title="池化技术"></a>池化技术</h2><p>我们平时使用线程时，都是额外创建一个线程(Thread)去执行任务(run方法)，run 方法执行完毕后就会销毁线程，频繁的创建和销毁无疑增加了开销，而池化技术则可以帮我们很好的管理线程。</p>
 <p>使用线程池后，使用线程池后，<strong>线程执行完一个 run 方法不再是无脑销毁，而是根据需要可能会留在池中，进而继续执行下次任务</strong>，降低资源消耗。并且，使用线程池还可以让我们更方便的管理，例如我们可以根据系统资源指定最大线程数，根据需要延时执行任务；又例如，线程池会帮我们统计已经运行了多少个任务、最多同时运行了几个任务等，便于我们排错，简言之，线程池具有如下好处：</p>
 <ul>

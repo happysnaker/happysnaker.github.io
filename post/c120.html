@@ -369,7 +369,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>文章已收录我的仓库：<a target="_blank" rel="noopener" href="https://github.com/happysnaker/JavaLearningNotes">Java学习笔记</a></p>
+                <p>文章已收录我的仓库：<a href="/archives/">Java学习笔记</a></p>
 <h1 id="进程间通信方式"><a href="#进程间通信方式" class="headerlink" title="进程间通信方式"></a>进程间通信方式</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在操作系统中，一个进程可以理解为是关于计算机资源集合的一次运行活动，其就是一个正在执行的程序的实例。从概念上来说，一个进程拥有它自己的虚拟CPU和虚拟地址空间，任何一个进程对于彼此而言都是相互独立的，这也引入了一个问题 —— 如何让进程之间互相通信？</p>
 <p>由于进程之间是互相独立的，没有任何手段直接通信，因此我们需要借助操作系统来辅助它们。举个通俗的例子，假如A与B之间是独立的，不能彼此联系，如果它们想要通信的话可以借助第三方C，比如A将信息交给C，C再将信息转交给B —— 这就是进程间通信的主要思想 —— 共享资源。</p>
 <p>这里要解决的一个重要的问题就是如何避免竞争，即避免多个进程同时访问临界区的资源。</p>

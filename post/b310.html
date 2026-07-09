@@ -369,7 +369,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>文章已收录我的仓库：<a target="_blank" rel="noopener" href="https://github.com/happysnaker/JavaLearningNotes">Java学习笔记与免费书籍分享</a></p>
+                <p>这篇旧文已保留在当前站点归档中；更多旧笔记可从 <a href="/archives/">文章归档</a> 继续阅读。</p>
 <h1 id="线程间同步方式"><a href="#线程间同步方式" class="headerlink" title="线程间同步方式"></a>线程间同步方式</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>不同线程间对临界区资源的访问可能会引起常见的并发问题，我们希望线程原子式的执行一系列指令，但由于单处理器上的中断，我们必须想一些其他办法以同步各线程，本文就来介绍一些线程间的同步方式。</p>
 <h2 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h2><p>互斥锁(又名互斥量)，强调的是资源的访问互斥：互斥锁是用在多线程多任务互斥的，当一个线程占用了某一个资源，那么别的线程就无法访问，直到这个线程unlock，其他的线程才开始可以利用这个资源。</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">pthread_mutex_lock</span><span class="token punctuation">(</span><span class="token class-name">pthread_mutex_t</span> <span class="token operator">*</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -447,7 +447,7 @@
 <li><p>V(s)：V操作将 s 的值加1，如果有任何进程在等在 s 值变为非0，那么V操作会重启这些等待进程中的其中一个(随机地)，然后由该进程执行P操作将 s 重新置为0，而其他等待进程将会继续等待。</p>
 </li>
 </ul>
-<p>在进程中也可以使用信号量，对于信号量的理解进程中与线程中并无太大差异，都是用来保护资源，关于更多信号量的理解参见这篇文章:  <a target="_blank" rel="noopener" href="https://github.com/happysnaker/JavaLearningNotes/blob/master/blog/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F.md">JavaLearningNotes&#x2F;进程间通信方式。</a></p>
+<p>在进程中也可以使用信号量，对于信号量的理解进程中与线程中并无太大差异，都是用来保护资源，关于更多信号量的理解参见这篇文章:  <a href="/archives/">JavaLearningNotes&#x2F;进程间通信方式。</a></p>
 <h3 id="有名信号量"><a href="#有名信号量" class="headerlink" title="有名信号量"></a>有名信号量</h3><p>有名信号量以文件的形式存在，即时是不同进程间的线程也可以访问该信号量，因此可以用于不同进程间的多线程间的互斥与同步。</p>
 <p>创建打开有名信号量</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">sem_t <span class="token operator">*</span><span class="token function">sem_open</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">,</span> <span class="token keyword">int</span> oflag<span class="token punctuation">)</span><span class="token punctuation">;</span>
