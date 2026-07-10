@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>qq-ai-bot - Self-hosted QQ ↔ AI Bot for OneBot 11 / NapCat / ACP</title>
-  <meta name="description" content="Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments.">
+  <meta name="description" content="Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments and an ARM/CasaOS tester path.">
   <meta name="keywords" content="qq ai bot, onebot 11, napcat, llonebot, acp, self-hosted ai, qq bot, docker, progress streaming, persistent sessions">
   <link rel="canonical" href="https://happysnaker.github.io/qq-ai-bot/" />
   <meta property="og:title" content="qq-ai-bot - Self-hosted QQ ↔ AI Bot for OneBot 11 / NapCat / ACP" />
-  <meta property="og:description" content="Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments." />
+  <meta property="og:description" content="Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments and an ARM/CasaOS tester path." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://happysnaker.github.io/qq-ai-bot/" />
   <meta property="og:image" content="https://happysnaker.github.io/medias/qq-ai-bot/progress-demo.png" />
   <meta property="og:image:alt" content="qq-ai-bot progress streaming demo" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="qq-ai-bot - Self-hosted QQ ↔ AI Bot for OneBot 11 / NapCat / ACP" />
-  <meta name="twitter:description" content="Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments." />
+  <meta name="twitter:description" content="Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments and an ARM/CasaOS tester path." />
   <meta name="twitter:image" content="https://happysnaker.github.io/medias/qq-ai-bot/progress-demo.png" />
   <script type="application/ld+json">
     {
@@ -24,7 +24,7 @@
       "name": "qq-ai-bot",
       "url": "https://happysnaker.github.io/qq-ai-bot/",
       "codeRepository": "https://github.com/happysnaker/qq-ai-bot",
-      "description": "Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments.",
+      "description": "Production-grade QQ AI bot scaffold for OneBot 11 / NapCat / LLOneBot and ACP-compatible local agents, including DeepSeek-backed self-hosted deployments and an ARM/CasaOS tester path.",
       "programmingLanguage": ["TypeScript", "JavaScript"],
       "runtimePlatform": "Node.js 22+",
       "license": "https://github.com/happysnaker/qq-ai-bot/blob/main/LICENSE",
@@ -42,7 +42,9 @@
         "self-hosted AI",
         "persistent sessions",
         "progress streaming",
-        "Docker"
+        "Docker",
+        "CasaOS",
+        "arm64"
       ],
       "image": "https://happysnaker.github.io/medias/qq-ai-bot/progress-demo.png"
     }
@@ -279,8 +281,9 @@
         <p class="tiny"><strong>Newest install surface:</strong> a public <a href="https://github.com/Cp0204/CasaOS-AppStore-Play/pull/42">CasaOS app-store PR</a> is now open, so the repo is also being packaged as a more homelab-friendly browser-first install path instead of only “clone compose and figure it out”.</p>
         <p class="tiny"><strong>Stable release signal:</strong> the repo now ships both a stable image tag <code>ghcr.io/happysnaker/qq-ai-bot:v0.1.7</code> and the moving mainline tag <code>ghcr.io/happysnaker/qq-ai-bot:latest</code>, so directory / app-store / homelab writeups can reference a non-moving version without giving up a newest-build path.</p>
         <p class="tiny"><strong>New hardware signal:</strong> both public image paths now ship <strong>linux/amd64</strong> and <strong>linux/arm64</strong>, so this stack is no longer only an x86 story — ARM NAS / mini-PC / SBC homelab installs are now part of the real public path too.</p>
+        <p class="tiny"><strong>Tester ask:</strong> QEMU arm64 smoke is green, but a real physical ARM / CasaOS / NAS / SBC report is still missing. Start with the <a href="https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/arm64-casaos-tester-pack.md">15-minute ARM / CasaOS tester pack</a>.</p>
 
-        <p class="tiny"><strong>Copy/paste pitch if you share this repo:</strong> <code>OneBot 11 + ACP + persistent sessions + progress streaming + Docker demo</code>.</p>
+        <p class="tiny"><strong>Copy/paste pitch if you share this repo:</strong> <code>OneBot 11 + ACP + persistent sessions + progress streaming + Docker demo + ARM/CasaOS tester pack</code>.</p>
 
         <div class="actions">
           <a class="btn btn-primary" href="https://github.com/happysnaker/qq-ai-bot">View repository</a>
@@ -293,6 +296,7 @@
           <a class="btn btn-secondary" href="mailto:happysnaker@foxmail.com?subject=Async%20review%20%7C%20qq-ai-bot%20inbound&body=I%20came%20from%20qq-ai-bot.%0ARepo%20link(s)%3A%0ATarget%20role%20or%20use%20case%3A%0AWhat%20feels%20weak%3A%20README%20/%20positioning%20/%20landing%20page%20/%20GitHub%20profile%0APayment%20screenshot%3A%20attached">Email ¥99 async-review order</a>
           <a class="btn btn-secondary" href="/support/#quick-read">Buy ¥29.9 blunt bot repo read</a>
           <a class="btn btn-secondary" href="/support/#async-review">Book ¥99 packaging pass</a>
+          <a class="btn btn-secondary" href="https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/arm64-casaos-tester-pack.md">Run ARM / CasaOS tester pack</a>
           <a class="btn btn-secondary" href="https://github.com/Cp0204/CasaOS-AppStore-Play/pull/42">See CasaOS app-store PR</a>
           <a class="btn btn-secondary" href="https://github.com/happysnaker/qq-ai-bot/blob/main/ARCHITECTURE.md">Read architecture</a>
           <a class="btn btn-secondary" href="https://github.com/happysnaker/qq-ai-bot/blob/main/docs/deployment-matrix.md">Read deployment matrix</a>
@@ -317,6 +321,10 @@
         <div class="metric">
           <strong>Ecosystem proof</strong>
           <span>Already anchored by the public <a href="https://onebot.dev/ecosystem">OneBot ecosystem</a> listing, the merged NapCat docs integration, a live CasaOS app-store PR, multi-arch GHCR images, and open Docker Compose / AwesomeHomelab PRs and merged ACP docs, so the repo is no longer only self-claimed.</span>
+        </div>
+        <div class="metric">
+          <strong>Tester path</strong>
+          <span>The <a href="https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/arm64-casaos-tester-pack.md">ARM/CasaOS tester pack</a> turns the remaining #26 gap into a 15-minute physical-host checklist.</span>
         </div>
         <div class="metric">
           <strong>Good support note</strong>
@@ -356,6 +364,34 @@
         </div>
       </div>
       <p class="tiny">The goal is to make this repo look like a living integration surface with ecosystem references and user feedback loops, not a dead side project.</p>
+    </section>
+
+
+
+    <section class="card section">
+      <h2>ARM / CasaOS tester path</h2>
+      <p>
+        The project already has multi-arch GHCR images and passing GitHub Actions QEMU arm64 smoke. The remaining proof gap is a real physical ARM / CasaOS / NAS / SBC report from an operator environment.
+      </p>
+      <div class="grid">
+        <div>
+          <ul class="list">
+            <li><strong>Already proven:</strong> `v0.1.7` image, Docker publish, CI, CodeQL, and arm64 QEMU smoke are green.</li>
+            <li><strong>Still needed:</strong> physical ARM host or CasaOS app-store flow with redacted evidence.</li>
+            <li><strong>Good testers:</strong> Raspberry Pi, Orange Pi, ARM NAS, CasaOS host, or real `linux/arm64` Docker host.</li>
+            <li><strong>Support note:</strong> use <code>qq-ai-bot #26 arm64</code> if you want to fund this validation instead of testing it yourself.</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li><a href="https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/arm64-casaos-tester-pack.md">15-minute tester pack</a></li>
+            <li><a href="https://github.com/happysnaker/qq-ai-bot/issues/26">Tracking issue #26</a></li>
+            <li><a href="https://github.com/happysnaker/qq-ai-bot/discussions/43">Call for testers discussion</a></li>
+            <li><a href="https://github.com/happysnaker/qq-ai-bot/actions/runs/29100777408">Latest arm64 QEMU smoke proof</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="tiny"><strong>Public-safety rule:</strong> do not post QQ credentials, login QR screenshots, OneBot tokens, private group/user IDs, private chat content, or unblurred local/IP details.</p>
     </section>
 
     <section class="card section">
@@ -582,11 +618,11 @@
           <p class="tiny"><strong>Best 3-link pack</strong></p>
           <pre>Repo: https://github.com/happysnaker/qq-ai-bot
 Project page: https://happysnaker.github.io/qq-ai-bot/
-Docker quickstart: https://github.com/happysnaker/qq-ai-bot/blob/main/docs/docker-quickstart.md</pre>
+Tester pack: https://github.com/happysnaker/qq-ai-bot/blob/main/docs/public/arm64-casaos-tester-pack.md</pre>
         </div>
       </div>
       <p class="tiny"><strong>Best framing for maintainers / curators:</strong> call it a <strong>QQ / OneBot bridge</strong>, <strong>bot scaffold</strong>, or <strong>self-hosted bot infrastructure</strong> project. Do not flatten it into “just another chatbot”.</p>
-      <p class="tiny"><strong>Fast curator update line after v0.1.7:</strong> <code>Now ships a stable image tag (v0.1.7) + a moving latest tag, both multi-arch (amd64/arm64), with public arm64 image-smoke automation, so it is easier to reference from self-hosted / homelab directories.</code></p>
+      <p class="tiny"><strong>Fast curator update line after tester pack:</strong> <code>Now ships stable + latest multi-arch images, passing arm64 QEMU smoke, and a 15-minute ARM/CasaOS tester pack for real physical-host reports.</code></p>
     </section>
 
     <section class="card section">
@@ -609,8 +645,8 @@ Docker quickstart: https://github.com/happysnaker/qq-ai-bot/blob/main/docs/docke
           <img src="/medias/support/alipay-pay.jpg" alt="Alipay QR code for qq-ai-bot support">
         </div>
       </div>
-      <p class="tiny"><strong>Roadmap tie-in:</strong> direct support helps keep work moving on Redis session storage, richer media, tracing, and the next production-grade polish round.</p>
-      <p class="tiny"><strong>Fastest homelab inbound path:</strong> if you came from CasaOS, Docker, AwesomeHomelab, or a self-hosted roundup, the best note is still <code>qq-ai-bot</code> and the best paid path is the deploy-read email template above.</p>
+      <p class="tiny"><strong>Roadmap tie-in:</strong> direct support helps keep work moving on physical ARM/CasaOS validation, Redis session storage, richer media, tracing, and the next production-grade polish round.</p>
+      <p class="tiny"><strong>Fastest homelab inbound path:</strong> if you came from CasaOS, Docker, AwesomeHomelab, or a self-hosted roundup, start with the tester pack; the best support note is <code>qq-ai-bot #26 arm64</code>.</p>
       <p class="tiny"><strong>Low-friction promo ask:</strong> if you share this repo in a QQ / OneBot / self-hosted AI group, the most useful link is the project page plus the note <code>OneBot 11 + ACP + /metrics + Docker demo</code>.</p>
       <p class="tiny"><strong>Best 3-link promo pack:</strong> <a href="https://github.com/happysnaker/qq-ai-bot">repository</a> + <a href="https://happysnaker.github.io/qq-ai-bot/">project page</a> + <a href="https://github.com/happysnaker/qq-ai-bot/blob/main/docs/docker-quickstart.md">Docker quickstart</a>.</p>
       <p class="tiny"><strong>July offer:</strong> the first paid request this month gets one extra public page / README in the same async pass.</p>
